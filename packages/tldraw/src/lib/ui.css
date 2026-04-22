@@ -2280,3 +2280,94 @@ tldraw? probably.
 		transform: translateX(calc(-100% - var(--tl-space-3)));
 	}
 }
+
+/* -------- Shape animations (TldrawShapeWrapper) -------- */
+/*
+ * The inner wrapper rendered by TldrawShapeWrapper. Its CSS animation is
+ * driven by `data-tl-animation` (set from `shape.meta.animation`). The outer
+ * `.tl-shape` element keeps the editor-managed page transform, so animating
+ * `transform` on this inner wrapper composes cleanly and never fights the
+ * editor's reactive updates.
+ */
+.tl-shape-animation {
+	position: absolute;
+	inset: 0;
+	transform-origin: center center;
+}
+
+.tl-shape-animation[data-tl-animation='none'] {
+	animation: none;
+}
+
+.tl-shape-animation[data-tl-animation='jiggle'] {
+	animation: tl-jiggle 0.45s ease-in-out infinite;
+	will-change: transform;
+}
+
+.tl-shape-animation[data-tl-animation='spin'] {
+	animation: tl-spin 2s ease-in-out infinite;
+	will-change: transform;
+}
+
+.tl-shape-animation[data-tl-animation='pulse'] {
+	animation: tl-pulse 1.2s ease-in-out infinite;
+	will-change: transform;
+}
+
+/* Respect reduced motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+	.tl-shape-animation[data-tl-animation='jiggle'],
+	.tl-shape-animation[data-tl-animation='spin'],
+	.tl-shape-animation[data-tl-animation='pulse'] {
+		animation: none;
+	}
+}
+
+@keyframes tl-jiggle {
+	0%,
+	100% {
+		transform: translateX(0) rotate(0);
+	}
+	25% {
+		transform: translateX(-4px) rotate(-1.5deg);
+	}
+	75% {
+		transform: translateX(4px) rotate(1.5deg);
+	}
+}
+
+/* Spins a full turn, slightly overshoots, then bounces back to 360deg before
+ * resting for the remaining time. The rest window produces the perceived
+ * "spin, pause, spin" loop. */
+@keyframes tl-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	55% {
+		transform: rotate(380deg);
+	}
+	65% {
+		transform: rotate(355deg);
+	}
+	70%,
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* Double-beat heartbeat: a stronger pulse at ~20% and a softer pulse at ~60%,
+ * then a long rest. */
+@keyframes tl-pulse {
+	0%,
+	40%,
+	80%,
+	100% {
+		transform: scale(1);
+	}
+	20% {
+		transform: scale(1.08);
+	}
+	60% {
+		transform: scale(1.04);
+	}
+}

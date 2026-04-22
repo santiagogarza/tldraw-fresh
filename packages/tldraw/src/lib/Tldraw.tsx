@@ -24,6 +24,7 @@ import { TldrawOverlays } from './canvas/TldrawOverlays'
 import { TldrawScribble } from './canvas/TldrawScribble'
 import { TldrawSelectionForeground } from './canvas/TldrawSelectionForeground'
 import { TldrawShapeIndicators } from './canvas/TldrawShapeIndicators'
+import { TldrawShapeWrapper } from './canvas/TldrawShapeWrapper'
 import { defaultAssetUtils } from './defaultAssetUtils'
 import { defaultBindingUtils } from './defaultBindingUtils'
 import { TLEmbedDefinition } from './defaultEmbedDefinitions'
@@ -178,6 +179,7 @@ export function Tldraw(props: TldrawProps) {
 		() => ({
 			Scribble: TldrawScribble,
 			ShapeIndicators: TldrawShapeIndicators,
+			ShapeWrapper: TldrawShapeWrapper,
 			CollaboratorScribble: TldrawScribble,
 			SelectionForeground: TldrawSelectionForeground,
 			Handles: TldrawHandles,

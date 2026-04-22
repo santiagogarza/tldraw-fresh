@@ -65,6 +65,7 @@ export { TldrawArrowHints, TldrawOverlays } from './lib/canvas/TldrawOverlays'
 export { TldrawScribble } from './lib/canvas/TldrawScribble'
 export { TldrawSelectionForeground } from './lib/canvas/TldrawSelectionForeground'
 export { TldrawShapeIndicators } from './lib/canvas/TldrawShapeIndicators'
+export { TldrawShapeWrapper, type TLTldrawAnimationKind } from './lib/canvas/TldrawShapeWrapper'
 export { defaultAssetUtils } from './lib/defaultAssetUtils'
 export { defaultBindingUtils } from './lib/defaultBindingUtils'
 export {
@@ -554,6 +555,7 @@ export {
 	StylePanelTextAlignPicker,
 	type StylePanelSectionProps,
 } from './lib/ui/components/StylePanel/DefaultStylePanelContent'
+export { StylePanelAnimationPicker } from './lib/ui/components/StylePanel/StylePanelAnimationPicker'
 export {
 	StylePanelButtonPicker,
 	StylePanelButtonPickerInline,
