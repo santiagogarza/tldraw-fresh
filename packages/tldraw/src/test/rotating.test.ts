@@ -321,7 +321,26 @@ describe('Rotation math', () => {
 })
 
 describe('Edge cases', () => {
-	it('does not enter the pointing_rotate_handle state when pointing a rotate corner of an image while holding command / control', () => {
+	it('enters the pointing_rotate_handle state when pointing a rotate corner of an image while holding command', () => {
+		const id = createShapeId()
+		editor
+			.createShape({
+				id,
+				type: 'image',
+			})
+			.select(id)
+			.keyDown('Meta')
+			.pointerDown(60, 10, {
+				target: 'selection',
+				handle: 'top_right_rotate',
+			})
+			.expectToBeIn('select.pointing_rotate_handle')
+			.pointerUp()
+			.keyUp('Meta')
+			.expectToBeIn('select.idle')
+	})
+
+	it('enters brushing when pointing a rotate corner while holding control', () => {
 		const id = createShapeId()
 		editor
 			.createShape({
