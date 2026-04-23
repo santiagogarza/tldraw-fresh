@@ -15,6 +15,8 @@ export function fetchCache<T>(cb: (response: Response) => Promise<T>, init?: Req
 				assert(response.ok)
 				return await cb(response)
 			} catch (err) {
+				// Don't permanently cache transient failures; allow a future retry.
+				cache.delete(url)
 				console.error(err)
 				return null
 			}
