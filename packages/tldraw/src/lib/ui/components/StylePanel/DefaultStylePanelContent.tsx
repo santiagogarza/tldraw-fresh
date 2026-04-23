@@ -261,7 +261,9 @@ export function StylePanelTextAlignPicker() {
 					type="icon"
 					title={msg('style-panel.vertical-align')}
 					data-testid="vertical-align"
-					disabled
+					className="tlui-style-panel__inactive-control"
+					aria-disabled
+					tabIndex={-1}
 				>
 					<TldrawUiButtonIcon icon="vertical-align-middle" />
 				</TldrawUiToolbarButton>
@@ -295,7 +297,9 @@ export function StylePanelLabelAlignPicker() {
 						type="icon"
 						title={msg('style-panel.vertical-align')}
 						data-testid="vertical-align"
-						disabled
+						className="tlui-style-panel__inactive-control"
+						aria-disabled
+						tabIndex={-1}
 					>
 						<TldrawUiButtonIcon icon="vertical-align-middle" />
 					</TldrawUiToolbarButton>
