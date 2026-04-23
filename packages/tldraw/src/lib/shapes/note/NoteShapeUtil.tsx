@@ -54,7 +54,11 @@ import { HyperlinkButton } from '../shared/HyperlinkButton'
 import { RichTextLabel, RichTextSVG } from '../shared/RichTextLabel'
 import { useIsReadyForEditing } from '../shared/useEditablePlainText'
 import { useEfficientZoomThreshold } from '../shared/useEfficientZoomThreshold'
-import { CLONE_HANDLE_MARGIN, getNoteShapeForAdjacentPosition } from './noteHelpers'
+import {
+	CLONE_HANDLE_MARGIN,
+	getNoteShapeForAdjacentPosition,
+	getRandomNoteRotation,
+} from './noteHelpers'
 
 const NOTE_SHAPE_HORIZONTAL_ALIGNS = Object.freeze({
 	start: 'start',
@@ -524,6 +528,14 @@ export class NoteShapeUtil extends ShapeUtil<TLNoteShape> {
 
 	override onBeforeCreate(next: TLNoteShape) {
 		return this.getNoteSizeAdjustments(next)
+	}
+
+	override onTranslateEnd(_initial: TLNoteShape, current: TLNoteShape) {
+		return {
+			id: current.id,
+			type: current.type,
+			rotation: getRandomNoteRotation(),
+		}
 	}
 
 	override onBeforeUpdate(prev: TLNoteShape, next: TLNoteShape) {

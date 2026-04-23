@@ -12,6 +12,7 @@ import { startEditingShapeWithRichText } from '../../../tools/SelectTool/selectH
 import { getDisplayValues } from '../../shared/getDisplayValues'
 import {
 	NOTE_ADJACENT_POSITION_SNAP_RADIUS,
+	getRandomNoteRotation,
 	getAvailableNoteAdjacentPositions,
 } from '../noteHelpers'
 import type { NoteShapeUtil } from '../NoteShapeUtil'
@@ -138,6 +139,7 @@ export function createNoteShape(editor: Editor, id: TLShapeId, center: Vec) {
 		type: 'note',
 		x: center.x,
 		y: center.y,
+		rotation: getRandomNoteRotation(),
 		props: {
 			scale: editor.getResizeScaleFactor(),
 		},
