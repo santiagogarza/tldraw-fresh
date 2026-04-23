@@ -1,4 +1,4 @@
-import { Box, TLNoteShape, Vec, toRichText } from '@tldraw/editor'
+import { Box, TLNoteShape, Vec, canonicalizeRotation, toRichText } from '@tldraw/editor'
 import { TestEditor } from '../../../test/TestEditor'
 import { NOTE_RANDOM_ROTATION_RANGE_DEGREES } from './noteHelpers'
 
@@ -349,9 +349,11 @@ function testNoteShapeFrameRotations(rotation: number) {
 	expect(newShape.parentId).toBe(frameA.id)
 
 	const rotationRangeRadians = (NOTE_RANDOM_ROTATION_RANGE_DEGREES * Math.PI) / 180
-	expect(Math.abs(editor.getShapePageTransform(newShape).rotation())).toBeLessThanOrEqual(
-		rotationRangeRadians
-	)
+	const pageRotation = editor.getShapePageTransform(newShape).rotation()
+	const normalizedRotation = canonicalizeRotation(pageRotation)
+	const signedRotation =
+		normalizedRotation > Math.PI ? normalizedRotation - Math.PI * 2 : normalizedRotation
+	expect(Math.abs(signedRotation)).toBeLessThanOrEqual(rotationRangeRadians)
 
 	editor.cancel().undo()
 }

@@ -27,7 +27,9 @@ describe(NoteShapeTool, () => {
 	})
 
 	it('Applies a random slight rotation when note shapes are moved', () => {
-		const id = editor.createShape({ type: 'note', x: 0, y: 0, rotation: 0 }).getLastCreatedShape().id
+		const id = editor
+			.createShape({ type: 'note', x: 0, y: 0, rotation: 0 })
+			.getLastCreatedShape().id
 		const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(1)
 
 		editor.nudgeShapes([id], { x: 10, y: 10 })
@@ -302,19 +304,18 @@ describe('Adjacent note position helpers (sticky pits)', () => {
 		editor.updateInstanceState({ isGridMode: true })
 
 		editor.createShape({ type: 'note', x: 2, y: 0 })
+		const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5)
 
 		const pit = { x: 322, y: 100 }
 
-		editor
-			.setCurrentTool('note')
-			.pointerDown(0, 0)
-			.pointerMove(pit.x, pit.y)
-			.pointerUp()
-			.expectShapeToMatch({
-				...editor.getLastCreatedShape(),
-				x: pit.x - 100,
-				y: pit.y - 100,
-			})
+		editor.setCurrentTool('note').pointerDown(0, 0).pointerMove(pit.x, pit.y).pointerUp()
+
+		editor.expectShapeToMatch({
+			...editor.getLastCreatedShape(),
+			x: pit.x - 100,
+			y: pit.y - 100,
+		})
 		expect(editor.getLastCreatedShape().x).not.toBe(220)
+		randomSpy.mockRestore()
 	})
 })
