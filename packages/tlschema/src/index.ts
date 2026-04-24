@@ -302,6 +302,8 @@ export {
 export { EnumStyleProp, StyleProp, type StylePropValue } from './styles/StyleProp'
 export {
 	DefaultColorStyle,
+	isHexColor,
+	normalizeHexColor,
 	registerColorsFromThemes,
 	type TLDefaultColorStyle,
 } from './styles/TLColorStyle'

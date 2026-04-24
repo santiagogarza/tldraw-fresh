@@ -2,6 +2,7 @@ import {
 	DefaultColorStyle,
 	TLDefaultColorStyle,
 	getColorValue,
+	isHexColor,
 	useEditor,
 	useValue,
 } from '@tldraw/editor'
@@ -28,7 +29,9 @@ export function MobileStylePanel() {
 	const colors = editor.getCurrentTheme().colors[editor.getColorMode()]
 	const currentColor =
 		color?.type === 'shared'
-			? getColorValue(colors, color.value as TLDefaultColorStyle, 'solid')
+			? isHexColor(color.value)
+				? color.value
+				: getColorValue(colors, color.value as TLDefaultColorStyle, 'solid')
 			: getColorValue(colors, 'black', 'solid')
 
 	const disableStylePanel = useValue(

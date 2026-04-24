@@ -292,7 +292,7 @@ export const defaultBindingSchemas: {
     };
 };
 
-// @public (undocumented)
+// @public
 export const DefaultColorStyle: EnumStyleProp<TLDefaultColorStyle>;
 
 // @public
@@ -528,6 +528,9 @@ export function isDocument(record?: UnknownRecord): record is TLDocument;
 export function isFontEntry(value: unknown): value is TLThemeFont;
 
 // @public
+export function isHexColor(value: unknown): value is string;
+
+// @public
 export function isPageId(id: string): id is TLPageId;
 
 // @public
@@ -697,6 +700,9 @@ export const lineShapeProps: RecordProps<TLLineShape>;
 
 // @public
 export const LineShapeSplineStyle: EnumStyleProp<"cubic" | "line">;
+
+// @public
+export function normalizeHexColor(value: string): string;
 
 // @public
 export const noteShapeMigrations: TLPropsMigrations;
