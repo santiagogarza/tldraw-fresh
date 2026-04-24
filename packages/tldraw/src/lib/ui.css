@@ -993,6 +993,10 @@
 	padding: 0px;
 }
 
+.tlui-button__disabled-tooltip-wrapper {
+	display: contents;
+}
+
 .tlui-page-menu__item__button .tlui-button__icon {
 	margin-inline-end: 4px;
 }
