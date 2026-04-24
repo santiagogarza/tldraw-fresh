@@ -351,6 +351,7 @@ export {
 	PasteMenuItem,
 	PrintItem,
 	RemoveFrameMenuItem,
+	ReorderMenuGroup,
 	ReorderMenuSubmenu,
 	SelectAllMenuItem,
 	ToggleAutoSizeMenuItem,

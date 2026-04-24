@@ -439,6 +439,23 @@ export function ReorderMenuSubmenu() {
 }
 
 /** @public @react */
+export function ReorderMenuGroup() {
+	const isReadonlyMode = useReadonly()
+	const oneSelected = useUnlockedSelectedShapesCount(1)
+	if (isReadonlyMode) return null
+	if (!oneSelected) return null
+
+	return (
+		<TldrawUiMenuGroup id="reorder">
+			<TldrawUiMenuActionItem actionId="bring-to-front" />
+			<TldrawUiMenuActionItem actionId="bring-forward" />
+			<TldrawUiMenuActionItem actionId="send-backward" />
+			<TldrawUiMenuActionItem actionId="send-to-back" />
+		</TldrawUiMenuGroup>
+	)
+}
+
+/** @public @react */
 export function MoveToPageMenu() {
 	const editor = useEditor()
 	const pages = useValue('pages', () => editor.getPages(), [editor])
