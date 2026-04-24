@@ -20,6 +20,7 @@ export type TLUiEventSource =
 	| 'dialog'
 	| 'help-menu'
 	| 'helper-buttons'
+	| 'header-toggle'
 	| 'style-panel'
 	| 'rich-text-menu'
 	| 'image-toolbar'

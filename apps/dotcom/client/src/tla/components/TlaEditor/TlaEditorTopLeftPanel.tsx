@@ -8,6 +8,7 @@ import {
 	ExtrasGroup,
 	PreferencesGroup,
 	TldrawUiButton,
+	TldrawUiButtonIcon,
 	TldrawUiButtonLabel,
 	TldrawUiDropdownMenuContent,
 	TldrawUiDropdownMenuRoot,
@@ -21,6 +22,7 @@ import {
 	useDialogs,
 	useEditor,
 	usePassThroughWheelEvents,
+	useUiEvents,
 	useValue,
 } from 'tldraw'
 import { useApp, useMaybeApp } from '../../hooks/useAppState'
@@ -49,6 +51,8 @@ const messages = defineMessages({
 	pageMenu: { defaultMessage: 'Page menu' },
 	brand: { defaultMessage: 'tldraw' },
 	untitledProject: { defaultMessage: 'Untitled file' },
+	toggleToLightMode: { defaultMessage: 'Switch to light mode' },
+	toggleToDarkMode: { defaultMessage: 'Switch to dark mode' },
 })
 
 // There are some styles in tla.css that adjust the regular tlui top panels
@@ -94,6 +98,7 @@ export function TlaEditorTopLeftPanelAnonymous() {
 			<Link to="/" className={styles.topLeftOfflineLogo}>
 				<TlaLogo data-testid="tla-top-left-logo-icon" />
 			</Link>
+			<TlaColorSchemeToggleButton />
 			{anonFileName && (
 				<>
 					<span
@@ -220,6 +225,7 @@ export function TlaEditorTopLeftPanelSignedIn() {
 		<>
 			{/* spacer for the sidebar toggle button */}
 			{isEmbed ? null : <div style={{ width: 40, flexShrink: 0 }} />}
+			<TlaColorSchemeToggleButton />
 			<TlaFileNameEditor
 				source="file-header"
 				isRenaming={isRenaming}
@@ -412,6 +418,31 @@ function SignInMenuItem() {
 		>
 			<TldrawUiButtonLabel>{msg}</TldrawUiButtonLabel>
 			<TlaIcon icon="sign-in" />
+		</TldrawUiButton>
+	)
+}
+
+function TlaColorSchemeToggleButton() {
+	const editor = useEditor()
+	const trackEvent = useUiEvents()
+	const isDark = useValue('isDarkMode', () => editor.user.getIsDarkMode(), [editor])
+	const intl = useIntl()
+
+	const handleClick = useCallback(() => {
+		const value = isDark ? 'light' : 'dark'
+		trackEvent('color-scheme', { source: 'header-toggle', value })
+		editor.user.updateUserPreferences({ colorScheme: value })
+	}, [editor, isDark, trackEvent])
+
+	return (
+		<TldrawUiButton
+			type="icon"
+			className={styles.topLeftColorSchemeButton}
+			data-testid="tla-color-scheme-toggle"
+			title={intl.formatMessage(isDark ? messages.toggleToLightMode : messages.toggleToDarkMode)}
+			onClick={handleClick}
+		>
+			<TldrawUiButtonIcon icon={isDark ? 'chevrons-ne' : 'chevrons-sw'} small />
 		</TldrawUiButton>
 	)
 }

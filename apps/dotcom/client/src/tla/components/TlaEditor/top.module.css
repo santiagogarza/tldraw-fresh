@@ -159,6 +159,49 @@ button.topLeftInputNameWidthSetter {
 
 /* -------------------- Main Menu ------------------- */
 
+/* Matches main menu control styling (separate class so the theme toggle can sit at the start of the row) */
+.topLeftColorSchemeButton {
+	background: none;
+	border: none;
+	position: relative;
+	outline: none;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--tl-color-text-3);
+	flex: 0 0 auto;
+	z-index: 3;
+	padding: 0px;
+	cursor: pointer;
+	margin-left: -2px;
+	margin-right: -2px;
+}
+
+.topLeftColorSchemeButton:focus-visible {
+	outline: 2px solid var(--tl-color-focus);
+	outline-offset: -5px;
+	border-radius: 10px;
+}
+
+.topLeftColorSchemeButton::after {
+	content: '';
+	position: absolute;
+	inset: 4px;
+	border-radius: var(--tl-radius-2);
+}
+
+@media (hover: hover) {
+	.topLeftColorSchemeButton:hover {
+		color: var(--tla-color-text-1);
+	}
+
+	.topLeftColorSchemeButton:hover::after {
+		background-color: var(--tl-color-muted-2);
+	}
+}
+
 .topLeftMainMenuTrigger {
 	background: none;
 	border: none;
