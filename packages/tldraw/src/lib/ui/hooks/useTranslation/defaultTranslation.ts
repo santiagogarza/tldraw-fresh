@@ -142,6 +142,7 @@ export const DEFAULT_TRANSLATION = {
 	'theme.dark': 'Dark',
 	'theme.light': 'Light',
 	'theme.system': 'System',
+	'theme.toggle': 'Toggle theme',
 	'color-style.white': 'White',
 	'color-style.black': 'Black',
 	'color-style.blue': 'Blue',

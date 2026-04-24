@@ -132,6 +132,7 @@ export type AssetUrls = {
 		menu: string
 		minus: string
 		mixed: string
+		moon: string
 		pack: string
 		plus: string
 		'question-mark-circle': string
@@ -155,6 +156,7 @@ export type AssetUrls = {
 		'stretch-horizontal': string
 		'stretch-vertical': string
 		strike: string
+		sun: string
 		'text-align-center': string
 		'text-align-left': string
 		'text-align-right': string

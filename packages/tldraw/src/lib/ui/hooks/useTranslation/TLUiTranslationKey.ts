@@ -141,6 +141,7 @@ export type TLUiTranslationKey =
 	| 'theme.dark'
 	| 'theme.light'
 	| 'theme.system'
+	| 'theme.toggle'
 	| 'color-style.white'
 	| 'color-style.black'
 	| 'color-style.blue'

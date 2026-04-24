@@ -14,6 +14,7 @@ import { DefaultDebugMenu } from '../components/DebugMenu/DefaultDebugMenu'
 import { DefaultDebugPanel } from '../components/DefaultDebugPanel'
 import { DefaultFollowingIndicator } from '../components/DefaultFollowingIndicator'
 import { DefaultMenuPanel } from '../components/DefaultMenuPanel'
+import { DefaultThemeToggle } from '../components/DefaultThemeToggle'
 import { DefaultDialogs } from '../components/Dialogs'
 import {
 	DefaultHelperButtons,
@@ -80,6 +81,7 @@ export interface TLUiComponents {
 	DebugPanel?: ComponentType | null
 	DebugMenu?: ComponentType | null
 	MenuPanel?: ComponentType | null
+	ThemeToggle?: ComponentType | null
 	TopPanel?: ComponentType | null
 	SharePanel?: ComponentType | null
 	CursorChatBubble?: ComponentType | null
@@ -133,6 +135,7 @@ export function TldrawUiComponentsProvider({
 					DebugPanel: DefaultDebugPanel,
 					DebugMenu: DefaultDebugMenu,
 					MenuPanel: DefaultMenuPanel,
+					ThemeToggle: DefaultThemeToggle,
 					SharePanel: showCollaborationUi ? DefaultSharePanel : null,
 					CursorChatBubble: showCollaborationUi ? CursorChatBubble : null,
 					TopPanel: null,

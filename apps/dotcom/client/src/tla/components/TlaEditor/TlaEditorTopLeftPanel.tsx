@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
 	DefaultPageMenu,
+	DefaultThemeToggle,
 	EditSubmenu,
 	ExportFileContentSubMenu,
 	ExtrasGroup,
@@ -116,6 +117,7 @@ export function TlaEditorTopLeftPanelAnonymous() {
 					<DefaultPageMenu />
 				</>
 			)}
+			<DefaultThemeToggle />
 			<TldrawUiDropdownMenuRoot id={`file-menu-anon`}>
 				<TldrawUiMenuContextProvider type="menu" sourceId="dialog">
 					<TldrawUiDropdownMenuTrigger>
@@ -229,6 +231,7 @@ export function TlaEditorTopLeftPanelSignedIn() {
 			/>
 			<span className={styles.topLeftPanelSeparator}>{separator}</span>
 			<DefaultPageMenu />
+			<DefaultThemeToggle />
 			<TlaFileMenu
 				fileId={fileId}
 				groupId={null}

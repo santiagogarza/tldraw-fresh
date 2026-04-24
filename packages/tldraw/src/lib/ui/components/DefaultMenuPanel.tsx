@@ -15,7 +15,7 @@ export const DefaultMenuPanel = memo(function MenuPanel() {
 	const ref = useRef<HTMLDivElement>(null)
 	usePassThroughWheelEvents(ref)
 
-	const { MainMenu, QuickActions, ActionsMenu, PageMenu } = useTldrawUiComponents()
+	const { MainMenu, QuickActions, ActionsMenu, PageMenu, ThemeToggle } = useTldrawUiComponents()
 
 	const editor = useEditor()
 	const isSinglePageMode = useValue('isSinglePageMode', () => editor.options.maxPages <= 1, [
@@ -29,12 +29,13 @@ export const DefaultMenuPanel = memo(function MenuPanel() {
 				? false
 				: breakpoint >= PORTRAIT_BREAKPOINT.TABLET
 
-	if (!MainMenu && !PageMenu && !showQuickActions) return null
+	if (!MainMenu && !PageMenu && !showQuickActions && !ThemeToggle) return null
 
 	return (
 		<nav ref={ref} className="tlui-menu-zone">
 			<TldrawUiRow>
 				{MainMenu && <MainMenu />}
+				{ThemeToggle && <ThemeToggle />}
 				{PageMenu && !isSinglePageMode && <PageMenu />}
 				{showQuickActions ? (
 					<TldrawUiToolbar orientation="horizontal" label={msg('actions-menu.title')}>

@@ -112,6 +112,7 @@ export type TLUiIconType =
 	| 'menu'
 	| 'minus'
 	| 'mixed'
+	| 'moon'
 	| 'pack'
 	| 'plus'
 	| 'question-mark-circle'
@@ -135,6 +136,7 @@ export type TLUiIconType =
 	| 'stretch-horizontal'
 	| 'stretch-vertical'
 	| 'strike'
+	| 'sun'
 	| 'text-align-center'
 	| 'text-align-left'
 	| 'text-align-right'
@@ -277,6 +279,7 @@ export const iconTypes = [
 	'menu',
 	'minus',
 	'mixed',
+	'moon',
 	'pack',
 	'plus',
 	'question-mark-circle',
@@ -300,6 +303,7 @@ export const iconTypes = [
 	'stretch-horizontal',
 	'stretch-vertical',
 	'strike',
+	'sun',
 	'text-align-center',
 	'text-align-left',
 	'text-align-right',

@@ -20,6 +20,7 @@ const components: Required<TLUiComponents> = {
 	DebugMenu: null,
 	SharePanel: null,
 	MenuPanel: null,
+	ThemeToggle: null,
 	TopPanel: null,
 	CursorChatBubble: null,
 	RichTextToolbar: null,
