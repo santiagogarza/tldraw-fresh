@@ -1,6 +1,7 @@
 import { BackToContent } from './BackToContent'
 import { ExitPenMode } from './ExitPenMode'
 import { StopFollowing } from './StopFollowing'
+import { ToggleDarkMode } from './ToggleDarkMode'
 
 /** @public @react */
 export function DefaultHelperButtonsContent() {
@@ -9,6 +10,7 @@ export function DefaultHelperButtonsContent() {
 			<ExitPenMode />
 			<BackToContent />
 			<StopFollowing />
+			<ToggleDarkMode />
 		</>
 	)
 }

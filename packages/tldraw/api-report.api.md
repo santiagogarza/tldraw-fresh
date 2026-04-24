@@ -5736,6 +5736,9 @@ export interface TLV1VideoShape extends TLV1BaseShape {
 export function ToggleAutoSizeMenuItem(): JSX.Element | null;
 
 // @public (undocumented)
+export function ToggleDarkMode(): JSX.Element;
+
+// @public (undocumented)
 export function ToggleDebugModeItem(): JSX.Element;
 
 // @public (undocumented)
