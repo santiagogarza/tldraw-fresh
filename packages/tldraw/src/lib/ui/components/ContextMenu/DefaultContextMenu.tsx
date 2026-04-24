@@ -1,6 +1,6 @@
 import { preventDefault, useContainer, useEditor, useEditorComponents } from '@tldraw/editor'
 import { ContextMenu as _ContextMenu } from 'radix-ui'
-import { ReactNode, memo, useCallback, useEffect } from 'react'
+import { MouseEvent, ReactNode, memo, useCallback, useEffect } from 'react'
 import { useMenuIsOpen } from '../../hooks/useMenuIsOpen'
 import { useDirection, useTranslation } from '../../hooks/useTranslation/useTranslation'
 import { TldrawUiMenuContextProvider } from '../primitives/menus/TldrawUiMenuContext'
@@ -92,6 +92,38 @@ export const DefaultContextMenu = memo(function DefaultContextMenu({
 		[editor, preventEscapeFromLosingShapeFocus]
 	)
 
+	const selectShapeFromNativeContextMenu = useCallback(
+		(e: MouseEvent) => {
+			// Fallback for platforms where a native context menu event reaches the
+			// UI before the editor's right-click selection path updates selection.
+			if (editor.getSelectedShapeIds().length > 0) return
+
+			const getHitShapeAtPoint = (x: number, y: number) =>
+				editor.getShapeAtPoint({ x, y }, {
+					margin: editor.options.hitTestMargin / editor.getZoomLevel(),
+					hitInside: false,
+					hitLabels: true,
+					hitLocked: true,
+					hitFrameInside: true,
+					renderingOnly: true,
+				})
+
+			const screenPoint = editor.screenToPage({ x: e.clientX, y: e.clientY })
+			const currentPoint = editor.inputs.getCurrentPagePoint()
+			const hitShape =
+				getHitShapeAtPoint(screenPoint.x, screenPoint.y) ??
+				getHitShapeAtPoint(currentPoint.x, currentPoint.y)
+			if (!hitShape) return
+
+			const targetShape = editor.getOutermostSelectableShape(hitShape)
+			if (editor.isShapeOrAncestorLocked(targetShape)) return
+
+			editor.markHistoryStoppingPoint('selecting shape')
+			editor.select(targetShape.id)
+		},
+		[editor]
+	)
+
 	const container = useContainer()
 	const dir = useDirection()
 	const [isOpen, handleOpenChange] = useMenuIsOpen('context menu', cb)
@@ -103,7 +135,7 @@ export const DefaultContextMenu = memo(function DefaultContextMenu({
 
 	return (
 		<_ContextMenu.Root dir={dir} onOpenChange={handleOpenChange} modal={false}>
-			<_ContextMenu.Trigger onContextMenu={undefined} dir="ltr" disabled={disabled}>
+			<_ContextMenu.Trigger onContextMenu={selectShapeFromNativeContextMenu} dir="ltr" disabled={disabled}>
 				{Canvas ? <Canvas /> : null}
 			</_ContextMenu.Trigger>
 			{isOpen && (
