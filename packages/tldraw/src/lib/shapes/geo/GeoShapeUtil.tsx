@@ -321,6 +321,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			case 'arrow-up':
 			case 'check-box':
 			case 'diamond':
+			case 'flower':
 			case 'hexagon':
 			case 'octagon':
 			case 'pentagon':

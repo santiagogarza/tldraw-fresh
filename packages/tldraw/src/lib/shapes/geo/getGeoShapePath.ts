@@ -172,6 +172,8 @@ function _getGeoPath(
 				.cubicBezierTo(cx, h, w, k * 2.5, o * 2.5, k * 3)
 				.close()
 		}
+		case 'flower':
+			return getFlowerPath(w, h, isFilled)
 		case 'hexagon':
 			return PathBuilder.lineThroughPoints(getPolygonVertices(w, h, 6), {
 				geometry: { isFilled },
@@ -365,6 +367,34 @@ function getStarPath(w: number, h: number, isFilled: boolean) {
 		}),
 		{ geometry: { isFilled } }
 	).close()
+}
+
+function getFlowerPath(w: number, h: number, isFilled: boolean) {
+	const n = 8
+	const step = PI2 / n
+	const cx = w / 2
+	const cy = h / 2
+	const orx = w / 2
+	const ory = h / 2
+	const k = 0.38
+	const irx = orx * k
+	const iry = ory * k
+	const path = new PathBuilder()
+	for (let i = 0; i < n; i++) {
+		const t0 = -HALF_PI + i * step
+		const t1 = -HALF_PI + (i + 0.5) * step
+		const ox = cx + orx * Math.cos(t0)
+		const oy = cy + ory * Math.sin(t0)
+		const ix = cx + irx * Math.cos(t1)
+		const iy = cy + iry * Math.sin(t1)
+		if (i === 0) {
+			path.moveTo(ox, oy, { geometry: { isFilled } })
+		} else {
+			path.lineTo(ox, oy)
+		}
+		path.lineTo(ix, iy)
+	}
+	return path.close()
 }
 
 /* ---------------------- Cloud --------------------- */

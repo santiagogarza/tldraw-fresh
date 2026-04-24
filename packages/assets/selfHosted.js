@@ -116,6 +116,7 @@ export function getAssetUrls(opts) {
 			'geo-cloud': iconsIcon0MergedSvg + '#geo-cloud',
 			'geo-diamond': iconsIcon0MergedSvg + '#geo-diamond',
 			'geo-ellipse': iconsIcon0MergedSvg + '#geo-ellipse',
+			'geo-flower': iconsIcon0MergedSvg + '#geo-flower',
 			'geo-heart': iconsIcon0MergedSvg + '#geo-heart',
 			'geo-hexagon': iconsIcon0MergedSvg + '#geo-hexagon',
 			'geo-octagon': iconsIcon0MergedSvg + '#geo-octagon',
