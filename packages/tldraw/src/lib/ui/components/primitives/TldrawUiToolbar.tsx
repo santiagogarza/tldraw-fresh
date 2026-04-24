@@ -82,6 +82,16 @@ export const TldrawUiToolbarButton = React.forwardRef<HTMLButtonElement, TLUiToo
 
 		const tooltipContent = tooltip || props.title
 
+		// Disabled buttons don't fire React mouse events, so we wrap in a
+		// span that can receive them and trigger the tooltip.
+		if (props.disabled && tooltipContent) {
+			return (
+				<TldrawUiTooltip content={tooltipContent}>
+					<span className="tlui-button__disabled-tooltip-wrapper">{button}</span>
+				</TldrawUiTooltip>
+			)
+		}
+
 		return <TldrawUiTooltip content={tooltipContent}>{button}</TldrawUiTooltip>
 	}
 )
