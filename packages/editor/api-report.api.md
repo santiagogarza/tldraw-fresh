@@ -63,8 +63,8 @@ import { TLCamera } from '@tldraw/tlschema';
 import { TLCreateShapePartial } from '@tldraw/tlschema';
 import { TLCursor } from '@tldraw/tlschema';
 import { TLCursorType } from '@tldraw/tlschema';
-import { TLDefaultColor } from '@tldraw/tlschema';
-import { TLDefaultColorStyle } from '@tldraw/tlschema';
+import type { TLDefaultColor } from '@tldraw/tlschema';
+import type { TLDefaultColorStyle } from '@tldraw/tlschema';
 import { TLDefaultDashStyle } from '@tldraw/tlschema';
 import { TLDefaultHorizontalAlignStyle } from '@tldraw/tlschema';
 import { TLDocument } from '@tldraw/tlschema';
@@ -91,7 +91,7 @@ import { TLStoreProps } from '@tldraw/tlschema';
 import { TLStoreSchema } from '@tldraw/tlschema';
 import { TLStoreSnapshot } from '@tldraw/tlschema';
 import { TLTheme } from '@tldraw/tlschema';
-import { TLThemeColors } from '@tldraw/tlschema';
+import type { TLThemeColors } from '@tldraw/tlschema';
 import { TLThemeId } from '@tldraw/tlschema';
 import { TLThemes } from '@tldraw/tlschema';
 import { TLUnknownAsset } from '@tldraw/tlschema';
@@ -1995,6 +1995,12 @@ export function getPointsOnArc(startPoint: VecLike, endPoint: VecLike, center: n
 
 // @public (undocumented)
 export function getPolygonVertices(width: number, height: number, sides: number): Vec[];
+
+// @public (undocumented)
+export function getRelativeContrastAgainstCanvas(hex6: string, theme: TLTheme, colorMode: 'dark' | 'light'): {
+    isLowContrast: boolean;
+    ratio: number;
+};
 
 // @internal (undocumented)
 export function getRotationSnapshot({ editor, ids }: {

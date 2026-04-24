@@ -17,6 +17,7 @@ import {
 	Vec,
 } from 'tldraw'
 import { SimpleShapeId } from '../types/ids-schema'
+import { tldrawColorToFocused } from './FocusedColor'
 import { convertTldrawFillToFocusedFill } from './FocusedFill'
 import { convertTldrawFontSizeAndScaleToFocusedFontSize } from './FocusedFontSize'
 import { FocusedGeoShapeType } from './FocusedGeoShapeType'
@@ -101,7 +102,7 @@ export function convertTldrawIdToSimpleId(id: TLShapeId): SimpleShapeId {
 function convertDrawShapeToFocused(editor: Editor, shape: TLDrawShape): FocusedDrawShape {
 	return {
 		_type: 'draw',
-		color: shape.props.color,
+		color: tldrawColorToFocused(shape.props.color),
 		fill: convertTldrawFillToFocusedFill(shape.props.fill),
 		note: (shape.meta.note as string) ?? '',
 		shapeId: convertTldrawIdToSimpleId(shape.id),
@@ -140,7 +141,7 @@ function convertTextShapeToFocused(editor: Editor, shape: TLTextShape): FocusedT
 	return {
 		_type: 'text',
 		anchor,
-		color: shape.props.color,
+		color: tldrawColorToFocused(shape.props.color),
 		fontSize: convertTldrawFontSizeAndScaleToFocusedFontSize(textSize, shape.props.scale),
 		maxWidth: shape.props.autoSize ? null : shape.props.w,
 		note: (shape.meta.note as string) ?? '',
@@ -175,7 +176,7 @@ function convertGeoShapeToFocused(editor: Editor, shape: TLGeoShape): FocusedGeo
 
 	return {
 		_type: GEO_TO_FOCUSED_TYPES[shape.props.geo],
-		color: shape.props.color,
+		color: tldrawColorToFocused(shape.props.color),
 		fill: convertTldrawFillToFocusedFill(shape.props.fill),
 		h: shape.props.h,
 		note: (shape.meta.note as string) ?? '',
@@ -193,7 +194,7 @@ function convertLineShapeToFocused(editor: Editor, shape: TLLineShape): FocusedL
 	const points = Object.values(shape.props.points).sort((a, b) => a.index.localeCompare(b.index))
 	return {
 		_type: 'line',
-		color: shape.props.color,
+		color: tldrawColorToFocused(shape.props.color),
 		note: (shape.meta.note as string) ?? '',
 		shapeId: convertTldrawIdToSimpleId(shape.id),
 		x1: points[0].x + bounds.x,
@@ -215,7 +216,7 @@ function convertArrowShapeToFocused(editor: Editor, shape: TLArrowShape): Focuse
 	return {
 		_type: 'arrow',
 		bend: shape.props.bend * -1,
-		color: shape.props.color,
+		color: tldrawColorToFocused(shape.props.color),
 		fromId: startBinding ? convertTldrawIdToSimpleId(startBinding.toId) : null,
 		note: (shape.meta.note as string) ?? '',
 		shapeId: convertTldrawIdToSimpleId(shape.id),
@@ -234,7 +235,7 @@ function convertNoteShapeToFocused(editor: Editor, shape: TLNoteShape): FocusedN
 	const bounds = getSimpleBounds(editor, shape)
 	return {
 		_type: 'note',
-		color: shape.props.color,
+		color: tldrawColorToFocused(shape.props.color),
 		note: (shape.meta.note as string) ?? '',
 		shapeId: convertTldrawIdToSimpleId(shape.id),
 		text: text ?? '',

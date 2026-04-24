@@ -133,7 +133,6 @@ export class EnumStyleProp<T> extends StyleProp<T> {
 				this.values.push(v)
 			}
 		}
-		// Rebuild the validator with the updated values
 		;(this as any).type = T.literalEnum(...this.values)
 	}
 

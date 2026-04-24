@@ -2,7 +2,15 @@
  * Focused shape format types and conversion utilities.
  * Ported from tldraw/tldraw templates/agent/shared/format/
  */
-import { TLDefaultFillStyle, TLDefaultSizeStyle, TLGeoShapeGeoStyle, TLShapeId } from 'tldraw'
+import {
+	isCustomColorStyle,
+	type TLDefaultColorStyle,
+	TLDefaultFillStyle,
+	TLDefaultSizeStyle,
+	TLGeoShapeGeoStyle,
+	TLNamedColorStyle,
+	TLShapeId,
+} from 'tldraw'
 
 // ---- Colors ----
 
@@ -22,11 +30,41 @@ export const FOCUSED_COLORS = [
 	'white',
 ] as const
 
-export type FocusedColor = (typeof FOCUSED_COLORS)[number]
+export type FocusedColor = (typeof FOCUSED_COLORS)[number] | `#${string}`
+
+/**
+ * Map a tldraw color style to the focused format (named swatch or exact hex for custom).
+ */
+export function tldrawColorToFocused(c: TLDefaultColorStyle): FocusedColor {
+	if (isCustomColorStyle(c) && c.value) {
+		return c.value as FocusedColor
+	}
+	return asColor(c as string)
+}
+
+/**
+ * For shape props: focused wire format (named or `#rrggbb`) with optional tldraw default.
+ */
+export function focusedColorToTldraw(
+	focused: FocusedColor | undefined,
+	fallback: TLDefaultColorStyle | undefined
+): TLDefaultColorStyle {
+	if (focused !== undefined) {
+		if (typeof focused === 'string' && /^#[0-9A-Fa-f]{6}$/.test(focused)) {
+			return { type: 'custom', value: focused.toLowerCase() } as const
+		}
+		return focused as TLNamedColorStyle
+	}
+	if (fallback !== undefined) return fallback
+	return 'black'
+}
 
 export function asColor(color: string): FocusedColor {
-	if (FOCUSED_COLORS.includes(color as FocusedColor)) {
-		return color as FocusedColor
+	if (FOCUSED_COLORS.includes(color as (typeof FOCUSED_COLORS)[number])) {
+		return color as (typeof FOCUSED_COLORS)[number]
+	}
+	if (/^#[0-9A-Fa-f]{6}$/i.test(color)) {
+		return color.toLowerCase() as FocusedColor
 	}
 	switch (color) {
 		case 'pink':

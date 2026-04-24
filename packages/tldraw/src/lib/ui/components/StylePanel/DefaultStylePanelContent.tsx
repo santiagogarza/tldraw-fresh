@@ -2,7 +2,6 @@ import {
 	ArrowShapeArrowheadEndStyle,
 	ArrowShapeArrowheadStartStyle,
 	ArrowShapeKindStyle,
-	DefaultColorStyle,
 	DefaultDashStyle,
 	DefaultFillStyle,
 	DefaultFontStyle,
@@ -20,12 +19,13 @@ import {
 } from '@tldraw/editor'
 import React from 'react'
 import { GeoShapeUtil } from '../../../shapes/geo/GeoShapeUtil'
-import { getColorStyleItems, getFontStyleItems, STYLES } from '../../../styles'
+import { getFontStyleItems, STYLES } from '../../../styles'
 import { useTranslation } from '../../hooks/useTranslation/useTranslation'
 import { TldrawUiButtonIcon } from '../primitives/Button/TldrawUiButtonIcon'
 import { TldrawUiSlider } from '../primitives/TldrawUiSlider'
 import { TldrawUiToolbar, TldrawUiToolbarButton } from '../primitives/TldrawUiToolbar'
 import { StylePanelButtonPicker, StylePanelButtonPickerInline } from './StylePanelButtonPicker'
+import { StylePanelColorPicker } from './StylePanelColorPicker'
 import { useStylePanelContext } from './StylePanelContext'
 import { StylePanelDoubleDropdownPicker } from './StylePanelDoubleDropdownPicker'
 import {
@@ -70,27 +70,6 @@ export interface StylePanelSectionProps {
 /** @public @react */
 export function StylePanelSection({ children }: StylePanelSectionProps) {
 	return <div className="tlui-style-panel__section">{children}</div>
-}
-
-/** @public @react */
-export function StylePanelColorPicker() {
-	const editor = useEditor()
-	const theme = editor.getCurrentTheme()
-	const colorMode = editor.getColorMode()
-	const { styles } = useStylePanelContext()
-	const msg = useTranslation()
-	const color = styles.get(DefaultColorStyle)
-	if (color === undefined) return null
-
-	return (
-		<StylePanelButtonPicker
-			title={msg('style-panel.color')}
-			uiType="color"
-			style={DefaultColorStyle}
-			items={getColorStyleItems(theme.colors[colorMode])}
-			value={color}
-		/>
-	)
 }
 
 const tldrawSupportedOpacities = [0.1, 0.25, 0.5, 0.75, 1] as const

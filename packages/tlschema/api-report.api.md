@@ -128,6 +128,19 @@ export const CameraRecordType: RecordType<TLCamera, never>;
 // @public
 export const canvasUiColorTypeValidator: T.Validator<"accent" | "black" | "laser" | "muted-1" | "selection-fill" | "selection-stroke" | "white">;
 
+// @public (undocumented)
+export class ColorStyleProp extends StyleProp<TLDefaultColorStyle> {
+    // @internal
+    constructor(id: 'tldraw:color' | 'tldraw:labelColor', defaultValue: TLDefaultColorStyle);
+    // (undocumented)
+    addValues(...newValues: (string | TLNamedColorStyle)[]): void;
+    // (undocumented)
+    removeValues(...valuesToRemove: string[]): void;
+    // (undocumented)
+    setDefaultValue(value: TLDefaultColorStyle): void;
+    values: TLNamedColorStyle[];
+}
+
 // @public
 export function compressLegacySegments(segments: {
     points: VecModel[];
@@ -293,7 +306,7 @@ export const defaultBindingSchemas: {
 };
 
 // @public (undocumented)
-export const DefaultColorStyle: EnumStyleProp<TLDefaultColorStyle>;
+export const DefaultColorStyle: ColorStyleProp;
 
 // @public
 export const DefaultDashStyle: EnumStyleProp<"dashed" | "dotted" | "draw" | "none" | "solid">;
@@ -514,6 +527,9 @@ export function isBinding(record?: UnknownRecord): record is TLBinding;
 
 // @public
 export function isBindingId(id?: string): id is TLBindingId;
+
+// @public (undocumented)
+export function isCustomColorStyle(value: unknown): value is TLCustomColorStyle;
 
 // @public
 export function isCustomRecord(typeName: string, record?: UnknownRecord): boolean;
@@ -1044,6 +1060,12 @@ export interface TLCursor {
 // @public
 export type TLCursorType = SetValue<typeof TL_CURSOR_TYPES>;
 
+// @public (undocumented)
+export type TLCustomColorStyle = {
+    value: string;
+    type: 'custom';
+};
+
 // @public
 export type TLCustomRecord = TLIndexedRecords[keyof TLIndexedRecords];
 
@@ -1086,9 +1108,7 @@ export interface TLDefaultColor {
 }
 
 // @public
-export type TLDefaultColorStyle = {
-    [K in keyof TLThemeDefaultColors]: TLThemeDefaultColors[K] extends TLDefaultColor ? K : never;
-}[keyof TLThemeDefaultColors] & string;
+export type TLDefaultColorStyle = TLCustomColorStyle | TLNamedColorStyle;
 
 // @public
 export type TLDefaultDashStyle = T.TypeOf<typeof DefaultDashStyle>;
@@ -1497,6 +1517,11 @@ export interface TLLineShapeProps {
 
 // @public
 export type TLLineShapeSplineStyle = T.TypeOf<typeof LineShapeSplineStyle>;
+
+// @public
+export type TLNamedColorStyle = {
+    [K in keyof TLThemeDefaultColors]: TLThemeDefaultColors[K] extends TLDefaultColor ? K : never;
+}[keyof TLThemeDefaultColors] & string;
 
 // @public
 export type TLNoteShape = TLBaseShape<'note', TLNoteShapeProps>;

@@ -26709,6 +26709,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-colorful@npm:^5.6.1":
+  version: 5.6.1
+  resolution: "react-colorful@npm:5.6.1"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10/3e02ba013454818d0c323949bd961fb2c19ac18130dfc67a4032aa5b03787c5ffe7ff159c4b97dc3475072d576828ca0c4b8e8ce85b55eaf484180596cdf0403
+  languageName: node
+  linkType: hard
+
 "react-dom@npm:^19.2.1":
   version: 19.2.1
   resolution: "react-dom@npm:19.2.1"
@@ -29867,6 +29877,7 @@ __metadata:
     lz-string: "npm:^1.5.0"
     radix-ui: "npm:^1.4.2"
     react: "npm:^19.2.1"
+    react-colorful: "npm:^5.6.1"
     react-dom: "npm:^19.2.1"
     resize-observer-polyfill: "npm:^1.5.1"
     vitest: "npm:^3.2.4"

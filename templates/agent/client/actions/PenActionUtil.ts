@@ -1,5 +1,5 @@
 import { b64Vecs, TLDrawShapeSegment, TLShapeId, Vec, VecModel } from 'tldraw'
-import { asColor } from '../../shared/format/FocusedColor'
+import { focusedColorToTldraw } from '../../shared/format/FocusedColor'
 import { convertFocusedFillToTldrawFill } from '../../shared/format/FocusedFill'
 import { PenAction } from '../../shared/schema/AgentActionSchemas'
 import { Streaming } from '../../shared/types/Streaming'
@@ -100,7 +100,7 @@ export const PenActionUtil = registerActionUtil(
 				y: minY,
 				isLocked: !action.complete,
 				props: {
-					color: asColor(action.color ?? 'black'),
+					color: focusedColorToTldraw(action.color, undefined),
 					fill: convertFocusedFillToTldrawFill(action.fill ?? 'none'),
 					dash: 'draw',
 					size: 's',

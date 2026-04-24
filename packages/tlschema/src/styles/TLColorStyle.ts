@@ -1,3 +1,9 @@
+import { T } from '@tldraw/validate'
+import {
+	type TLCustomColorStyle,
+	customColorStyleValidator,
+	isCustomColorStyle,
+} from './customColorStyle'
 import { StyleProp } from './StyleProp'
 import { TLDefaultColor, TLThemeDefaultColors, TLThemes } from './TLTheme'
 
@@ -7,17 +13,22 @@ import { TLDefaultColor, TLThemeDefaultColors, TLThemes } from './TLTheme'
  *
  * @public
  */
-export type TLDefaultColorStyle = {
+export type TLNamedColorStyle = {
 	[K in keyof TLThemeDefaultColors]: TLThemeDefaultColors[K] extends TLDefaultColor ? K : never
 }[keyof TLThemeDefaultColors] &
 	string
 
 /**
- * Used only for initial values of the color style; the source of truth has moved to TLTheme.
+ * Shape stroke/fill color: a named theme palette entry or a fixed custom {@link TLCustomColorStyle}.
  *
- * @internal
+ * @public
  */
-const defaultColorNames: TLDefaultColorStyle[] = [
+export type TLDefaultColorStyle = TLNamedColorStyle | TLCustomColorStyle
+
+// Re-export for custom branch checks in UI
+export { isCustomColorStyle, type TLCustomColorStyle } from './customColorStyle'
+
+const defaultColorNames: readonly TLNamedColorStyle[] = [
 	'black',
 	'grey',
 	'light-violet',
@@ -30,24 +41,91 @@ const defaultColorNames: TLDefaultColorStyle[] = [
 	'light-green',
 	'light-red',
 	'red',
-	'white',
 ] as const
 
-/**
- * @public
- */
-export const DefaultColorStyle = StyleProp.defineEnum('tldraw:color', {
-	defaultValue: 'black',
-	values: defaultColorNames,
-})
+const validNamedColors = new Set<string>(defaultColorNames)
+
+const namedColorStyleValidator: T.Validator<TLNamedColorStyle> = new T.Validator(
+	(value) => {
+		if (typeof value !== 'string' || !validNamedColors.has(value)) {
+			throw new T.ValidationError('Expected a named theme color string')
+		}
+		return value as TLNamedColorStyle
+	},
+	(known, next) => {
+		if (Object.is(known, next)) return known
+		return namedColorStyleValidator.validate(next)
+	}
+)
+
+const defaultColorValueValidator: T.Validator<TLDefaultColorStyle> = T.or(
+	namedColorStyleValidator,
+	customColorStyleValidator
+) as T.Validator<TLDefaultColorStyle>
+
+/** @public */
+export class ColorStyleProp extends StyleProp<TLDefaultColorStyle> {
+	/** Only named palette color names (excludes the custom object branch) */
+	values: TLNamedColorStyle[]
+
+	/** @internal */
+	constructor(id: 'tldraw:color' | 'tldraw:labelColor', defaultValue: TLDefaultColorStyle) {
+		super(id, defaultValue, defaultColorValueValidator)
+		this.values = [...defaultColorNames] as TLNamedColorStyle[]
+	}
+
+	override setDefaultValue(value: TLDefaultColorStyle) {
+		this.defaultValue = value
+	}
+
+	/**
+	 * @public
+	 */
+	addValues(...newValues: (TLNamedColorStyle | string)[]) {
+		for (const v of newValues) {
+			if (!this.values.includes(v as TLNamedColorStyle)) {
+				this.values.push(v as TLNamedColorStyle)
+			}
+			validNamedColors.add(v)
+		}
+	}
+
+	/**
+	 * @public
+	 */
+	removeValues(...valuesToRemove: string[]) {
+		for (const v of valuesToRemove) {
+			const idx = this.values.indexOf(v as TLNamedColorStyle)
+			if (idx >= 0) {
+				this.values.splice(idx, 1)
+			}
+			validNamedColors.delete(v)
+		}
+	}
+}
 
 /**
  * @public
  */
-export const DefaultLabelColorStyle = StyleProp.defineEnum('tldraw:labelColor', {
-	defaultValue: 'black',
-	values: defaultColorNames,
-})
+export const DefaultColorStyle = new ColorStyleProp('tldraw:color', 'black')
+
+/**
+ * Same values and runtime registration as {@link DefaultColorStyle}; separate `id` for the label field.
+ *
+ * @public
+ */
+export const DefaultLabelColorStyle = (() => {
+	const p = new ColorStyleProp('tldraw:labelColor', 'black')
+	// Reuse the single source of named-color list
+	p.addValues = (...newValues: (TLNamedColorStyle | string)[]) => {
+		DefaultColorStyle.addValues(...newValues)
+	}
+	p.removeValues = (...valuesToRemove: string[]) => {
+		DefaultColorStyle.removeValues(...valuesToRemove)
+	}
+	Object.defineProperty(p, 'values', { get: () => DefaultColorStyle.values })
+	return p
+})() as ColorStyleProp
 
 /**
  * Scan theme definitions and sync color registrations to match.
@@ -61,25 +139,23 @@ export const DefaultLabelColorStyle = StyleProp.defineEnum('tldraw:labelColor', 
  * @public
  */
 export function registerColorsFromThemes(definitions: TLThemes): void {
-	const colorNames = new Set<TLDefaultColorStyle>()
+	const colorNames = new Set<TLNamedColorStyle>()
 	for (const def of Object.values(definitions)) {
 		for (const colorPalette of [def.colors.light, def.colors.dark]) {
 			for (const [key, value] of Object.entries(colorPalette)) {
 				if (typeof value === 'object' && value !== null) {
-					colorNames.add(key as TLDefaultColorStyle)
+					colorNames.add(key as TLNamedColorStyle)
 				}
 			}
 		}
 	}
 	if (colorNames.size > 0) {
 		DefaultColorStyle.addValues(...colorNames)
-		DefaultLabelColorStyle.addValues(...colorNames)
 	}
 
-	const toRemove = DefaultColorStyle.values.filter((v) => !colorNames.has(v as TLDefaultColorStyle))
+	const toRemove = DefaultColorStyle.values.filter((v) => !colorNames.has(v as TLNamedColorStyle))
 	if (toRemove.length > 0) {
 		DefaultColorStyle.removeValues(...toRemove)
-		DefaultLabelColorStyle.removeValues(...toRemove)
 	}
 
 	if (process.env.NODE_ENV !== 'production') {

@@ -301,9 +301,13 @@ export {
 } from './shapes/TLVideoShape'
 export { EnumStyleProp, StyleProp, type StylePropValue } from './styles/StyleProp'
 export {
+	ColorStyleProp,
 	DefaultColorStyle,
 	registerColorsFromThemes,
 	type TLDefaultColorStyle,
+	type TLNamedColorStyle,
+	isCustomColorStyle,
+	type TLCustomColorStyle,
 } from './styles/TLColorStyle'
 export { DefaultDashStyle, type TLDefaultDashStyle } from './styles/TLDashStyle'
 export { DefaultFillStyle, type TLDefaultFillStyle } from './styles/TLFillStyle'
