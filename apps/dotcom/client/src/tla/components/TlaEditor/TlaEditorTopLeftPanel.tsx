@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
 	DefaultPageMenu,
+	ColorSchemeToggle,
 	EditSubmenu,
 	ExportFileContentSubMenu,
 	ExtrasGroup,
@@ -60,6 +61,7 @@ export function TlaEditorTopLeftPanel({ isAnonUser }: { isAnonUser: boolean }) {
 	return (
 		<div ref={ref} className={classNames(styles.topLeftPanel)}>
 			<div className={classNames(styles.topLeftPanelButtons)}>
+				<ColorSchemeToggle className={styles.topLeftColorSchemeToggle} />
 				{isAnonUser ? <TlaEditorTopLeftPanelAnonymous /> : <TlaEditorTopLeftPanelSignedIn />}
 			</div>
 		</div>

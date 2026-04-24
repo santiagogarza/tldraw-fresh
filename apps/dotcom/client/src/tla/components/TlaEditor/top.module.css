@@ -36,6 +36,10 @@
 	justify-content: flex-start;
 }
 
+.topLeftColorSchemeToggle {
+	flex-shrink: 0;
+}
+
 .topLeftPanel > button:nth-last-of-type(1) {
 	position: relative;
 	z-index: 2;

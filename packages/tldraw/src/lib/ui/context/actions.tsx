@@ -1253,6 +1253,7 @@ export function ActionsProvider({ overrides, children }: ActionsProviderProps) {
 				kbd: 'cmd+/,ctrl+/',
 				readonlyOk: true,
 				onSelect(source) {
+					// Toggles light/dark. If the user was on "system", pick the opposite of the resolved appearance.
 					const value = editor.user.getIsDarkMode() ? 'light' : 'dark'
 					trackEvent('color-scheme', { source, value })
 					editor.user.updateUserPreferences({

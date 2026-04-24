@@ -27,6 +27,7 @@ export { startEditingShapeWithRichText } from './lib/tools/SelectTool/selectHelp
 export { DefaultA11yAnnouncer, useSelectedShapesAnnouncer } from './lib/ui/components/A11y'
 export { AccessibilityMenu } from './lib/ui/components/AccessibilityMenu'
 export { ColorSchemeMenu } from './lib/ui/components/ColorSchemeMenu'
+export { ColorSchemeToggle } from './lib/ui/components/ColorSchemeToggle'
 export { DefaultFollowingIndicator } from './lib/ui/components/DefaultFollowingIndicator'
 export { DefaultDialogs } from './lib/ui/components/Dialogs'
 export {

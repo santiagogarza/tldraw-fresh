@@ -4,6 +4,7 @@ import { PORTRAIT_BREAKPOINT } from '../constants'
 import { useBreakpoint } from '../context/breakpoints'
 import { useTldrawUiComponents } from '../context/components'
 import { useTranslation } from '../hooks/useTranslation/useTranslation'
+import { ColorSchemeToggle } from './ColorSchemeToggle'
 import { TldrawUiRow } from './primitives/layout'
 import { TldrawUiToolbar } from './primitives/TldrawUiToolbar'
 
@@ -29,11 +30,10 @@ export const DefaultMenuPanel = memo(function MenuPanel() {
 				? false
 				: breakpoint >= PORTRAIT_BREAKPOINT.TABLET
 
-	if (!MainMenu && !PageMenu && !showQuickActions) return null
-
 	return (
 		<nav ref={ref} className="tlui-menu-zone">
 			<TldrawUiRow>
+				<ColorSchemeToggle />
 				{MainMenu && <MainMenu />}
 				{PageMenu && !isSinglePageMode && <PageMenu />}
 				{showQuickActions ? (
