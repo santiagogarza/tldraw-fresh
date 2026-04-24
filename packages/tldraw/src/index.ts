@@ -302,6 +302,7 @@ export {
 	type TLUiHelperButtonsProps,
 } from './lib/ui/components/HelperButtons/DefaultHelperButtons'
 export { DefaultHelperButtonsContent } from './lib/ui/components/HelperButtons/DefaultHelperButtonsContent'
+export { ToggleColorMode } from './lib/ui/components/HelperButtons/ToggleColorMode'
 export {
 	DefaultHelpMenu,
 	type TLUiHelpMenuProps,
