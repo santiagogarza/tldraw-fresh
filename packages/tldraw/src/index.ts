@@ -542,7 +542,6 @@ export {
 	DefaultStylePanelContent,
 	StylePanelArrowheadPicker,
 	StylePanelArrowKindPicker,
-	StylePanelColorPicker,
 	StylePanelDashPicker,
 	StylePanelFillPicker,
 	StylePanelFontPicker,
@@ -555,6 +554,7 @@ export {
 	StylePanelTextAlignPicker,
 	type StylePanelSectionProps,
 } from './lib/ui/components/StylePanel/DefaultStylePanelContent'
+export { StylePanelColorPicker } from './lib/ui/components/StylePanel/StylePanelColorPicker'
 export {
 	StylePanelButtonPicker,
 	StylePanelButtonPickerInline,

@@ -16,7 +16,7 @@ import { flushSync } from 'react-dom'
 import { ErrorBoundary } from '../components/ErrorBoundary'
 import { InnerShape, InnerShapeBackground } from '../components/Shape'
 import type { Editor, TLRenderingShape } from '../editor/Editor'
-import { getColorValue } from '../editor/managers/ThemeManager/defaultThemes'
+import { getColorValue } from '../editor/managers/ThemeManager/customColorPalette'
 import { ShapeUtil } from '../editor/shapes/ShapeUtil'
 import { TLImageExportOptions } from '../editor/types/misc-types'
 import {

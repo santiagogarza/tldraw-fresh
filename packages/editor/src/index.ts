@@ -529,4 +529,4 @@ registerTldrawLibraryVersion(
 	(globalThis as any).TLDRAW_LIBRARY_MODULES
 )
 
-export { getColorValue } from './lib/editor/managers/ThemeManager/defaultThemes'
+export { getColorValue, getRelativeContrastAgainstCanvas } from './lib/editor/managers/ThemeManager/customColorPalette'

@@ -66,7 +66,8 @@
 		"hotkeys-js": "^4.0.2",
 		"idb": "^7.1.1",
 		"lz-string": "^1.5.0",
-		"radix-ui": "^1.4.2"
+		"radix-ui": "^1.4.2",
+		"react-colorful": "^5.6.1"
 	},
 	"peerDependencies": {
 		"react": "^18.2.0 || ^19.2.1",

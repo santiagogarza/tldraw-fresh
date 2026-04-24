@@ -17,14 +17,15 @@ import {
 	TLNoteShape,
 	TLShape,
 	TLTextShape,
+	type TLDefaultColorStyle,
 	toRichText,
 	Vec,
 } from 'tldraw'
 import {
-	asColor,
 	convertFocusedFillToTldrawFill,
 	convertFocusedFontSizeToTldrawFontSizeAndScale,
 	convertSimpleIdToTldrawId,
+	focusedColorToTldraw,
 	FOCUSED_TO_GEO_TYPES,
 	type FocusedArrowShape,
 	type FocusedDrawShape,
@@ -140,7 +141,7 @@ function convertTextShapeToTldrawShape(
 			size: textSize,
 			scale,
 			richText,
-			color: asColor(focusedShape.color ?? defaultTextShape.props?.color ?? 'black'),
+			color: focusedColorToTldraw(focusedShape.color, defaultTextShape.props?.color as TLDefaultColorStyle | undefined),
 			textAlign,
 			autoSize,
 			w:
@@ -246,7 +247,7 @@ function convertLineShapeToTldrawShape(
 					a1: { id: 'a1', index: 'a1' as IndexKey, x: x1 - minX, y: y1 - minY },
 					a2: { id: 'a2', index: 'a2' as IndexKey, x: x2 - minX, y: y2 - minY },
 				},
-				color: asColor(focusedShape.color ?? defaultLineShape.props?.color ?? 'black'),
+				color: focusedColorToTldraw(focusedShape.color, defaultLineShape.props?.color as TLDefaultColorStyle | undefined),
 				dash: defaultLineShape.props?.dash ?? 'draw',
 				scale: defaultLineShape.props?.scale ?? 1,
 				spline: defaultLineShape.props?.spline ?? 'line',
@@ -297,7 +298,7 @@ function convertArrowShapeToTldrawShape(
 			arrowheadEnd: defaultArrowShape.props?.arrowheadEnd ?? 'arrow',
 			arrowheadStart: defaultArrowShape.props?.arrowheadStart ?? 'none',
 			bend: (focusedShape.bend ?? (defaultArrowShape.props?.bend ?? 0) * -1) * -1,
-			color: asColor(focusedShape.color ?? defaultArrowShape.props?.color ?? 'black'),
+			color: focusedColorToTldraw(focusedShape.color, defaultArrowShape.props?.color as TLDefaultColorStyle | undefined),
 			dash: defaultArrowShape.props?.dash ?? 'draw',
 			elbowMidPoint: defaultArrowShape.props?.elbowMidPoint ?? 0.5,
 			end: { x: x2 - minX, y: y2 - minY },
@@ -405,7 +406,7 @@ function convertGeoShapeToTldrawShape(
 			opacity: defaultGeoShape.opacity ?? 1,
 			props: {
 				align: focusedShape.textAlign ?? defaultGeoShape.props?.align ?? 'start',
-				color: asColor(focusedShape.color ?? defaultGeoShape.props?.color ?? 'black'),
+				color: focusedColorToTldraw(focusedShape.color, defaultGeoShape.props?.color as TLDefaultColorStyle | undefined),
 				dash: defaultGeoShape.props?.dash ?? 'draw',
 				fill,
 				font: defaultGeoShape.props?.font ?? 'draw',
@@ -457,7 +458,7 @@ function convertNoteShapeToTldrawShape(
 			isLocked: defaultNoteShape.isLocked ?? false,
 			opacity: defaultNoteShape.opacity ?? 1,
 			props: {
-				color: asColor(focusedShape.color ?? defaultNoteShape.props?.color ?? 'black'),
+				color: focusedColorToTldraw(focusedShape.color, defaultNoteShape.props?.color as TLDefaultColorStyle | undefined),
 				richText,
 				size: defaultNoteShape.props?.size ?? 's',
 				align: defaultNoteShape.props?.align ?? 'middle',
@@ -508,7 +509,7 @@ function convertDrawShapeToTldrawShape(
 			opacity: defaultDrawShape.opacity ?? 1,
 			props: {
 				...editor.getShapeUtil('draw').getDefaultProps(),
-				color: asColor(focusedShape.color ?? defaultDrawShape.props?.color ?? 'black'),
+				color: focusedColorToTldraw(focusedShape.color, defaultDrawShape.props?.color as TLDefaultColorStyle | undefined),
 				fill,
 			},
 			meta: {
