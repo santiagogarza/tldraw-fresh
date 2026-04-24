@@ -727,6 +727,14 @@ describe('adding cloud shape', () => {
 	})
 })
 
+describe('adding flower shape', () => {
+	const { up } = getTestMigration(geoShapeVersions.AddFlower)
+
+	test('up does nothing', () => {
+		expect(up({ props: { geo: 'rectangle' } })).toEqual({ props: { geo: 'rectangle' } })
+	})
+})
+
 describe('Migrate NoteShape legacy horizontal alignment', () => {
 	const { up } = getTestMigration(noteShapeVersions.MigrateLegacyAlign)
 

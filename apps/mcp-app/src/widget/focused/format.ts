@@ -122,6 +122,7 @@ export type FocusedGeoShapeType =
 	| 'x-box'
 	| 'check-box'
 	| 'heart'
+	| 'flower'
 	| 'pentagon'
 	| 'octagon'
 	| 'star'
@@ -144,6 +145,7 @@ export const FOCUSED_TO_GEO_TYPES: Record<FocusedGeoShapeType, TLGeoShapeGeoStyl
 	'x-box': 'x-box',
 	'check-box': 'check-box',
 	heart: 'heart',
+	flower: 'flower',
 	pentagon: 'pentagon',
 	octagon: 'octagon',
 	star: 'star',
@@ -167,6 +169,7 @@ export const GEO_TO_FOCUSED_TYPES: Record<TLGeoShapeGeoStyle, FocusedGeoShapeTyp
 	'x-box': 'x-box',
 	'check-box': 'check-box',
 	heart: 'heart',
+	flower: 'flower',
 	pentagon: 'pentagon',
 	octagon: 'octagon',
 	star: 'star',

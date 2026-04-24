@@ -60,6 +60,7 @@ export const GeoShapeGeoStyle = StyleProp.defineEnum('tldraw:geo', {
 		'x-box',
 		'check-box',
 		'heart',
+		'flower',
 	],
 })
 
@@ -194,6 +195,7 @@ const geoShapeVersions = createShapePropsMigrationIds('geo', {
 	AddScale: 9,
 	AddRichText: 10,
 	AddRichTextAttrs: 11,
+	AddFlower: 12,
 })
 
 /**
@@ -317,6 +319,13 @@ export const geoShapeMigrations = createShapePropsMigrationSequence({
 					delete props.richText.attrs
 				}
 			},
+		},
+		{
+			id: geoShapeVersions.AddFlower,
+			up: (_props) => {
+				// noop - flower is a new built-in geo variant; existing records unchanged
+			},
+			down: 'retired',
 		},
 	],
 })

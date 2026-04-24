@@ -79,6 +79,7 @@ export function convertFocusedShapeToTldrawShape(
 		case 'fat-arrow-down':
 		case 'check-box':
 		case 'heart':
+		case 'flower':
 		case 'ellipse': {
 			return convertGeoShapeToTldrawShape(editor, focusedShape, { defaultShape })
 		}
@@ -126,6 +127,7 @@ export const FOCUSED_TO_GEO_TYPES: Record<FocusedGeoShapeType, TLGeoShapeGeoStyl
 	'x-box': 'x-box',
 	'check-box': 'check-box',
 	heart: 'heart',
+	flower: 'flower',
 	pentagon: 'pentagon',
 	octagon: 'octagon',
 	star: 'star',

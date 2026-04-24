@@ -11,6 +11,7 @@ export const FocusedGeoShapeTypeSchema = z.enum([
 	'x-box',
 	'check-box',
 	'heart',
+	'flower',
 	'pentagon',
 	'octagon',
 	'star',

@@ -193,6 +193,7 @@ export type TLUiTranslationKey =
 	| 'geo-style.diamond'
 	| 'geo-style.ellipse'
 	| 'geo-style.heart'
+	| 'geo-style.flower'
 	| 'geo-style.hexagon'
 	| 'geo-style.octagon'
 	| 'geo-style.oval'

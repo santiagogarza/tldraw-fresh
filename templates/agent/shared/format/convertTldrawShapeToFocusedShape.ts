@@ -82,6 +82,7 @@ const GEO_TO_FOCUSED_TYPES: Record<TLGeoShapeGeoStyle, FocusedGeoShapeType> = {
 	'x-box': 'x-box',
 	'check-box': 'check-box',
 	heart: 'heart',
+	flower: 'flower',
 	pentagon: 'pentagon',
 	octagon: 'octagon',
 	star: 'star',

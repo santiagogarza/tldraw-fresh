@@ -194,6 +194,7 @@ export const DEFAULT_TRANSLATION = {
 	'geo-style.diamond': 'Diamond',
 	'geo-style.ellipse': 'Ellipse',
 	'geo-style.heart': 'Heart',
+	'geo-style.flower': 'Flower',
 	'geo-style.hexagon': 'Hexagon',
 	'geo-style.octagon': 'Octagon',
 	'geo-style.oval': 'Oval',
