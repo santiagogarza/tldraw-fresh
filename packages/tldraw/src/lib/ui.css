@@ -1195,6 +1195,122 @@ tldraw? probably.
 	padding-top: 0px;
 }
 
+/* --------- Custom color trigger + recent row ------ */
+
+.tlui-custom-color-trigger__swatch {
+	display: block;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 1px var(--tl-color-divider);
+}
+
+.tlui-button.tlui-button__custom-color[data-isactive='true'] {
+	color: inherit;
+}
+
+.tlui-style-panel__recent-colors__toolbar {
+	padding: 0;
+}
+
+.tlui-style-panel__recent-colors .tlui-row {
+	padding-left: 4px;
+}
+
+/* ------------- Custom color picker popover ------- */
+
+.tlui-custom-color-picker {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 8px;
+	min-width: 160px;
+	font-size: 12px;
+	color: var(--tl-color-text);
+}
+
+.tlui-custom-color-picker__preview {
+	position: relative;
+	height: 64px;
+	border-radius: var(--tl-radius-2);
+	box-shadow: inset 0 0 0 1px var(--tl-color-divider);
+	overflow: hidden;
+}
+
+.tlui-custom-color-picker__wheel {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	border: none;
+	background: transparent;
+	padding: 0;
+	cursor: pointer;
+	opacity: 0;
+}
+
+.tlui-custom-color-picker__preview:hover .tlui-custom-color-picker__wheel,
+.tlui-custom-color-picker__preview:focus-within .tlui-custom-color-picker__wheel {
+	opacity: 1;
+}
+
+.tlui-custom-color-picker__field {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.tlui-custom-color-picker__field label {
+	width: 28px;
+	text-align: right;
+	color: var(--tl-color-text-1);
+}
+
+.tlui-custom-color-picker__input {
+	flex: 1;
+	padding: 4px 6px;
+	background: var(--tl-color-muted-2);
+	border: 1px solid var(--tl-color-divider);
+	border-radius: var(--tl-radius-1);
+	color: var(--tl-color-text);
+	font-family: inherit;
+	font-size: 12px;
+	min-width: 0;
+}
+
+.tlui-custom-color-picker__input:focus {
+	outline: 1px solid var(--tl-color-accent);
+	outline-offset: -1px;
+}
+
+.tlui-custom-color-picker__input--error {
+	outline: 1px solid var(--tl-color-warn);
+	outline-offset: -1px;
+}
+
+.tlui-custom-color-picker__rgb {
+	display: flex;
+	gap: 6px;
+}
+
+.tlui-custom-color-picker__rgb .tlui-custom-color-picker__field {
+	flex: 1;
+	gap: 4px;
+}
+
+.tlui-custom-color-picker__rgb .tlui-custom-color-picker__field label {
+	width: auto;
+}
+
+.tlui-custom-color-picker__rgb .tlui-custom-color-picker__input {
+	width: 100%;
+}
+
+.tlui-custom-color-picker__actions {
+	display: flex;
+	justify-content: flex-end;
+}
+
 /* --------------------- Bottom --------------------- */
 
 .tlui-layout__bottom {

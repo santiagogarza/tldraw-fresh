@@ -11,20 +11,37 @@ import {
 	DefaultTextAlignStyle,
 	DefaultVerticalAlignStyle,
 	GeoShapeGeoStyle,
+	getColorValue,
+	isHexColor,
 	kickoutOccludedShapes,
 	LineShapeSplineStyle,
 	minBy,
+	normalizeHexColor,
 	TLArrowShapeArrowheadStyle,
+	TLDefaultColorStyle,
 	useEditor,
 	useValue,
 } from '@tldraw/editor'
-import React from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { GeoShapeUtil } from '../../../shapes/geo/GeoShapeUtil'
 import { getColorStyleItems, getFontStyleItems, STYLES } from '../../../styles'
 import { useTranslation } from '../../hooks/useTranslation/useTranslation'
+import { TldrawUiButton } from '../primitives/Button/TldrawUiButton'
 import { TldrawUiButtonIcon } from '../primitives/Button/TldrawUiButtonIcon'
+import { TldrawUiGrid, TldrawUiRow } from '../primitives/layout'
+import {
+	TldrawUiPopover,
+	TldrawUiPopoverContent,
+	TldrawUiPopoverTrigger,
+} from '../primitives/TldrawUiPopover'
 import { TldrawUiSlider } from '../primitives/TldrawUiSlider'
-import { TldrawUiToolbar, TldrawUiToolbarButton } from '../primitives/TldrawUiToolbar'
+import {
+	TldrawUiToolbar,
+	TldrawUiToolbarButton,
+	TldrawUiToolbarToggleGroup,
+	TldrawUiToolbarToggleItem,
+} from '../primitives/TldrawUiToolbar'
+import { CustomColorPicker } from './CustomColorPicker'
 import { StylePanelButtonPicker, StylePanelButtonPickerInline } from './StylePanelButtonPicker'
 import { useStylePanelContext } from './StylePanelContext'
 import { StylePanelDoubleDropdownPicker } from './StylePanelDoubleDropdownPicker'
@@ -33,6 +50,7 @@ import {
 	StylePanelDropdownPickerInline,
 } from './StylePanelDropdownPicker'
 import { StylePanelSubheading } from './StylePanelSubheading'
+import { useRecentColors } from './useRecentColors'
 
 /** @public @react */
 export function DefaultStylePanelContent() {
@@ -77,18 +95,182 @@ export function StylePanelColorPicker() {
 	const editor = useEditor()
 	const theme = editor.getCurrentTheme()
 	const colorMode = editor.getColorMode()
-	const { styles } = useStylePanelContext()
+	const colors = theme.colors[colorMode]
+	const { styles, onValueChange, onHistoryMark } = useStylePanelContext()
 	const msg = useTranslation()
+	const { recent, push: pushRecent } = useRecentColors()
+
 	const color = styles.get(DefaultColorStyle)
+	const presetItems = useMemo(() => getColorStyleItems(colors), [colors])
+
+	const pendingCustomRef = useRef<string | null>(null)
+
+	const applyColor = useCallback(
+		(value: string, { markHistory = true, updateRecent = true } = {}) => {
+			if (markHistory) onHistoryMark?.('custom-color picker')
+			onValueChange(DefaultColorStyle, value)
+			if (updateRecent) pushRecent(value)
+		},
+		[onValueChange, onHistoryMark, pushRecent]
+	)
+
+	// Close-handler: commit the most-recent pending scrub value (add to recent, mark history).
+	const handleCustomOpenChange = useCallback(
+		(next: boolean) => {
+			if (!next && pendingCustomRef.current) {
+				const hex = pendingCustomRef.current
+				pendingCustomRef.current = null
+				pushRecent(hex)
+			}
+		},
+		[pushRecent]
+	)
+
 	if (color === undefined) return null
 
+	const title = msg('style-panel.color')
+	const customTitle = msg('style-panel.color.custom')
+	const currentColorValue = color.type === 'shared' ? color.value : undefined
+	const currentHex = isHexColor(currentColorValue ?? '') ? currentColorValue! : undefined
+	const initialPickerValue =
+		currentHex ??
+		(currentColorValue ? getColorValue(colors, currentColorValue, 'solid') : '#000000')
+
 	return (
-		<StylePanelButtonPicker
-			title={msg('style-panel.color')}
-			uiType="color"
-			style={DefaultColorStyle}
-			items={getColorStyleItems(theme.colors[colorMode])}
-			value={color}
+		<div className="tlui-style-panel__color-section">
+			{recent.length > 0 && (
+				<div className="tlui-style-panel__recent-colors" data-testid="style.color.recent">
+					<StylePanelSubheading>{msg('style-panel.color.recent')}</StylePanelSubheading>
+					<TldrawUiToolbar
+						orientation="horizontal"
+						label={msg('style-panel.color.recent')}
+						className="tlui-style-panel__recent-colors__toolbar"
+					>
+						<TldrawUiToolbarToggleGroup
+							data-testid="style.color.recent.group"
+							type="single"
+							value={currentColorValue ?? null}
+						>
+							<TldrawUiRow>
+								{recent.map((recentColor) => {
+									const isHex = isHexColor(recentColor)
+									const swatchColor = isHex
+										? recentColor
+										: getColorValue(colors, recentColor as TLDefaultColorStyle, 'solid')
+									const isActive =
+										color.type === 'shared' &&
+										(isHex && isHexColor(color.value)
+											? normalizeHexColor(color.value) === normalizeHexColor(recentColor)
+											: color.value === recentColor)
+									return (
+										<TldrawUiToolbarToggleItem
+											type="icon"
+											key={recentColor}
+											data-id={recentColor}
+											data-testid={`style.color.recent.${recentColor}`}
+											aria-label={recentColor}
+											tooltip={recentColor}
+											value={recentColor}
+											data-state={isActive ? 'on' : 'off'}
+											data-isactive={isActive}
+											title={recentColor}
+											style={{ color: swatchColor }}
+											onClick={() => applyColor(recentColor, { updateRecent: true })}
+										>
+											<TldrawUiButtonIcon icon="color" />
+										</TldrawUiToolbarToggleItem>
+									)
+								})}
+							</TldrawUiRow>
+						</TldrawUiToolbarToggleGroup>
+					</TldrawUiToolbar>
+				</div>
+			)}
+			<StylePanelSubheading>{title}</StylePanelSubheading>
+			<TldrawUiToolbar label={title}>
+				<TldrawUiToolbarToggleGroup
+					data-testid="style.color"
+					type="single"
+					value={color.type === 'shared' ? color.value : null}
+					asChild
+				>
+					<TldrawUiGrid>
+						{presetItems.map((item) => {
+							const isActive = color.type === 'shared' && color.value === item.value
+							const label = title + ' — ' + msg(`color-style.${item.value}` as any)
+							return (
+								<TldrawUiToolbarToggleItem
+									type="icon"
+									key={item.value}
+									data-id={item.value}
+									data-testid={`style.color.${item.value}`}
+									aria-label={label + (isActive ? ` (${msg('style-panel.selected')})` : '')}
+									tooltip={
+										<>
+											<div>{label}</div>
+											{isActive ? <div>({msg('style-panel.selected')})</div> : null}
+										</>
+									}
+									value={item.value}
+									data-state={isActive ? 'on' : 'off'}
+									data-isactive={isActive}
+									title={label}
+									style={{ color: getColorValue(colors, item.value as TLDefaultColorStyle, 'solid') }}
+									onClick={() => applyColor(item.value)}
+								>
+									<TldrawUiButtonIcon icon={item.icon} />
+								</TldrawUiToolbarToggleItem>
+							)
+						})}
+						<TldrawUiPopover id="custom color picker" onOpenChange={handleCustomOpenChange}>
+							<TldrawUiPopoverTrigger>
+								<TldrawUiButton
+									type="icon"
+									className="tlui-button__custom-color"
+									data-testid="style.color.custom"
+									title={customTitle}
+									aria-label={customTitle}
+									data-isactive={!!currentHex}
+									style={currentHex ? { color: currentHex } : undefined}
+								>
+									{currentHex ? (
+										<TldrawUiButtonIcon icon="color" />
+									) : (
+										<CustomColorTriggerSwatch />
+									)}
+								</TldrawUiButton>
+							</TldrawUiPopoverTrigger>
+							<TldrawUiPopoverContent side="right" align="start">
+								<CustomColorPicker
+									value={initialPickerValue}
+									onChange={(hex) => {
+										pendingCustomRef.current = hex
+										applyColor(hex, { markHistory: false, updateRecent: false })
+									}}
+									onCommit={(hex) => {
+										pendingCustomRef.current = null
+										applyColor(hex)
+									}}
+								/>
+							</TldrawUiPopoverContent>
+						</TldrawUiPopover>
+					</TldrawUiGrid>
+				</TldrawUiToolbarToggleGroup>
+			</TldrawUiToolbar>
+		</div>
+	)
+}
+
+/** Swatch shown on the custom-color trigger when no custom hex is active. */
+function CustomColorTriggerSwatch() {
+	return (
+		<span
+			aria-hidden
+			className="tlui-custom-color-trigger__swatch"
+			style={{
+				backgroundImage:
+					'conic-gradient(from 0deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)',
+			}}
 		/>
 	)
 }
