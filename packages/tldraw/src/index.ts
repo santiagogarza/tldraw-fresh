@@ -297,6 +297,7 @@ export {
 	type FeatureFlagsProps,
 } from './lib/ui/components/DebugMenu/DefaultDebugMenuContent'
 export { DefaultMenuPanel } from './lib/ui/components/DefaultMenuPanel'
+export { DefaultThemeToggle } from './lib/ui/components/DefaultThemeToggle'
 export {
 	DefaultHelperButtons,
 	type TLUiHelperButtonsProps,
