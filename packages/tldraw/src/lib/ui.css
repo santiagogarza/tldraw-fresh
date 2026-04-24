@@ -52,6 +52,10 @@
 	z-index: 0;
 }
 
+.tlui-button__tooltip-wrapper {
+	display: inline-flex;
+}
+
 .tlui-button:disabled,
 .tlui-button[data-disabled] {
 	color: var(--tl-color-text-3);
