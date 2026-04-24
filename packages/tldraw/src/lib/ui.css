@@ -132,6 +132,10 @@
 	.tlui-button:not(:disabled, [data-disabled]):hover::after {
 		opacity: 1;
 	}
+
+	.tlui-button.tlui-button--allow-disabled-hover:is(:disabled, [data-disabled]):hover::after {
+		opacity: 1;
+	}
 }
 
 .tlui-button__icon + .tlui-button__label {
