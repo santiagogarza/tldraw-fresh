@@ -272,9 +272,13 @@ describe('When pasting', () => {
 
 		// Should put the pasted shapes centered in the frame
 		editor.select(shapes.new.box1!.id, shapes.new.box1!.id)
-		expect(editor.getShapePageBounds(shapes.old.box1)).toMatchObject(
-			editor.getShapePageBounds(shapes.new.box1)!
-		)
+		const oldBounds = editor.getShapePageBounds(shapes.old.box1)!
+		const newBounds = editor.getShapePageBounds(shapes.new.box1)!
+		expect(newBounds).toMatchObject({
+			...oldBounds,
+			x: oldBounds.x + editor.options.adjacentShapeMargin,
+			y: oldBounds.y + editor.options.adjacentShapeMargin,
+		})
 	})
 
 	it('pastes shapes as children of the most common ancestor', () => {
