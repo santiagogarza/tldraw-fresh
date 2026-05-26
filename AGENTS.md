@@ -196,3 +196,35 @@ Dependencies:
 - Use semantic PR titles for pull requests: `<type>(<scope>): <description>`.
 - Never add yourself or an AI tool as a co-author.
 - See `skills/pr/` and `skills/issue/` for GitHub workflows, and `skills/write-pr/` and `skills/write-issue/` for repository content standards.
+
+## Cursor Cloud specific instructions
+
+### Environment
+
+- Node v22 is installed (satisfies the `^20.0.0` engine requirement).
+- Corepack is enabled globally; `yarn` resolves to the repo-pinned Yarn 4.12.0.
+- The `node-modules` linker is used (`.yarnrc.yml`), so dependencies live in `node_modules/`.
+
+### Running services
+
+- `yarn dev` starts three processes together: the examples Vite app (`:5420`), the bemo-worker (`:8989`), and the image-resize-worker (`:8786`).
+- The image-resize-worker may log TLS errors about `Request.cf` when running locally — these are non-fatal wrangler warnings and can be ignored.
+- The `workerd` native build is disabled via `dependenciesMeta` in `package.json` (not needed at dev time; wrangler invokes it directly).
+
+### Testing
+
+- Run targeted tests: `cd packages/<pkg> && yarn test run` (single run) or `yarn test run --grep "pattern"`.
+- The full `yarn vitest` across all packages is slow (~minutes). Prefer per-workspace tests.
+- Lint: `yarn lint` in a workspace, or `yarn lint-current` for changed files from root.
+- Type check: `yarn typecheck` from root (also refreshes generated assets).
+
+### Build
+
+- `yarn build` runs an incremental build across all 50 workspace tasks via `lazyrepo`. Cached tasks resolve instantly on subsequent runs.
+- For SDK packages only: `yarn build-package`.
+
+### Gotchas
+
+- Never run bare `tsc`; use `yarn typecheck` which wraps it with asset refresh.
+- The `postinstall` script runs `husky install && yarn refresh-assets`, so `yarn install` is sufficient to set up hooks and generated files.
+- Some peer dependency warnings during install (React 19 vs libraries expecting React 18) are expected and non-blocking.
