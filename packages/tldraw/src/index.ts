@@ -28,6 +28,13 @@ export { DefaultA11yAnnouncer, useSelectedShapesAnnouncer } from './lib/ui/compo
 export { AccessibilityMenu } from './lib/ui/components/AccessibilityMenu'
 export { ColorSchemeMenu } from './lib/ui/components/ColorSchemeMenu'
 export { DefaultFollowingIndicator } from './lib/ui/components/DefaultFollowingIndicator'
+export { DefaultModeSwitcher } from './lib/ui/components/ModeSwitcher/DefaultModeSwitcher'
+export {
+	CANVAS_MODES,
+	type TLCanvasMode,
+	type TLCanvasModeId,
+} from './lib/ui/components/ModeSwitcher/modes'
+export { useCanvasMode } from './lib/ui/components/ModeSwitcher/useCanvasMode'
 export { DefaultDialogs } from './lib/ui/components/Dialogs'
 export {
 	TldrawUiColumn,
