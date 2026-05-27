@@ -19,6 +19,7 @@ interface Fixtures {
 	helpMenu: HelpMenu
 	mainMenu: MainMenu
 	pageMenu: PageMenu
+	modeSwitcher: ModeSwitcher
 	navigationPanel: NavigationPanel
 	api: ReturnType<typeof makeApiFixture>
 	isMac: boolean

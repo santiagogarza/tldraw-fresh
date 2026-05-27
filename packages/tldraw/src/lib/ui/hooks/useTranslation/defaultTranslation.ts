@@ -507,4 +507,10 @@ export const DEFAULT_TRANSLATION = {
 	'ui.close': 'Close',
 	'ui.checked': 'Checked',
 	'ui.unchecked': 'Unchecked',
+	'mode.menu.title': 'Canvas mode',
+	'mode.light.label': 'Light mode',
+	'mode.dark.label': 'Dark mode',
+	'mode.sky.label': 'Sky mode',
+	'mode.sunrise.label': 'Sunrise mode',
+	'mode.sunset.label': 'Sunset mode',
 }

@@ -782,6 +782,88 @@
 	}
 }
 
+/* ------------------- Mode switcher ------------------ */
+
+.tlui-mode-switcher {
+	width: 24px;
+	min-width: 24px;
+	height: 24px;
+	padding: 0;
+	border-radius: 50%;
+}
+
+.tlui-mode-switcher__swatch {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	border: 1.5px solid var(--tl-color-text-1);
+	box-sizing: border-box;
+}
+
+.tlui-mode-switcher__item-swatch {
+	flex: 0 0 auto;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	border: 1px solid var(--tl-color-text-3);
+	box-sizing: border-box;
+}
+
+.tlui-mode-switcher .tlui-button__checkbox__indicator {
+	margin-inline-end: 4px;
+}
+
+.tl-container[data-canvas-mode='light'] {
+	--tl-color-background: #ffffff;
+	--tl-color-selected: hsl(214, 84%, 56%);
+	--tl-color-primary: hsl(214, 84%, 56%);
+}
+
+.tl-container[data-canvas-mode='light'] .tl-background {
+	background: #ffffff;
+}
+
+.tl-container[data-canvas-mode='dark'] {
+	--tl-color-background: #0e0e10;
+	--tl-color-selected: hsl(217, 89%, 61%);
+	--tl-color-primary: hsl(217, 89%, 61%);
+}
+
+.tl-container[data-canvas-mode='dark'] .tl-background {
+	background: #0e0e10;
+}
+
+.tl-container[data-canvas-mode='sky'] {
+	--tl-color-background: #cfe8ff;
+	--tl-color-selected: hsl(210, 72%, 48%);
+	--tl-color-primary: hsl(210, 72%, 48%);
+}
+
+.tl-container[data-canvas-mode='sky'] .tl-background {
+	background: #cfe8ff;
+}
+
+.tl-container[data-canvas-mode='sunrise'] {
+	--tl-color-background: #ffd6e7;
+	--tl-color-selected: hsl(310, 58%, 52%);
+	--tl-color-primary: hsl(310, 58%, 52%);
+}
+
+.tl-container[data-canvas-mode='sunrise'] .tl-background {
+	background: linear-gradient(135deg, #ffd6e7 0%, #e0c8ff 100%);
+}
+
+.tl-container[data-canvas-mode='sunset'] {
+	--tl-color-background: #ff7e5f;
+	--tl-color-selected: hsl(12, 90%, 52%);
+	--tl-color-primary: hsl(12, 90%, 52%);
+}
+
+.tl-container[data-canvas-mode='sunset'] .tl-background {
+	background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+}
+
 /* ------------------- Page Select ------------------ */
 
 .tlui-page-menu__wrapper {
