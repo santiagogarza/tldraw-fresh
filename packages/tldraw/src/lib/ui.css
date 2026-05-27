@@ -27,6 +27,55 @@
 	--tl-layer-following-indicator: 1000;
 }
 
+.tl-container[data-canvas-mode] .tl-background {
+	background: var(--tl-canvas-mode-background, var(--tl-color-background));
+}
+
+.tl-container[data-canvas-mode='light'] {
+	--tl-canvas-mode-background: #ffffff;
+	--tl-canvas-mode-swatch: #ffffff;
+	--tl-color-background: #ffffff;
+	--tl-color-primary: hsl(214, 84%, 56%);
+	--tl-color-selected: hsl(214, 84%, 56%);
+	--tl-color-selection-stroke: hsl(214, 84%, 56%);
+}
+
+.tl-container[data-canvas-mode='dark'] {
+	--tl-canvas-mode-background: #0e0e10;
+	--tl-canvas-mode-swatch: #0e0e10;
+	--tl-color-background: #0e0e10;
+	--tl-color-primary: hsl(214, 84%, 56%);
+	--tl-color-selected: hsl(214, 84%, 56%);
+	--tl-color-selection-stroke: hsl(214, 84%, 56%);
+}
+
+.tl-container[data-canvas-mode='sky'] {
+	--tl-canvas-mode-background: #cfe8ff;
+	--tl-canvas-mode-swatch: #cfe8ff;
+	--tl-color-background: #cfe8ff;
+	--tl-color-primary: #1f8adf;
+	--tl-color-selected: #1f8adf;
+	--tl-color-selection-stroke: #1f8adf;
+}
+
+.tl-container[data-canvas-mode='sunrise'] {
+	--tl-canvas-mode-background: linear-gradient(135deg, #ffd6e7 0%, #e0c8ff 100%);
+	--tl-canvas-mode-swatch: linear-gradient(135deg, #ffd6e7 0%, #e0c8ff 100%);
+	--tl-color-background: #ffd6e7;
+	--tl-color-primary: #b653d9;
+	--tl-color-selected: #b653d9;
+	--tl-color-selection-stroke: #b653d9;
+}
+
+.tl-container[data-canvas-mode='sunset'] {
+	--tl-canvas-mode-background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+	--tl-canvas-mode-swatch: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+	--tl-color-background: #ff7e5f;
+	--tl-color-primary: #f25a2a;
+	--tl-color-selected: #f25a2a;
+	--tl-color-selection-stroke: #f25a2a;
+}
+
 /* Button */
 
 .tlui-button {

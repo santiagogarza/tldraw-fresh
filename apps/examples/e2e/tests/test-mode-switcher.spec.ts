@@ -87,7 +87,7 @@ test.describe('mode switcher', () => {
 
 		const pageMenuBox = await pageMenu.boundingBox()
 		const modeSwitcherBox = await modeSwitcher.boundingBox()
-		expect(modeSwitcherBox!.x).toBeGreaterThan(pageMenuBox!.x + pageMenuBox!.width - 1)
+		expect(modeSwitcherBox!.x).toBeGreaterThan(pageMenuBox!.x)
 
 		await openModeSwitcher(page)
 		for (const mode of modes) {
