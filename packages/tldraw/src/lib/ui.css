@@ -2298,13 +2298,10 @@ tldraw? probably.
 /* ------------------- Mode Switcher ------------------- */
 
 .tlui-mode-switcher__trigger {
-	width: 32px;
-	height: 32px;
-	min-width: 0;
+	width: 40px;
+	min-width: 40px;
 	padding: 0;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
+	align-self: stretch;
 }
 
 .tlui-mode-switcher__swatch {
