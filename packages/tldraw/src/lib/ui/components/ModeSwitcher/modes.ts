@@ -57,14 +57,16 @@ export const CANVAS_MODES: readonly TLCanvasMode[] = [
 	},
 ]
 
-export const DEFAULT_CANVAS_MODE_ID: TLCanvasModeId = 'light'
+const DEFAULT_CANVAS_MODE_ID: TLCanvasModeId = 'light'
 
-export const CANVAS_MODE_STORAGE_KEY = 'tldraw_canvas_mode'
+const CANVAS_MODE_STORAGE_KEY = 'tldraw_canvas_mode'
 
+/** @public */
 export function isCanvasModeId(value: unknown): value is TLCanvasModeId {
 	return typeof value === 'string' && CANVAS_MODES.some((mode) => mode.id === value)
 }
 
+/** @public */
 export function getCanvasModeById(id: TLCanvasModeId): TLCanvasMode {
 	const mode = CANVAS_MODES.find((m) => m.id === id)
 	if (!mode) {

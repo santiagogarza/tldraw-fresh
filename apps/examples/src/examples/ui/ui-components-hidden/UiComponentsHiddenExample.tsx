@@ -11,6 +11,7 @@ const components: Required<TLUiComponents> = {
 	Minimap: null,
 	StylePanel: null,
 	PageMenu: null,
+	ModeSwitcher: null,
 	NavigationPanel: null,
 	Toolbar: null,
 	KeyboardShortcutsDialog: null,

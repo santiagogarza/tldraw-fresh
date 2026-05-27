@@ -1,10 +1,11 @@
 import { useEditor } from '@tldraw/editor'
 import { useCallback, useLayoutEffect } from 'react'
 import { useLocalStorageState } from '../../hooks/useLocalStorageState'
+
+const CANVAS_MODE_STORAGE_KEY = 'tldraw_canvas_mode'
+const DEFAULT_CANVAS_MODE_ID = 'light' satisfies TLCanvasModeId
 import { applyCanvasModeStyles } from './applyCanvasModeStyles'
 import {
-	CANVAS_MODE_STORAGE_KEY,
-	DEFAULT_CANVAS_MODE_ID,
 	getCanvasModeById,
 	isCanvasModeId,
 	TLCanvasMode,

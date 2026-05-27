@@ -2,9 +2,10 @@ import { act, screen, waitFor } from '@testing-library/react'
 import { Tldraw } from '../../lib/Tldraw'
 import { applyCanvasModeStyles } from '../../lib/ui/components/ModeSwitcher/applyCanvasModeStyles'
 import {
-	CANVAS_MODE_STORAGE_KEY,
 	getCanvasModeById,
 } from '../../lib/ui/components/ModeSwitcher/modes'
+
+const CANVAS_MODE_STORAGE_KEY = 'tldraw_canvas_mode'
 import { useCanvasMode } from '../../lib/ui/components/ModeSwitcher/useCanvasMode'
 import { renderTldrawComponentWithEditor } from '../testutils/renderTldrawComponent'
 

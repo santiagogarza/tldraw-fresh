@@ -424,14 +424,9 @@ export { DefaultMinimap } from './lib/ui/components/Minimap/DefaultMinimap'
 export { MobileStylePanel } from './lib/ui/components/MobileStylePanel'
 export { DefaultNavigationPanel } from './lib/ui/components/NavigationPanel/DefaultNavigationPanel'
 export { OfflineIndicator } from './lib/ui/components/OfflineIndicator/OfflineIndicator'
-export { applyCanvasModeStyles } from './lib/ui/components/ModeSwitcher/applyCanvasModeStyles'
 export { DefaultModeSwitcher } from './lib/ui/components/ModeSwitcher/DefaultModeSwitcher'
 export {
 	CANVAS_MODES,
-	CANVAS_MODE_STORAGE_KEY,
-	DEFAULT_CANVAS_MODE_ID,
-	getCanvasModeById,
-	isCanvasModeId,
 	type TLCanvasMode,
 	type TLCanvasModeId,
 } from './lib/ui/components/ModeSwitcher/modes'

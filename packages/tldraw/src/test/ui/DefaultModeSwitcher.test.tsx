@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react'
 import { Tldraw } from '../../lib/Tldraw'
-import { CANVAS_MODE_STORAGE_KEY } from '../../lib/ui/components/ModeSwitcher/modes'
+const CANVAS_MODE_STORAGE_KEY = 'tldraw_canvas_mode'
 import { renderTldrawComponentWithEditor } from '../testutils/renderTldrawComponent'
 
 beforeEach(() => {
