@@ -26,6 +26,7 @@ import {
 } from '../components/KeyboardShortcutsDialog/DefaultKeyboardShortcutsDialog'
 import { DefaultMainMenu, TLUiMainMenuProps } from '../components/MainMenu/DefaultMainMenu'
 import { DefaultMinimap } from '../components/Minimap/DefaultMinimap'
+import { DefaultModeSwitcher } from '../components/ModeSwitcher/DefaultModeSwitcher'
 import { DefaultNavigationPanel } from '../components/NavigationPanel/DefaultNavigationPanel'
 import { DefaultPageMenu } from '../components/PageMenu/DefaultPageMenu'
 import {
@@ -69,6 +70,7 @@ export interface TLUiComponents {
 	Minimap?: ComponentType | null
 	StylePanel?: ComponentType<TLUiStylePanelProps> | null
 	PageMenu?: ComponentType | null
+	ModeSwitcher?: ComponentType | null
 	NavigationPanel?: ComponentType | null
 	Toolbar?: ComponentType | null
 	RichTextToolbar?: ComponentType<TLUiRichTextToolbarProps> | null
@@ -122,6 +124,7 @@ export function TldrawUiComponentsProvider({
 					Minimap: DefaultMinimap,
 					StylePanel: DefaultStylePanel,
 					PageMenu: DefaultPageMenu,
+					ModeSwitcher: DefaultModeSwitcher,
 					NavigationPanel: DefaultNavigationPanel,
 					Toolbar: DefaultToolbar,
 					RichTextToolbar: DefaultRichTextToolbar,

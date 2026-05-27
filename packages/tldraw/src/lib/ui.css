@@ -27,6 +27,17 @@
 	--tl-layer-following-indicator: 1000;
 }
 
+.tl-container[data-canvas-mode] {
+	--tl-color-background: var(--tl-canvas-mode-background-color);
+	--tl-color-selected: var(--tl-canvas-mode-accent);
+	--tl-color-primary: var(--tl-canvas-mode-accent);
+	--tl-color-selection-stroke: var(--tl-canvas-mode-accent);
+}
+
+.tl-container[data-canvas-mode] .tl-background {
+	background: var(--tl-canvas-mode-background);
+}
+
 /* Button */
 
 .tlui-button {
@@ -780,6 +791,58 @@
 		background: linear-gradient(180deg, rgba(144, 144, 144, 0) 0%, var(--tl-color-muted-2) 100%);
 		opacity: 1;
 	}
+}
+
+/* ------------------- Mode switcher ------------------ */
+
+.tlui-mode-switcher {
+	width: 24px;
+	min-width: 24px;
+	height: 24px;
+	padding: 0;
+	margin-inline: 4px;
+	border: 1.5px solid currentColor;
+	border-radius: 999px;
+	color: var(--tl-color-text);
+}
+
+.tlui-mode-switcher::after {
+	inset: 0;
+	border-radius: 999px;
+}
+
+.tlui-mode-switcher__trigger-swatch {
+	width: 14px;
+	height: 14px;
+	border-radius: 999px;
+	background-size: cover;
+	background-position: center;
+}
+
+.tlui-mode-switcher__menu {
+	width: 196px;
+	padding: 4px;
+}
+
+.tlui-mode-switcher__item {
+	gap: 10px;
+	padding-inline: 8px;
+}
+
+.tlui-mode-switcher__item-swatch {
+	width: 14px;
+	height: 14px;
+	flex-shrink: 0;
+	border-radius: 999px;
+	background-size: cover;
+	background-position: center;
+	border: 1px solid var(--tl-color-divider);
+}
+
+.tlui-mode-switcher__item-check-spacer {
+	width: 14px;
+	height: 14px;
+	flex-shrink: 0;
 }
 
 /* ------------------- Page Select ------------------ */

@@ -422,6 +422,13 @@ export {
 } from './lib/ui/components/menu-items'
 export { DefaultMinimap } from './lib/ui/components/Minimap/DefaultMinimap'
 export { MobileStylePanel } from './lib/ui/components/MobileStylePanel'
+export { DefaultModeSwitcher } from './lib/ui/components/ModeSwitcher/DefaultModeSwitcher'
+export {
+	CANVAS_MODES,
+	type TLCanvasMode,
+	type TLCanvasModeId,
+} from './lib/ui/components/ModeSwitcher/modes'
+export { useCanvasMode } from './lib/ui/components/ModeSwitcher/useCanvasMode'
 export { DefaultNavigationPanel } from './lib/ui/components/NavigationPanel/DefaultNavigationPanel'
 export { OfflineIndicator } from './lib/ui/components/OfflineIndicator/OfflineIndicator'
 export { DefaultPageMenu } from './lib/ui/components/PageMenu/DefaultPageMenu'
