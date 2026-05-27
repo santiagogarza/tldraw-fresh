@@ -4,6 +4,7 @@ import { ActionsMenu } from './menus/ActionsMenu'
 import { HelpMenu } from './menus/HelpMenu'
 import { MainMenu } from './menus/MainMenu'
 import { MenuClickCapture } from './menus/MenuClickCapture'
+import { ModeSwitcher } from './menus/ModeSwitcher'
 import { NavigationPanel } from './menus/NavigationPanel'
 import { PageMenu } from './menus/PageMenu'
 import { RichTextToolbar } from './menus/RichTextToolbar'
@@ -19,6 +20,7 @@ interface Fixtures {
 	helpMenu: HelpMenu
 	mainMenu: MainMenu
 	pageMenu: PageMenu
+	modeSwitcher: ModeSwitcher
 	navigationPanel: NavigationPanel
 	api: ReturnType<typeof makeApiFixture>
 	isMac: boolean
@@ -79,6 +81,10 @@ const test = base.extend<Fixtures>({
 	pageMenu: async ({ page }, testUse) => {
 		const pagemenu = new PageMenu(page)
 		await testUse(pagemenu)
+	},
+	modeSwitcher: async ({ page }, testUse) => {
+		const modeSwitcher = new ModeSwitcher(page)
+		await testUse(modeSwitcher)
 	},
 	navigationPanel: async ({ page }, testUse) => {
 		const navigationPanel = new NavigationPanel(page)
