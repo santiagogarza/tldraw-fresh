@@ -1,6 +1,6 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react'
-import { Tldraw } from '../../../Tldraw'
 import { renderTldrawComponentWithEditor } from '../../../../test/testutils/renderTldrawComponent'
+import { Tldraw } from '../../../Tldraw'
 import { CANVAS_MODE_STORAGE_KEY, useCanvasMode } from './useCanvasMode'
 
 function CanvasModeProbe() {

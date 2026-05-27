@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react'
-import { Tldraw, type TLComponents } from '../../../Tldraw'
 import { renderTldrawComponentWithEditor } from '../../../../test/testutils/renderTldrawComponent'
+import { Tldraw, type TLComponents } from '../../../Tldraw'
 import { CANVAS_MODES } from './modes'
 
 const translationOverrides = {
@@ -17,7 +17,11 @@ const translationOverrides = {
 async function renderEditor(components?: TLComponents) {
 	return await renderTldrawComponentWithEditor(
 		(onMount) => (
-			<Tldraw onMount={onMount} components={components} overrides={{ translations: translationOverrides }} />
+			<Tldraw
+				onMount={onMount}
+				components={components}
+				overrides={{ translations: translationOverrides }}
+			/>
 		),
 		{ waitForPatterns: false }
 	)
@@ -69,9 +73,11 @@ describe('DefaultModeSwitcher', () => {
 		await waitFor(() => {
 			expect(screen.queryByTestId('mode-switcher.menu')).toBeNull()
 		})
-		expect(screen.getByTestId('mode-switcher.button').style.getPropertyValue('--tlui-mode-switcher-swatch')).toBe(
-			'linear-gradient(135deg, #ffd6e7 0%, #e0c8ff 100%)'
-		)
+		expect(
+			screen
+				.getByTestId('mode-switcher.button')
+				.style.getPropertyValue('--tlui-mode-switcher-swatch')
+		).toBe('linear-gradient(135deg, #ffd6e7 0%, #e0c8ff 100%)')
 		expect(editor.getContainer().getAttribute('data-canvas-mode')).toBe('sunrise')
 	})
 
@@ -81,7 +87,9 @@ describe('DefaultModeSwitcher', () => {
 
 		await waitFor(() => {
 			expect(
-				screen.getByTestId('mode-switcher.button').style.getPropertyValue('--tlui-mode-switcher-swatch')
+				screen
+					.getByTestId('mode-switcher.button')
+					.style.getPropertyValue('--tlui-mode-switcher-swatch')
 			).toBe('#cfe8ff')
 		})
 		expect(editor.getContainer().getAttribute('data-canvas-mode')).toBe('sky')

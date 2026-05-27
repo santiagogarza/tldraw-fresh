@@ -122,9 +122,7 @@ test.describe('mode switcher', () => {
 
 		for (const mode of modes) {
 			await selectMode(page, mode.id)
-			await expect(page.locator('.tlui-menu-zone')).toHaveScreenshot(
-				`mode-switcher-${mode.id}.png`
-			)
+			await expect(page.locator('.tlui-menu-zone')).toHaveScreenshot(`mode-switcher-${mode.id}.png`)
 		}
 	})
 })

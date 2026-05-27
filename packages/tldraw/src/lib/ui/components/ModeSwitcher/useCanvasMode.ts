@@ -2,11 +2,7 @@ import { useEditor } from '@tldraw/editor'
 import { useCallback, useLayoutEffect, useMemo } from 'react'
 import { useLocalStorageState } from '../../hooks/useLocalStorageState'
 import { applyCanvasModeStyles } from './applyCanvasModeStyles'
-import {
-	DEFAULT_CANVAS_MODE_ID,
-	getCanvasModeById,
-	type TLCanvasModeId,
-} from './modes'
+import { DEFAULT_CANVAS_MODE_ID, getCanvasModeById, type TLCanvasModeId } from './modes'
 
 export const CANVAS_MODE_STORAGE_KEY = 'tldraw_canvas_mode'
 
