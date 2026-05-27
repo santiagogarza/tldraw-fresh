@@ -28,7 +28,7 @@ it('uses light mode by default', async () => {
 	render(<CanvasModeHarness />)
 
 	await waitFor(() => {
-		expect(screen.getByTestId('canvas-mode-id')).toHaveTextContent('light')
+		expect(screen.getByTestId('canvas-mode-id').textContent).toBe('light')
 	})
 })
 
@@ -38,7 +38,7 @@ it('updates the state and localStorage when setting a mode', async () => {
 	fireEvent.click(screen.getByTestId('set-dark-mode'))
 
 	await waitFor(() => {
-		expect(screen.getByTestId('canvas-mode-id')).toHaveTextContent('dark')
+		expect(screen.getByTestId('canvas-mode-id').textContent).toBe('dark')
 		expect(window.localStorage.getItem(CANVAS_MODE_STORAGE_KEY)).toBe('"dark"')
 	})
 })
@@ -49,6 +49,6 @@ it('falls back to light mode for invalid persisted values', async () => {
 	render(<CanvasModeHarness />)
 
 	await waitFor(() => {
-		expect(screen.getByTestId('canvas-mode-id')).toHaveTextContent('light')
+		expect(screen.getByTestId('canvas-mode-id').textContent).toBe('light')
 	})
 })

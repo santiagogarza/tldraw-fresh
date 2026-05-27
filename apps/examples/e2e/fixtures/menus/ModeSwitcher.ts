@@ -9,7 +9,7 @@ export class ModeSwitcher {
 		this.page = page
 		this.button = this.page.getByTestId('mode-switcher.button')
 		this.popover = this.page.getByTestId('mode-switcher.popover')
-		this.modeItems = this.page.getByTestId(/^mode-switcher\\.item-/)
+		this.modeItems = this.page.locator('[data-testid^="mode-switcher.item-"]')
 	}
 
 	getModeItem(modeId: 'light' | 'dark' | 'sky' | 'sunrise' | 'sunset') {

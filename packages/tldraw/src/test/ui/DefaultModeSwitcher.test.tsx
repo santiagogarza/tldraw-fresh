@@ -22,10 +22,10 @@ it('renders the trigger button with menu aria label and default light mode', asy
 	await renderTldrawComponent(<Tldraw />, { waitForPatterns: false })
 
 	const button = await screen.findByTestId('mode-switcher.button')
-	expect(button).toHaveAttribute('aria-label', 'Canvas mode')
+	expect(button.getAttribute('aria-label')).toBe('mode.menu.title')
 
 	await waitFor(() => {
-		expect(getContainer()).toHaveAttribute('data-canvas-mode', 'light')
+		expect(getContainer().getAttribute('data-canvas-mode')).toBe('light')
 	})
 })
 
@@ -41,11 +41,13 @@ it('opens the popover and lists all five modes', async () => {
 	await screen.findByTestId('mode-switcher.item-sunrise')
 	await screen.findByTestId('mode-switcher.item-sunset')
 
-	expect(screen.getByTestId('mode-switcher.item-light')).toHaveTextContent('Light mode')
-	expect(screen.getByTestId('mode-switcher.item-dark')).toHaveTextContent('Dark mode')
-	expect(screen.getByTestId('mode-switcher.item-sky')).toHaveTextContent('Sky mode')
-	expect(screen.getByTestId('mode-switcher.item-sunrise')).toHaveTextContent('Sunrise mode')
-	expect(screen.getByTestId('mode-switcher.item-sunset')).toHaveTextContent('Sunset mode')
+	expect(screen.getByTestId('mode-switcher.item-light').textContent).toContain('mode.light.label')
+	expect(screen.getByTestId('mode-switcher.item-dark').textContent).toContain('mode.dark.label')
+	expect(screen.getByTestId('mode-switcher.item-sky').textContent).toContain('mode.sky.label')
+	expect(screen.getByTestId('mode-switcher.item-sunrise').textContent).toContain(
+		'mode.sunrise.label'
+	)
+	expect(screen.getByTestId('mode-switcher.item-sunset').textContent).toContain('mode.sunset.label')
 })
 
 it('selects a mode, closes the popover, and updates the trigger swatch', async () => {
@@ -57,7 +59,7 @@ it('selects a mode, closes the popover, and updates the trigger swatch', async (
 
 	await waitFor(() => {
 		expect(screen.queryByTestId('mode-switcher.popover')).toBeNull()
-		expect(getContainer()).toHaveAttribute('data-canvas-mode', 'dark')
+		expect(getContainer().getAttribute('data-canvas-mode')).toBe('dark')
 		expect(getContainer().style.getPropertyValue('--tl-canvas-mode-background')).toBe('#0e0e10')
 	})
 })
@@ -69,14 +71,14 @@ it('persists mode selection across remounts', async () => {
 	fireEvent.click(await screen.findByTestId('mode-switcher.item-sunset'))
 
 	await waitFor(() => {
-		expect(getContainer()).toHaveAttribute('data-canvas-mode', 'sunset')
+		expect(getContainer().getAttribute('data-canvas-mode')).toBe('sunset')
 	})
 
 	rendered.unmount()
 	await renderTldrawComponent(<Tldraw />, { waitForPatterns: false })
 
 	await waitFor(() => {
-		expect(getContainer()).toHaveAttribute('data-canvas-mode', 'sunset')
+		expect(getContainer().getAttribute('data-canvas-mode')).toBe('sunset')
 	})
 })
 

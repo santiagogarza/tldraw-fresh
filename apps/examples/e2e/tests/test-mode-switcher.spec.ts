@@ -87,9 +87,9 @@ test.describe('mode switcher', () => {
 		for (const mode of MODES) {
 			await modeSwitcher.select(mode.id)
 
-			await expect.poll(() =>
-				page.locator('.tl-container').getAttribute('data-canvas-mode')
-			).toBe(mode.id)
+			await expect
+				.poll(() => page.locator('.tl-container').getAttribute('data-canvas-mode'))
+				.toBe(mode.id)
 
 			const background = await page.locator('.tl-background').evaluate((element) => {
 				const style = getComputedStyle(element)
@@ -105,9 +105,11 @@ test.describe('mode switcher', () => {
 				expect(background.backgroundImage).toBe('none')
 			}
 
-			const selectedColor = await page.locator('.tl-container').evaluate((element) =>
-				getComputedStyle(element).getPropertyValue('--tl-color-selected').trim().toLowerCase()
-			)
+			const selectedColor = await page
+				.locator('.tl-container')
+				.evaluate((element) =>
+					getComputedStyle(element).getPropertyValue('--tl-color-selected').trim().toLowerCase()
+				)
 			expect(selectedColor).toBe(mode.accent)
 
 			if (!isMobile) {
@@ -118,15 +120,15 @@ test.describe('mode switcher', () => {
 
 	test('persists mode selection after a page reload', async ({ page, modeSwitcher }) => {
 		await modeSwitcher.select('sunset')
-		await expect.poll(() =>
-			page.locator('.tl-container').getAttribute('data-canvas-mode')
-		).toBe('sunset')
+		await expect
+			.poll(() => page.locator('.tl-container').getAttribute('data-canvas-mode'))
+			.toBe('sunset')
 
 		await page.reload()
 		await page.waitForSelector('[data-testid="mode-switcher.button"]')
 
-		await expect.poll(() =>
-			page.locator('.tl-container').getAttribute('data-canvas-mode')
-		).toBe('sunset')
+		await expect
+			.poll(() => page.locator('.tl-container').getAttribute('data-canvas-mode'))
+			.toBe('sunset')
 	})
 })
