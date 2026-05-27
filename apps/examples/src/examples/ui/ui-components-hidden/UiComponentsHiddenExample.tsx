@@ -8,6 +8,7 @@ const components: Required<TLUiComponents> = {
 	HelpMenu: null,
 	ZoomMenu: null,
 	MainMenu: null,
+	ModeSwitcher: null,
 	Minimap: null,
 	StylePanel: null,
 	PageMenu: null,
