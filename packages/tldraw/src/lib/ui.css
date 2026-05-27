@@ -799,6 +799,7 @@
 	width: 24px;
 	min-width: 24px;
 	height: 24px;
+	align-self: center;
 	padding: 0;
 	margin-inline: 4px;
 	border: 1.5px solid currentColor;
