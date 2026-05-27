@@ -2294,3 +2294,130 @@ tldraw? probably.
 		transform: translateX(calc(-100% - var(--tl-space-3)));
 	}
 }
+
+/* ------------------- Mode Switcher ------------------- */
+
+.tlui-mode-switcher__trigger {
+	width: 32px;
+	height: 32px;
+	min-width: 0;
+	padding: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.tlui-mode-switcher__swatch {
+	display: block;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	border: 1.5px solid var(--tl-color-text);
+	background-clip: padding-box;
+	pointer-events: none;
+}
+
+.tlui-mode-switcher__trigger[data-state='open']::after {
+	background: linear-gradient(180deg, rgba(144, 144, 144, 0) 0%, var(--tl-color-muted-2) 100%);
+	opacity: 1;
+}
+
+.tlui-mode-switcher__menu {
+	display: flex;
+	flex-direction: column;
+	min-width: 180px;
+	padding: 4px;
+	gap: 0;
+	background-color: var(--tl-color-panel);
+	border-radius: var(--tl-radius-2);
+	pointer-events: all;
+}
+
+.tlui-mode-switcher__item {
+	display: grid;
+	grid-template-columns: 18px 1fr 16px;
+	column-gap: 10px;
+	align-items: center;
+	width: 100%;
+	height: 32px;
+	padding: 0 8px;
+	justify-content: flex-start;
+	text-align: left;
+}
+
+.tlui-mode-switcher__item[data-isactive='true'] {
+	background-color: var(--tl-color-hint);
+}
+
+.tlui-mode-switcher__item-swatch {
+	display: block;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	border: 1px solid var(--tl-color-text-3);
+	background-clip: padding-box;
+	pointer-events: none;
+}
+
+.tlui-mode-switcher__item-label {
+	flex: 1;
+	color: var(--tl-color-text);
+	font-size: 12px;
+}
+
+.tlui-mode-switcher__item-check {
+	width: 16px;
+	height: 16px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--tl-color-text);
+}
+
+/* Mode-specific overrides on the editor container. The accent overrides live
+   on `.tl-container[data-canvas-mode]` so they cascade to both canvas and UI.
+   The canvas background is applied to `.tl-background` per mode (solid colors
+   use the CSS variable; gradients require a direct `background` declaration). */
+
+.tl-container[data-canvas-mode='light'] {
+	--tl-color-background: #ffffff;
+	--tl-color-selected: hsl(214, 84%, 56%);
+	--tl-color-primary: hsl(214, 84%, 56%);
+}
+.tl-container[data-canvas-mode='light'] .tl-background {
+	background: #ffffff;
+}
+
+.tl-container[data-canvas-mode='dark'] {
+	--tl-color-background: #0e0e10;
+	--tl-color-selected: hsl(214, 84%, 56%);
+	--tl-color-primary: hsl(214, 84%, 56%);
+}
+.tl-container[data-canvas-mode='dark'] .tl-background {
+	background: #0e0e10;
+}
+
+.tl-container[data-canvas-mode='sky'] {
+	--tl-color-background: #cfe8ff;
+	--tl-color-selected: hsl(208, 88%, 48%);
+	--tl-color-primary: hsl(208, 88%, 48%);
+}
+.tl-container[data-canvas-mode='sky'] .tl-background {
+	background: #cfe8ff;
+}
+
+.tl-container[data-canvas-mode='sunrise'] {
+	--tl-color-selected: hsl(312, 50%, 51%);
+	--tl-color-primary: hsl(312, 50%, 51%);
+}
+.tl-container[data-canvas-mode='sunrise'] .tl-background {
+	background: linear-gradient(135deg, #ffd6e7 0%, #e0c8ff 100%);
+}
+
+.tl-container[data-canvas-mode='sunset'] {
+	--tl-color-selected: hsl(12, 79%, 56%);
+	--tl-color-primary: hsl(12, 79%, 56%);
+}
+.tl-container[data-canvas-mode='sunset'] .tl-background {
+	background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+}

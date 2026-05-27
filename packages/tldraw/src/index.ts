@@ -421,6 +421,20 @@ export {
 	ZoomToSelectionMenuItem,
 } from './lib/ui/components/menu-items'
 export { DefaultMinimap } from './lib/ui/components/Minimap/DefaultMinimap'
+export { applyCanvasModeStyles } from './lib/ui/components/ModeSwitcher/applyCanvasModeStyles'
+export { DefaultModeSwitcher } from './lib/ui/components/ModeSwitcher/DefaultModeSwitcher'
+export {
+	CANVAS_MODES,
+	DEFAULT_CANVAS_MODE_ID,
+	getCanvasMode,
+	isCanvasModeId,
+	type TLCanvasMode,
+	type TLCanvasModeId,
+} from './lib/ui/components/ModeSwitcher/modes'
+export {
+	CANVAS_MODE_STORAGE_KEY,
+	useCanvasMode,
+} from './lib/ui/components/ModeSwitcher/useCanvasMode'
 export { MobileStylePanel } from './lib/ui/components/MobileStylePanel'
 export { DefaultNavigationPanel } from './lib/ui/components/NavigationPanel/DefaultNavigationPanel'
 export { OfflineIndicator } from './lib/ui/components/OfflineIndicator/OfflineIndicator'
