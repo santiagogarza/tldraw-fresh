@@ -196,6 +196,7 @@ export const UserPreferencesKeys = [
 	'areKeyboardShortcutsEnabled',
 	'edgeScrollSpeed',
 	'colorScheme',
+	'themeId',
 	'isSnapMode',
 	'isWrapMode',
 	'isDynamicSizeMode',

@@ -1700,6 +1700,7 @@ export interface TLThemeDefaultColors {
     'light-violet': TLDefaultColor;
     // (undocumented)
     background: string;
+    backgroundGradient?: string;
     // (undocumented)
     black: TLDefaultColor;
     // (undocumented)
@@ -1763,6 +1764,12 @@ export type TLThemeId = keyof TLThemes & string;
 export interface TLThemes {
     // (undocumented)
     default: TLTheme;
+    // (undocumented)
+    sky: TLTheme;
+    // (undocumented)
+    sunrise: TLTheme;
+    // (undocumented)
+    sunset: TLTheme;
 }
 
 // @public

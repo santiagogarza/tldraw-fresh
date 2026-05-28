@@ -21,6 +21,8 @@ export interface TLUserPreferences {
 	areKeyboardShortcutsEnabled?: boolean | null
 	edgeScrollSpeed?: number | null
 	colorScheme?: 'light' | 'dark' | 'system'
+	/** Persisted canvas theme id (see {@link @tldraw/tlschema#TLThemeId}). */
+	themeId?: string | null
 	isSnapMode?: boolean | null
 	isWrapMode?: boolean | null
 	isDynamicSizeMode?: boolean | null
@@ -52,6 +54,7 @@ export const userTypeValidator: T.Validator<TLUserPreferences> = T.object<TLUser
 	areKeyboardShortcutsEnabled: T.boolean.nullable().optional(),
 	edgeScrollSpeed: T.number.nullable().optional(),
 	colorScheme: T.literalEnum('light', 'dark', 'system').optional(),
+	themeId: T.string.nullable().optional(),
 	isSnapMode: T.boolean.nullable().optional(),
 	isWrapMode: T.boolean.nullable().optional(),
 	isDynamicSizeMode: T.boolean.nullable().optional(),
@@ -75,6 +78,7 @@ const Versions = {
 	AddPointerPeripheral: 11,
 	RenameShowUiLabelsToEnhancedA11yMode: 12,
 	AddZoomDirectionInverted: 13,
+	AddThemeId: 14,
 } as const
 
 const CURRENT_VERSION = Math.max(...Object.values(Versions))
@@ -129,6 +133,10 @@ function migrateSnapshot(data: { version: number; user: any }) {
 		data.user.isZoomDirectionInverted = false
 	}
 
+	if (data.version < Versions.AddThemeId) {
+		data.user.themeId = 'default'
+	}
+
 	// finally
 	data.version = CURRENT_VERSION
 }
@@ -178,6 +186,7 @@ export const defaultUserPreferences = Object.freeze({
 	isPasteAtCursorMode: false,
 	enhancedA11yMode: false,
 	colorScheme: 'light',
+	themeId: 'default',
 	inputMode: null,
 	isZoomDirectionInverted: false,
 }) satisfies Readonly<Omit<TLUserPreferences, 'id'>>

@@ -32,6 +32,7 @@ function makeUser(overrides: Partial<TlaUser> & { id: string }): TlaUser {
 		areKeyboardShortcutsEnabled: null,
 		edgeScrollSpeed: null,
 		colorScheme: null,
+		themeId: null,
 		isSnapMode: null,
 		isWrapMode: null,
 		isDynamicSizeMode: null,

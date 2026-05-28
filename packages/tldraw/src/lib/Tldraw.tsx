@@ -4,11 +4,14 @@ import {
 	TLEditorComponents,
 	TLOnMountHandler,
 	TLTextOptions,
+	TLThemeId,
 	TldrawEditor,
 	TldrawEditorBaseProps,
 	TldrawEditorStoreProps,
 	defaultUserPreferences,
+	getUserPreferences,
 	mergeArraysAndReplaceDefaults,
+	resolveThemes,
 	useEditor,
 	useEditorComponents,
 	useOnMount,
@@ -40,6 +43,7 @@ import { AssetUrlsProvider } from './ui/context/asset-urls'
 import { TLUiComponents, useTldrawUiComponents } from './ui/context/components'
 import { useUiEvents } from './ui/context/events'
 import { useToasts } from './ui/context/toasts'
+import { useSyncCanvasThemeFromPreferences } from './ui/hooks/useSyncCanvasThemeFromPreferences'
 import {
 	TldrawUiTranslationProvider,
 	useTranslation,
@@ -265,6 +269,14 @@ export function Tldraw(props: TldrawProps) {
 
 	const assets = useDefaultEditorAssetsWithOverrides(rest.assetUrls)
 
+	const resolvedThemes = useMemo(() => resolveThemes(rest.themes), [rest.themes])
+
+	const initialTheme = useMemo((): TLThemeId => {
+		const themeId =
+			rest.user?.userPreferences.get().themeId ?? getUserPreferences().themeId ?? 'default'
+		return themeId && themeId in resolvedThemes ? (themeId as TLThemeId) : 'default'
+	}, [rest.user, resolvedThemes])
+
 	const embedShapeUtil = shapeUtilsWithDefaults.find((util) => util.type === 'embed')
 	if (embedShapeUtil && embeds) {
 		// eslint-disable-next-line @typescript-eslint/no-deprecated
@@ -284,6 +296,8 @@ export function Tldraw(props: TldrawProps) {
 				<TldrawEditor
 					initialState="select"
 					{...rest}
+					themes={resolvedThemes}
+					initialTheme={initialTheme}
 					components={componentsWithDefault}
 					shapeUtils={shapeUtilsWithDefaults}
 					bindingUtils={bindingUtilsWithDefaults}
@@ -323,6 +337,8 @@ function InsideOfEditorAndUiContext({
 	const toasts = useToasts()
 	const msg = useTranslation()
 	const trackEvent = useUiEvents()
+
+	useSyncCanvasThemeFromPreferences()
 
 	useOnMount(() => {
 		const unsubs: (void | (() => void) | undefined)[] = []
