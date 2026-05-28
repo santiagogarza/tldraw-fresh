@@ -57,6 +57,11 @@ export interface TLDefaultColor {
 export interface TLThemeDefaultColors {
 	text: string
 	background: string
+	/**
+	 * Optional CSS gradient for the canvas background. When set, the canvas uses this for DOM
+	 * rendering while `background` remains the solid fallback for export and minimap.
+	 */
+	backgroundGradient?: string
 	negativeSpace: string
 	solid: string
 	cursor: string
@@ -255,6 +260,9 @@ export interface TLTheme {
  */
 export interface TLThemes {
 	default: TLTheme
+	sky: TLTheme
+	sunrise: TLTheme
+	sunset: TLTheme
 }
 
 /** @public */

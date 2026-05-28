@@ -2,6 +2,7 @@ import { Atom, atom, computed } from '@tldraw/state'
 import { TLTheme, TLThemeId, TLThemes } from '@tldraw/tlschema'
 import { structuredClone } from '@tldraw/utils'
 import type { Editor } from '../../Editor'
+import { BUILTIN_THEMES } from './builtinThemes'
 import { DEFAULT_THEME } from './defaultThemes'
 
 /**
@@ -13,7 +14,7 @@ import { DEFAULT_THEME } from './defaultThemes'
  * @public
  */
 export function resolveThemes(themes?: Partial<TLThemes>): TLThemes {
-	return { default: DEFAULT_THEME, ...themes } as TLThemes
+	return { default: DEFAULT_THEME, ...BUILTIN_THEMES, ...themes } as TLThemes
 }
 
 /**

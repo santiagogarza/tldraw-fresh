@@ -97,6 +97,27 @@ describe('TLUserPreferences', () => {
 		expect(editor.user.getName()).toBe('blah')
 	})
 
+	it('persists themeId updates', () => {
+		const userPreferences = atom<TLUserPreferences>('userPreferences', {
+			id: '123',
+			themeId: 'default',
+		})
+		const setUserPreferences = vi.fn((preferences) => userPreferences.set(preferences))
+
+		editor = new TestEditor({
+			user: createTLCurrentUser({
+				setUserPreferences,
+				userPreferences,
+			}),
+		})
+
+		editor.user.updateUserPreferences({ themeId: 'sunrise' })
+		expect(editor.user.getThemeId()).toBe('sunrise')
+		expect(setUserPreferences).toHaveBeenLastCalledWith(
+			expect.objectContaining({ themeId: 'sunrise' })
+		)
+	})
+
 	it('allows setting values to null', () => {
 		const userPreferences = atom<TLUserPreferences>('userPreferences', {
 			id: '123',

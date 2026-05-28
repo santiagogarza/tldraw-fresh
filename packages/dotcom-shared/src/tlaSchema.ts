@@ -34,6 +34,7 @@ export const user = table('user')
 		areKeyboardShortcutsEnabled: boolean().optional(),
 		edgeScrollSpeed: number().optional(),
 		colorScheme: string().optional(),
+		themeId: string().optional(),
 		isSnapMode: boolean().optional(),
 		isWrapMode: boolean().optional(),
 		isDynamicSizeMode: boolean().optional(),

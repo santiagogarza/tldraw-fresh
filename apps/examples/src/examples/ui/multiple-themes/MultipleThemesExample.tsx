@@ -21,7 +21,7 @@ import 'tldraw/tldraw.css'
 declare module '@tldraw/tlschema' {
 	interface TLThemes {
 		ocean: TLTheme
-		sunset: TLTheme
+		coral: TLTheme
 	}
 }
 
@@ -37,21 +37,21 @@ OCEAN_THEME.colors.dark.violet.solid = '#7b6bd4'
 OCEAN_THEME.colors.dark.violet.noteFill = '#3a2d6e'
 OCEAN_THEME.colors.dark.violet.noteText = '#f2f2f2'
 
-const SUNSET_THEME: TLTheme = structuredClone(DEFAULT_THEME)
-SUNSET_THEME.id = 'sunset'
-SUNSET_THEME.colors.light.blue.solid = '#e07038'
-SUNSET_THEME.colors.light.violet.solid = '#9b4dca'
-SUNSET_THEME.colors.light.violet.noteFill = '#dab0f0'
-SUNSET_THEME.colors.light.violet.noteText = '#000000'
-SUNSET_THEME.colors.dark.blue.solid = '#f0884a'
-SUNSET_THEME.colors.dark.violet.solid = '#b060d8'
-SUNSET_THEME.colors.dark.violet.noteFill = '#5c2870'
-SUNSET_THEME.colors.dark.violet.noteText = '#f2f2f2'
+const CORAL_THEME: TLTheme = structuredClone(DEFAULT_THEME)
+CORAL_THEME.id = 'coral'
+CORAL_THEME.colors.light.blue.solid = '#e07038'
+CORAL_THEME.colors.light.violet.solid = '#9b4dca'
+CORAL_THEME.colors.light.violet.noteFill = '#dab0f0'
+CORAL_THEME.colors.light.violet.noteText = '#000000'
+CORAL_THEME.colors.dark.blue.solid = '#f0884a'
+CORAL_THEME.colors.dark.violet.solid = '#b060d8'
+CORAL_THEME.colors.dark.violet.noteFill = '#5c2870'
+CORAL_THEME.colors.dark.violet.noteText = '#f2f2f2'
 
 // [3]
 const themes: Partial<TLThemes> = {
 	ocean: OCEAN_THEME,
-	sunset: SUNSET_THEME,
+	coral: CORAL_THEME,
 }
 
 function createInitialShapes(editor: Editor) {
@@ -90,8 +90,11 @@ export default function MultipleThemesExample() {
 // [5]
 const THEME_LABELS: Record<TLThemeId, string> = {
 	default: 'Default',
-	ocean: 'Ocean',
+	sky: 'Sky',
+	sunrise: 'Sunrise',
 	sunset: 'Sunset',
+	ocean: 'Ocean',
+	coral: 'Coral',
 }
 
 function ThemeSwitcher() {

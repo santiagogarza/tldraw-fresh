@@ -26,6 +26,7 @@ describe('UserPreferencesManager', () => {
 		enhancedA11yMode: false,
 		edgeScrollSpeed: 1,
 		colorScheme: 'light',
+		themeId: 'default',
 		isSnapMode: false,
 		isWrapMode: false,
 		isDynamicSizeMode: false,
@@ -232,6 +233,7 @@ describe('UserPreferencesManager', () => {
 				enhancedA11yMode: mockUserPreferences.enhancedA11yMode,
 				isSnapMode: mockUserPreferences.isSnapMode,
 				colorScheme: mockUserPreferences.colorScheme,
+				themeId: defaultUserPreferences.themeId,
 				isDarkMode: false, // light mode
 				isWrapMode: mockUserPreferences.isWrapMode,
 				isDynamicResizeMode: mockUserPreferences.isDynamicSizeMode,
@@ -321,6 +323,28 @@ describe('UserPreferencesManager', () => {
 			it('should return default name when name is empty after trimming', () => {
 				userPreferencesAtom.set({ ...mockUserPreferences, name: '   ' })
 				expect(userPreferencesManager.getName()).toBe(defaultUserPreferences.name)
+			})
+		})
+
+		describe('getThemeId', () => {
+			it('should return user themeId', () => {
+				userPreferencesAtom.set({ ...mockUserPreferences, themeId: 'sunrise' })
+				expect(userPreferencesManager.getThemeId()).toBe('sunrise')
+			})
+
+			it('should return default themeId when themeId is null', () => {
+				userPreferencesAtom.set({ ...mockUserPreferences, themeId: null })
+				expect(userPreferencesManager.getThemeId()).toBe(defaultUserPreferences.themeId)
+			})
+
+			it('should return default themeId when themeId is undefined', () => {
+				userPreferencesAtom.set({ ...mockUserPreferences, themeId: undefined })
+				expect(userPreferencesManager.getThemeId()).toBe(defaultUserPreferences.themeId)
+			})
+
+			it('should include themeId in getUserPreferences', () => {
+				userPreferencesAtom.set({ ...mockUserPreferences, themeId: 'sky' })
+				expect(userPreferencesManager.getUserPreferences().themeId).toBe('sky')
 			})
 		})
 

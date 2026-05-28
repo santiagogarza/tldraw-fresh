@@ -2294,3 +2294,66 @@ tldraw? probably.
 		transform: translateX(calc(-100% - var(--tl-space-3)));
 	}
 }
+
+/* Canvas theme picker */
+
+.tlui-canvas-theme-picker__trigger {
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: none;
+	border-radius: var(--tl-radius-2);
+	cursor: pointer;
+	pointer-events: all;
+}
+
+.tlui-canvas-theme-picker__trigger:hover {
+	background-color: var(--tl-color-muted-0);
+}
+
+.tlui-canvas-theme-picker__swatch {
+	display: block;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	border: 1px solid var(--tl-color-muted-1);
+	flex-shrink: 0;
+}
+
+.tlui-canvas-theme-picker__list {
+	list-style: none;
+	margin: 0;
+	padding: 4px;
+	min-width: 160px;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.tlui-canvas-theme-picker__option {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	border: none;
+	border-radius: var(--tl-radius-2);
+	background: transparent;
+	color: var(--tl-color-text-1);
+	cursor: pointer;
+	font-size: 12px;
+	text-align: start;
+}
+
+.tlui-canvas-theme-picker__option:hover,
+.tlui-canvas-theme-picker__option[aria-selected='true'] {
+	background-color: var(--tl-color-muted-0);
+}
+
+.tlui-canvas-theme-picker__label {
+	flex: 1;
+}

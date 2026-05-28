@@ -47,6 +47,7 @@ export class UserPreferencesManager {
 			areKeyboardShortcutsEnabled: this.getAreKeyboardShortcutsEnabled(),
 			isSnapMode: this.getIsSnapMode(),
 			colorScheme: this.user.userPreferences.get().colorScheme,
+			themeId: this.getThemeId(),
 			isDarkMode: this.getIsDarkMode(),
 			isWrapMode: this.getIsWrapMode(),
 			isDynamicResizeMode: this.getIsDynamicResizeMode(),
@@ -54,6 +55,10 @@ export class UserPreferencesManager {
 			inputMode: this.getInputMode(),
 			isZoomDirectionInverted: this.getIsZoomDirectionInverted(),
 		}
+	}
+
+	@computed getThemeId() {
+		return this.user.userPreferences.get().themeId ?? defaultUserPreferences.themeId
 	}
 
 	@computed getIsDarkMode() {

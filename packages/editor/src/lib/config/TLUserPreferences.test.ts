@@ -1,6 +1,33 @@
 import { describe, expect, it } from 'vitest'
 import { defaultUserPreferences, userTypeValidator } from './TLUserPreferences'
 
+describe('themeId validation', () => {
+	it('accepts string and null themeId values', () => {
+		expect(
+			userTypeValidator.validate({
+				id: 'user-1',
+				themeId: 'sunset',
+			})
+		).toEqual({ id: 'user-1', themeId: 'sunset' })
+
+		expect(
+			userTypeValidator.validate({
+				id: 'user-1',
+				themeId: null,
+			})
+		).toEqual({ id: 'user-1', themeId: null })
+	})
+
+	it('rejects non-string themeId values', () => {
+		expect(() =>
+			userTypeValidator.validate({
+				id: 'user-1',
+				themeId: { bad: true },
+			} as any)
+		).toThrow()
+	})
+})
+
 describe('TLUserPreferences consistency', () => {
 	// When adding a new user preference, add it to this list AND update:
 	// 1. TLUserPreferences interface
@@ -15,6 +42,7 @@ describe('TLUserPreferences consistency', () => {
 		'areKeyboardShortcutsEnabled',
 		'edgeScrollSpeed',
 		'colorScheme',
+		'themeId',
 		'isSnapMode',
 		'isWrapMode',
 		'isDynamicSizeMode',

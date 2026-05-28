@@ -194,6 +194,7 @@ export function createMockUser(
 		enhancedA11yMode: false,
 		edgeScrollSpeed: 1.0,
 		colorScheme: 'auto',
+		themeId: null,
 		isSnapMode: false,
 		isWrapMode: false,
 		inputMode: null,
