@@ -4,6 +4,7 @@ import { PORTRAIT_BREAKPOINT } from '../constants'
 import { useBreakpoint } from '../context/breakpoints'
 import { useTldrawUiComponents } from '../context/components'
 import { useTranslation } from '../hooks/useTranslation/useTranslation'
+import { CanvasThemePicker } from './CanvasThemePicker'
 import { TldrawUiRow } from './primitives/layout'
 import { TldrawUiToolbar } from './primitives/TldrawUiToolbar'
 
@@ -35,6 +36,7 @@ export const DefaultMenuPanel = memo(function MenuPanel() {
 		<nav ref={ref} className="tlui-menu-zone">
 			<TldrawUiRow>
 				{MainMenu && <MainMenu />}
+				<CanvasThemePicker />
 				{PageMenu && !isSinglePageMode && <PageMenu />}
 				{showQuickActions ? (
 					<TldrawUiToolbar orientation="horizontal" label={msg('actions-menu.title')}>

@@ -2294,3 +2294,29 @@ tldraw? probably.
 		transform: translateX(calc(-100% - var(--tl-space-3)));
 	}
 }
+
+/* Canvas theme picker */
+
+.tlui-canvas-theme-picker__trigger.tlui-button__icon {
+	width: 40px;
+	min-width: 40px;
+	padding: 0;
+}
+
+.tlui-canvas-theme-picker__swatch {
+	display: block;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	border: 1px solid var(--tl-color-divider);
+}
+
+.tlui-canvas-theme-picker__option-swatch {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	border: 1px solid var(--tl-color-divider);
+	flex-shrink: 0;
+	margin-inline-end: var(--tl-space-3);
+}

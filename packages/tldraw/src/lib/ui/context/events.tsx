@@ -113,6 +113,7 @@ export interface TLUiEventMap {
 	'enhanced-a11y-mode': null
 	'toggle-edge-scrolling': null
 	'color-scheme': { value: string }
+	'set-canvas-theme': { source: TLUiEventSource; value: string }
 	'exit-pen-mode': null
 	'start-following': null
 	'stop-following': null

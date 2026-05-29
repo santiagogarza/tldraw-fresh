@@ -338,6 +338,8 @@ input,
 
 .tl-background {
 	background-color: var(--tl-color-background);
+	/* Optional runtime gradient from canvas theme picker (packages/tldraw). */
+	background-image: var(--tl-color-background-image, none);
 	width: 100%;
 	height: 100%;
 }

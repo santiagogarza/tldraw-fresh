@@ -2,6 +2,7 @@ import { tlenv, useContainer, useEditor, useReactor, useValue } from '@tldraw/ed
 import classNames from 'classnames'
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { TLUiAssetUrlOverrides } from './assetUrls'
+import { useCanvasTheme } from './canvas-theme/useCanvasTheme'
 import { SkipToMainContent } from './components/A11y'
 import { TldrawUiButton } from './components/primitives/Button/TldrawUiButton'
 import { TldrawUiButtonIcon } from './components/primitives/Button/TldrawUiButtonIcon'
@@ -99,6 +100,7 @@ const TldrawUiContent = React.memo(function TldrawUI() {
 	const msg = useTranslation()
 	const breakpoint = useBreakpoint()
 	const isReadonlyMode = useReadonly()
+	useCanvasTheme()
 	const isFocusMode = useValue('focus', () => editor.getInstanceState().isFocusMode, [editor])
 	const isDebugMode = useValue('debug', () => editor.getInstanceState().isDebugMode, [editor])
 

@@ -27,6 +27,17 @@ export { startEditingShapeWithRichText } from './lib/tools/SelectTool/selectHelp
 export { DefaultA11yAnnouncer, useSelectedShapesAnnouncer } from './lib/ui/components/A11y'
 export { AccessibilityMenu } from './lib/ui/components/AccessibilityMenu'
 export { ColorSchemeMenu } from './lib/ui/components/ColorSchemeMenu'
+export { CanvasThemePicker } from './lib/ui/components/CanvasThemePicker'
+export {
+	CANVAS_THEME_DEFINITIONS,
+	DEFAULT_CANVAS_THEME_ID,
+	getCanvasThemeDefinition,
+	isCanvasThemeId,
+	type CanvasThemeDefinition,
+	type CanvasThemeId,
+} from './lib/ui/canvas-theme/canvasThemeDefinitions'
+export { getCanvasTheme, setCanvasTheme } from './lib/ui/canvas-theme/canvasThemeState'
+export { useCanvasTheme } from './lib/ui/canvas-theme/useCanvasTheme'
 export { DefaultFollowingIndicator } from './lib/ui/components/DefaultFollowingIndicator'
 export { DefaultDialogs } from './lib/ui/components/Dialogs'
 export {
