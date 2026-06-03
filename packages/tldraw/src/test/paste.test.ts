@@ -175,6 +175,10 @@ describe('When pasting', () => {
 		const shapes = getShapes()
 		expect(shapes.new.box1?.parentId).toBe(editor.getCurrentPageId())
 		expect(shapes.new.box2?.parentId).toBe(editor.getCurrentPageId())
+		expect(shapes.new.box1?.x).toBe(shapes.old.box1.x + editor.options.adjacentShapeMargin)
+		expect(shapes.new.box1?.y).toBe(shapes.old.box1.y + editor.options.adjacentShapeMargin)
+		expect(shapes.new.box2?.x).toBe(shapes.old.box2.x + editor.options.adjacentShapeMargin)
+		expect(shapes.new.box2?.y).toBe(shapes.old.box2.y + editor.options.adjacentShapeMargin)
 
 		expect(editor.getCurrentPageShapesSorted().map((m) => m.id)).toStrictEqual([
 			shapes.old.frame1.id,
@@ -270,11 +274,11 @@ describe('When pasting', () => {
 		expect(shapes.new.box1?.parentId).toBe(editor.getCurrentPageId())
 		expect(shapes.new.box2?.parentId).toBe(editor.getCurrentPageId())
 
-		// Should put the pasted shapes centered in the frame
-		editor.select(shapes.new.box1!.id, shapes.new.box1!.id)
-		expect(editor.getShapePageBounds(shapes.old.box1)).toMatchObject(
-			editor.getShapePageBounds(shapes.new.box1)!
-		)
+		// Should offset page-level paste down-right when source overlaps viewport
+		const oldBounds = editor.getShapePageBounds(shapes.old.box1)!
+		const newBounds = editor.getShapePageBounds(shapes.new.box1)!
+		expect(newBounds.x).toBe(oldBounds.x + editor.options.adjacentShapeMargin)
+		expect(newBounds.y).toBe(oldBounds.y + editor.options.adjacentShapeMargin)
 	})
 
 	it('pastes shapes as children of the most common ancestor', () => {

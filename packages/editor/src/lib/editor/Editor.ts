@@ -10030,7 +10030,12 @@ export class Editor extends EventEmitter<TLEventMap> {
 						const b = this.getShapePageBounds(s.id)
 						return b && viewportPageBounds.collides(b)
 					})
-					point = anyOverlap ? rootBounds.center : viewportPageBounds.center
+					point = anyOverlap
+						? Vec.Add(rootBounds.center, {
+								x: this.options.adjacentShapeMargin,
+								y: this.options.adjacentShapeMargin,
+							})
+						: viewportPageBounds.center
 				}
 			}
 
