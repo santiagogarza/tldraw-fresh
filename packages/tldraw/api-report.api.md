@@ -2880,6 +2880,12 @@ export class NoteShapeUtil extends ShapeUtil<TLNoteShape> {
         y: number;
     } | undefined;
     // (undocumented)
+    onTranslateEnd(_initial: TLNoteShape, current: TLNoteShape): {
+        id: TLShapeId;
+        rotation: number;
+        type: "note";
+    };
+    // (undocumented)
     options: NoteShapeOptions;
     // (undocumented)
     static props: RecordProps<TLNoteShape>;

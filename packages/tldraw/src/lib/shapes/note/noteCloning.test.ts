@@ -1,5 +1,6 @@
-import { Box, TLNoteShape, Vec, toRichText } from '@tldraw/editor'
+import { Box, TLNoteShape, Vec, canonicalizeRotation, toRichText } from '@tldraw/editor'
 import { TestEditor } from '../../../test/TestEditor'
+import { NOTE_RANDOM_ROTATION_RANGE_DEGREES } from './noteHelpers'
 
 let editor: TestEditor
 
@@ -49,13 +50,10 @@ function testCloneHandles(x: number, y: number, rotation: number) {
 		expect(newShape.id).not.toBe(shape.id)
 
 		const expectedPosition = positions[i]
-
-		editor.expectShapeToMatch({
-			id: newShape.id,
-			type: 'note',
-			x: expectedPosition.x,
-			y: expectedPosition.y,
-		})
+		const expectedCenter = expectedPosition.clone().add(new Vec(100, 100).rot(rotation))
+		const actualCenter = editor.getShapePageBounds(newShape)!.center
+		expect(actualCenter.x).toBeCloseTo(expectedCenter.x)
+		expect(actualCenter.y).toBeCloseTo(expectedCenter.y)
 
 		editor.expectToBeIn('select.editing_shape')
 
@@ -107,14 +105,9 @@ function testDragCloneHandles(x: number, y: number, rotation: number) {
 
 		expect(newShape.id).not.toBe(shape.id)
 
-		const offset = new Vec(100, 100).rot(rotation)
-
-		editor.expectShapeToMatch({
-			id: newShape.id,
-			type: 'note',
-			x: handleInPageSpace.x + 30 - offset.x,
-			y: handleInPageSpace.y + 30 - offset.y,
-		})
+		const actualCenter = editor.getShapePageBounds(newShape)!.center
+		expect(actualCenter.x).toBeCloseTo(handleInPageSpace.x + 30)
+		expect(actualCenter.y).toBeCloseTo(handleInPageSpace.y + 30)
 
 		editor.pointerUp()
 
@@ -213,13 +206,12 @@ it('Creates an adjacent note when dragging the clone handle', () => {
 	expect(newShape.id).not.toBe(shapeB.id)
 	expect(newShape.id).not.toBe(shapeA.id)
 
-	const offset = new Vec(100, 100).rot(0)
-
+	const actualCenter = editor.getShapePageBounds(newShape)!.center
+	expect(actualCenter.x).toBeCloseTo(handle.x + 30)
+	expect(actualCenter.y).toBeCloseTo(handle.y + 30)
 	editor.expectShapeToMatch<TLNoteShape>({
 		id: newShape.id,
 		type: 'note',
-		x: handle.x + 30 - offset.x,
-		y: handle.y + 30 - offset.y,
 		props: {
 			richText: toRichText(''),
 		},
@@ -334,11 +326,11 @@ it('Puts the new shape into a frame based on its center', () => {
 	expect(newShape.parentId).toBe(frameA.id)
 })
 
-function testNoteShapeFrameRotations(sourceRotation: number, rotation: number) {
+function testNoteShapeFrameRotations(rotation: number) {
 	editor.createShape({ type: 'frame', x: 1220, y: 1000, rotation: rotation })
 	const frameA = editor.getLastCreatedShape()!
 	// top left won't be in the frame, but the center will (barely but yes)
-	editor.createShape({ type: 'note', x: 1000, y: 1000, rotation: sourceRotation })
+	editor.createShape({ type: 'note', x: 1000, y: 1000 })
 	const shapeA = editor.getLastCreatedShape()!
 	// to the right
 	const handle = editor.getShapeHandles(shapeA.id)![1]
@@ -356,13 +348,18 @@ function testNoteShapeFrameRotations(sourceRotation: number, rotation: number) {
 	// Should be a child of the frame
 	expect(newShape.parentId).toBe(frameA.id)
 
-	expect(editor.getShapePageTransform(newShape).rotation()).toBeCloseTo(sourceRotation)
+	const rotationRangeRadians = (NOTE_RANDOM_ROTATION_RANGE_DEGREES * Math.PI) / 180
+	const pageRotation = editor.getShapePageTransform(newShape).rotation()
+	const normalizedRotation = canonicalizeRotation(pageRotation)
+	const signedRotation =
+		normalizedRotation > Math.PI ? normalizedRotation - Math.PI * 2 : normalizedRotation
+	expect(Math.abs(signedRotation)).toBeLessThanOrEqual(rotationRangeRadians)
 
 	editor.cancel().undo()
 }
 
-it('Puts the new shape into a rotated frame and keeps the source page rotation', () => {
-	testNoteShapeFrameRotations(0, 0.01)
-	testNoteShapeFrameRotations(0.01, 0)
-	testNoteShapeFrameRotations(0.01, 0.01)
+it('Puts the new shape into a rotated frame and keeps the page rotation in range', () => {
+	testNoteShapeFrameRotations(0.01)
+	testNoteShapeFrameRotations(0)
+	testNoteShapeFrameRotations(0.01)
 })

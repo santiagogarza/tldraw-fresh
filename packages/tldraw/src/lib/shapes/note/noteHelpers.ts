@@ -13,6 +13,16 @@ import {
 export const CLONE_HANDLE_MARGIN = 0
 /** @internal */
 export const NOTE_ADJACENT_POSITION_SNAP_RADIUS = 10
+/** @internal */
+export const NOTE_RANDOM_ROTATION_RANGE_DEGREES = 5
+
+/** @internal */
+export function getRandomNoteRotation() {
+	return ((Math.random() * NOTE_RANDOM_ROTATION_RANGE_DEGREES * 2 -
+		NOTE_RANDOM_ROTATION_RANGE_DEGREES) *
+		Math.PI) /
+		180
+}
 
 const BASE_NOTE_POSITIONS = (editor: Editor, noteWidth: number, noteHeight: number) =>
 	[
@@ -215,6 +225,7 @@ export function getNoteShapeForAdjacentPosition(
 	if (!nextNote || forceNew) {
 		editor.markHistoryStoppingPoint('creating note shape')
 		const id = createShapeId()
+		const randomPageRotation = getRandomNoteRotation()
 
 		// We create it at the center first, so that it becomes
 		// the child of whatever parent was at that center
@@ -223,7 +234,7 @@ export function getNoteShapeForAdjacentPosition(
 			type: 'note',
 			x: center.x,
 			y: center.y,
-			rotation: pageRotation,
+			rotation: randomPageRotation,
 			opacity: shape.opacity,
 			props: {
 				// Use the props of the shape we're cloning
@@ -246,7 +257,10 @@ export function getNoteShapeForAdjacentPosition(
 			createdShape,
 			Vec.Sub(
 				center,
-				Vec.Rot(new Vec(noteWidth / 2, noteHeight / 2).mul(createdShape.props.scale), pageRotation)
+				Vec.Rot(
+					new Vec(noteWidth / 2, noteHeight / 2).mul(createdShape.props.scale),
+					randomPageRotation
+				)
 			)
 		)
 
