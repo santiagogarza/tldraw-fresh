@@ -1093,6 +1093,11 @@
 	outline-offset: -5px;
 }
 
+.tlui-style-panel .tlui-style-panel__inactive-control {
+	color: var(--tl-color-text-3);
+	cursor: default;
+}
+
 .tlui-style-panel::-webkit-scrollbar {
 	display: none;
 }
