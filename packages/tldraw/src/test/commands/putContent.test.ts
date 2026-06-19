@@ -76,6 +76,32 @@ describe('Post-positioning reparent into frame', () => {
 		const [pastedId] = editor.getSelectedShapeIds()
 		expect(editor.getShape(pastedId)?.parentId).toBe(frameId)
 	})
+
+	it('nudges page-level copy-paste by the adjacent shape margin when source overlaps viewport', () => {
+		const shapeId = createShapeId('shape')
+
+		editor.createShapes([
+			{
+				id: shapeId,
+				type: 'geo',
+				x: 100,
+				y: 100,
+				props: { w: 100, h: 100 },
+			},
+		])
+
+		editor.select(shapeId)
+		editor.copy()
+		editor.selectNone()
+
+		editor.putContentOntoCurrentPage(editor.getClipboard()!, { select: true })
+
+		const [pastedId] = editor.getSelectedShapeIds()
+		const original = editor.getShape(shapeId)!
+		const pasted = editor.getShape(pastedId)!
+		expect(pasted.x).toBe(original.x + editor.options.adjacentShapeMargin)
+		expect(pasted.y).toBe(original.y + editor.options.adjacentShapeMargin)
+	})
 })
 
 describe('Paste parent selection with explicit point', () => {

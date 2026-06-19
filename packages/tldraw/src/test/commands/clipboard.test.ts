@@ -97,8 +97,20 @@ describe('When copying and pasting', () => {
 
 		// The new shapes should match the old shapes, except for their id
 		expect(shapesAfter.length).toBe(shapesBefore.length * 2)
-		expect(box1b).toMatchObject({ ...box1a, id: box1b.id, index: 'a3' })
-		expect(box2b).toMatchObject({ ...box2a, id: box2b.id, index: 'a4' })
+		expect(box1b).toMatchObject({
+			...box1a,
+			id: box1b.id,
+			index: 'a3',
+			x: box1a.x + editor.options.adjacentShapeMargin,
+			y: box1a.y + editor.options.adjacentShapeMargin,
+		})
+		expect(box2b).toMatchObject({
+			...box2a,
+			id: box2b.id,
+			index: 'a4',
+			x: box2a.x + editor.options.adjacentShapeMargin,
+			y: box2a.y + editor.options.adjacentShapeMargin,
+		})
 	})
 
 	it.todo('pastes at the correct child index (top of the current focus layer list)')
@@ -142,8 +154,20 @@ describe('When copying and pasting', () => {
 
 		// The new shapes should match the old shapes, except for their id
 		expect(shapesAfter.length).toBe(shapesBefore.length * 2)
-		expect(box1b).toMatchObject({ ...box1a, id: box1b.id, index: 'a3' })
-		expect(box2b).toMatchObject({ ...box2a, id: box2b.id, index: 'a4' })
+		expect(box1b).toMatchObject({
+			...box1a,
+			id: box1b.id,
+			index: 'a3',
+			x: box1a.x + editor.options.adjacentShapeMargin,
+			y: box1a.y + editor.options.adjacentShapeMargin,
+		})
+		expect(box2b).toMatchObject({
+			...box2a,
+			id: box2b.id,
+			index: 'a4',
+			x: box2a.x + editor.options.adjacentShapeMargin,
+			y: box2a.y + editor.options.adjacentShapeMargin,
+		})
 	})
 
 	it('copies the selected shapes and pastes when NO shapes still in the viewport', async () => {
@@ -258,12 +282,26 @@ describe('When copying and pasting', () => {
 
 		// The new shapes should match the old shapes, except for their id and the arrow's bindings!
 		expect(shapesAfter.length).toBe(shapesBefore.length * 2)
-		expect(box1b).toMatchObject({ ...box1a, id: box1b.id, index: 'a4' })
-		expect(box2b).toMatchObject({ ...box2a, id: box2b.id, index: 'a5' })
+		expect(box1b).toMatchObject({
+			...box1a,
+			id: box1b.id,
+			index: 'a4',
+			x: box1a.x + editor.options.adjacentShapeMargin,
+			y: box1a.y + editor.options.adjacentShapeMargin,
+		})
+		expect(box2b).toMatchObject({
+			...box2a,
+			id: box2b.id,
+			index: 'a5',
+			x: box2a.x + editor.options.adjacentShapeMargin,
+			y: box2a.y + editor.options.adjacentShapeMargin,
+		})
 		expect(arrow1b).toMatchObject({
 			...arrow1a,
 			id: arrow1b.id,
 			index: 'a6',
+			x: arrow1a.x + editor.options.adjacentShapeMargin,
+			y: arrow1a.y + editor.options.adjacentShapeMargin,
 		})
 		expect(getArrowBindings(editor, arrow1b as TLArrowShape)).toMatchObject({
 			start: { toId: box1b.id },
