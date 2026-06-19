@@ -232,6 +232,7 @@ describe('When pasting', () => {
 	})
 
 	it('pastes shapes as children of the most common ancestor', () => {
+		const pasteNudge = editor.options.adjacentShapeMargin
 		editor.reparentShapes([ids.frame3], ids.frame1)
 		editor.reparentShapes([ids.frame4], ids.frame2)
 		editor.reparentShapes([ids.box1], ids.frame3)
@@ -272,9 +273,13 @@ describe('When pasting', () => {
 
 		// Should put the pasted shapes centered in the frame
 		editor.select(shapes.new.box1!.id, shapes.new.box1!.id)
-		expect(editor.getShapePageBounds(shapes.old.box1)).toMatchObject(
-			editor.getShapePageBounds(shapes.new.box1)!
-		)
+		const oldBoxBounds = editor.getShapePageBounds(shapes.old.box1)!
+		const newBoxBounds = editor.getShapePageBounds(shapes.new.box1)!
+		expect(newBoxBounds).toMatchObject({
+			...oldBoxBounds,
+			x: oldBoxBounds.x + pasteNudge,
+			y: oldBoxBounds.y + pasteNudge,
+		})
 	})
 
 	it('pastes shapes as children of the most common ancestor', () => {

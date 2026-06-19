@@ -9813,6 +9813,7 @@ export class Editor extends EventEmitter<TLEventMap> {
 
 		const shapesById = new Map(shapes.map((s) => [s.id, s]))
 		const rootShapesFromContent = compact(rootShapeIds.map((id) => shapesById.get(id)))
+		const hasSourceShapesInDocument = rootShapesFromContent.some((shape) => this.getShape(shape.id))
 
 		if (point) {
 			// PASTE AT CURSOR: find the deepest accepts-children shape under the cursor
@@ -10030,7 +10031,18 @@ export class Editor extends EventEmitter<TLEventMap> {
 						const b = this.getShapePageBounds(s.id)
 						return b && viewportPageBounds.collides(b)
 					})
-					point = anyOverlap ? rootBounds.center : viewportPageBounds.center
+					if (anyOverlap) {
+						// If we're pasting a copy of shapes that still exist in this document,
+						// nudge the pasted shapes down-right so the paste is visibly apparent.
+						if (hasSourceShapesInDocument) {
+							const nudge = this.options.adjacentShapeMargin
+							point = { x: rootBounds.center.x + nudge, y: rootBounds.center.y + nudge }
+						} else {
+							point = rootBounds.center
+						}
+					} else {
+						point = viewportPageBounds.center
+					}
 				}
 			}
 

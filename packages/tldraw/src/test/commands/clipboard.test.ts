@@ -64,6 +64,7 @@ describe('When copying and pasting', () => {
 
 	it('copies the selected shapes and pastes when ALL shapes still in the viewport', async () => {
 		const mockClipboard = doMockClipboard()
+		const pasteNudge = editor.options.adjacentShapeMargin
 
 		editor.createShapes([
 			{ id: ids.box1, type: 'geo', x: 100, y: 100, props: { w: 100, h: 100 } },
@@ -97,8 +98,20 @@ describe('When copying and pasting', () => {
 
 		// The new shapes should match the old shapes, except for their id
 		expect(shapesAfter.length).toBe(shapesBefore.length * 2)
-		expect(box1b).toMatchObject({ ...box1a, id: box1b.id, index: 'a3' })
-		expect(box2b).toMatchObject({ ...box2a, id: box2b.id, index: 'a4' })
+		expect(box1b).toMatchObject({
+			...box1a,
+			id: box1b.id,
+			index: 'a3',
+			x: box1a.x + pasteNudge,
+			y: box1a.y + pasteNudge,
+		})
+		expect(box2b).toMatchObject({
+			...box2a,
+			id: box2b.id,
+			index: 'a4',
+			x: box2a.x + pasteNudge,
+			y: box2a.y + pasteNudge,
+		})
 	})
 
 	it.todo('pastes at the correct child index (top of the current focus layer list)')
@@ -109,6 +122,7 @@ describe('When copying and pasting', () => {
 
 	it('copies the selected shapes and pastes when SOME shapes still in the viewport', async () => {
 		const mockClipboard = doMockClipboard()
+		const pasteNudge = editor.options.adjacentShapeMargin
 
 		editor.createShapes([
 			{ id: ids.box1, type: 'geo', x: -2000, y: -100, props: { w: 100, h: 100 } },
@@ -142,8 +156,20 @@ describe('When copying and pasting', () => {
 
 		// The new shapes should match the old shapes, except for their id
 		expect(shapesAfter.length).toBe(shapesBefore.length * 2)
-		expect(box1b).toMatchObject({ ...box1a, id: box1b.id, index: 'a3' })
-		expect(box2b).toMatchObject({ ...box2a, id: box2b.id, index: 'a4' })
+		expect(box1b).toMatchObject({
+			...box1a,
+			id: box1b.id,
+			index: 'a3',
+			x: box1a.x + pasteNudge,
+			y: box1a.y + pasteNudge,
+		})
+		expect(box2b).toMatchObject({
+			...box2a,
+			id: box2b.id,
+			index: 'a4',
+			x: box2a.x + pasteNudge,
+			y: box2a.y + pasteNudge,
+		})
 	})
 
 	it('copies the selected shapes and pastes when NO shapes still in the viewport', async () => {
@@ -202,6 +228,7 @@ describe('When copying and pasting', () => {
 
 	it('creates new bindings for arrows when pasting', async () => {
 		const mockClipboard = doMockClipboard()
+		const pasteNudge = editor.options.adjacentShapeMargin
 
 		editor
 			.createShapes([
@@ -258,12 +285,26 @@ describe('When copying and pasting', () => {
 
 		// The new shapes should match the old shapes, except for their id and the arrow's bindings!
 		expect(shapesAfter.length).toBe(shapesBefore.length * 2)
-		expect(box1b).toMatchObject({ ...box1a, id: box1b.id, index: 'a4' })
-		expect(box2b).toMatchObject({ ...box2a, id: box2b.id, index: 'a5' })
+		expect(box1b).toMatchObject({
+			...box1a,
+			id: box1b.id,
+			index: 'a4',
+			x: box1a.x + pasteNudge,
+			y: box1a.y + pasteNudge,
+		})
+		expect(box2b).toMatchObject({
+			...box2a,
+			id: box2b.id,
+			index: 'a5',
+			x: box2a.x + pasteNudge,
+			y: box2a.y + pasteNudge,
+		})
 		expect(arrow1b).toMatchObject({
 			...arrow1a,
 			id: arrow1b.id,
 			index: 'a6',
+			x: arrow1a.x + pasteNudge,
+			y: arrow1a.y + pasteNudge,
 		})
 		expect(getArrowBindings(editor, arrow1b as TLArrowShape)).toMatchObject({
 			start: { toId: box1b.id },
