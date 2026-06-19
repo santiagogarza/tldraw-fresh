@@ -59,8 +59,18 @@
 	cursor: default;
 }
 
+.tlui-button--disabled-but-hoverable {
+	color: var(--tl-color-text-3);
+	text-shadow: none;
+	cursor: default;
+}
+
 .tlui-button:disabled .tlui-kbd,
 .tlui-button[data-disabled] .tlui-kbd {
+	color: var(--tl-color-text-3);
+}
+
+.tlui-button--disabled-but-hoverable .tlui-kbd {
 	color: var(--tl-color-text-3);
 }
 

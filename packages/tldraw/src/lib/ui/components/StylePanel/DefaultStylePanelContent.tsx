@@ -266,16 +266,36 @@ export function StylePanelTextAlignPicker() {
 					items={STYLES.textAlign}
 					value={textAlign}
 				/>
-				<TldrawUiToolbarButton
-					type="icon"
+				<StylePanelInactiveIconButton
 					title={msg('style-panel.vertical-align')}
-					data-testid="vertical-align"
-					disabled
-				>
-					<TldrawUiButtonIcon icon="vertical-align-middle" />
-				</TldrawUiToolbarButton>
+					testId="vertical-align"
+					icon="vertical-align-middle"
+				/>
 			</TldrawUiToolbar>
 		</>
+	)
+}
+
+interface StylePanelInactiveIconButtonProps {
+	title: string
+	testId: string
+	icon: 'vertical-align-middle'
+}
+
+function StylePanelInactiveIconButton({ title, testId, icon }: StylePanelInactiveIconButtonProps) {
+	return (
+		<TldrawUiToolbarButton
+			type="icon"
+			title={title}
+			data-testid={testId}
+			aria-disabled="true"
+			className="tlui-button--disabled-but-hoverable"
+			tabIndex={-1}
+			onPointerDown={(event) => event.preventDefault()}
+			onClick={(event) => event.preventDefault()}
+		>
+			<TldrawUiButtonIcon icon={icon} />
+		</TldrawUiToolbarButton>
 	)
 }
 
@@ -300,14 +320,11 @@ export function StylePanelLabelAlignPicker() {
 					value={labelAlign}
 				/>
 				{verticalLabelAlign === undefined ? (
-					<TldrawUiToolbarButton
-						type="icon"
+					<StylePanelInactiveIconButton
 						title={msg('style-panel.vertical-align')}
-						data-testid="vertical-align"
-						disabled
-					>
-						<TldrawUiButtonIcon icon="vertical-align-middle" />
-					</TldrawUiToolbarButton>
+						testId="vertical-align"
+						icon="vertical-align-middle"
+					/>
 				) : (
 					<StylePanelDropdownPickerInline
 						type="icon"
