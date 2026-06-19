@@ -64,6 +64,7 @@ export interface TLUiToolbarButtonProps extends React.HTMLAttributes<HTMLButtonE
 /** @public @react */
 export const TldrawUiToolbarButton = React.forwardRef<HTMLButtonElement, TLUiToolbarButtonProps>(
 	({ asChild, children, type, isActive, tooltip, ...props }: TLUiToolbarButtonProps, ref) => {
+		const isDisabled = !!props.disabled
 		const button = (
 			<_Toolbar.Button
 				ref={ref}
@@ -81,8 +82,13 @@ export const TldrawUiToolbarButton = React.forwardRef<HTMLButtonElement, TLUiToo
 		)
 
 		const tooltipContent = tooltip || props.title
+		const tooltipTrigger = isDisabled ? (
+			<span className="tlui-button__tooltip-wrapper">{button}</span>
+		) : (
+			button
+		)
 
-		return <TldrawUiTooltip content={tooltipContent}>{button}</TldrawUiTooltip>
+		return <TldrawUiTooltip content={tooltipContent}>{tooltipTrigger}</TldrawUiTooltip>
 	}
 )
 
