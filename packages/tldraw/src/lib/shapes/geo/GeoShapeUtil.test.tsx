@@ -11,6 +11,7 @@ import { vi } from 'vitest'
 import { TestEditor } from '../../../test/TestEditor'
 import { PathBuilder } from '../shared/PathBuilder'
 import { GeoShapeUtil } from './GeoShapeUtil'
+import { getGeoShapePath } from './getGeoShapePath'
 
 let editor: TestEditor
 let ids: Record<string, TLShapeId>
@@ -179,6 +180,61 @@ describe('Resizing geo shapes with labels', () => {
 		const geo = getGeo()
 		expect(geo.props.w).toBeLessThan(50)
 		expect(geo.props.h).toBeLessThan(50)
+	})
+})
+
+describe('Geo rectangle corner radius paths', () => {
+	test('rectangle path changes for each corner radius step', () => {
+		const id = createShapeId('rounded-rectangle')
+		editor.createShapes([
+			{
+				id,
+				type: 'geo',
+				x: 0,
+				y: 0,
+				props: { geo: 'rectangle', w: 160, h: 100 },
+			},
+		])
+
+		const values = ['sharp', 'soft', 'round', 'pill'] as const
+		const paths = values.map((cornerRadius) => {
+			editor.updateShape({
+				id,
+				type: 'geo',
+				props: { cornerRadius },
+			})
+			const shape = editor.getShape<TLGeoShape>(id)!
+			return getGeoShapePath(shape, 1).toD()
+		})
+
+		expect(new Set(paths).size).toBe(values.length)
+		expect(paths[0]).not.toMatch(/[Aa]/)
+		expect(paths.slice(1).every((path) => /[Aa]/.test(path))).toBe(true)
+	})
+
+	test('non-rectangle geo paths ignore corner radius style', () => {
+		const id = createShapeId('ellipse-corner-radius')
+		editor.createShapes([
+			{
+				id,
+				type: 'geo',
+				x: 0,
+				y: 0,
+				props: { geo: 'ellipse', w: 160, h: 100, cornerRadius: 'sharp' },
+			},
+		])
+
+		const sharp = getGeoShapePath(editor.getShape<TLGeoShape>(id)!, 1).toD()
+
+		editor.updateShape({
+			id,
+			type: 'geo',
+			props: { cornerRadius: 'pill' },
+		})
+
+		const pill = getGeoShapePath(editor.getShape<TLGeoShape>(id)!, 1).toD()
+
+		expect(pill).toBe(sharp)
 	})
 })
 

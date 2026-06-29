@@ -10,11 +10,75 @@ import {
 	TLDefaultDashStyle,
 	TLDefaultSizeStyle,
 	TLGeoShape,
+	TLGeoShapeCornerRadiusStyle,
 	Vec,
 	VecModel,
 	WeakCache,
 } from '@tldraw/editor'
 import { PathBuilder } from '../shared/PathBuilder'
+
+const CORNER_RADIUS_FRACTION: Record<TLGeoShapeCornerRadiusStyle, number> = {
+	sharp: 0,
+	soft: 0.08,
+	round: 0.2,
+	pill: 0.5,
+}
+export const GEO_SHAPE_CORNER_RADIUS_STEPS = Object.freeze(
+	Object.keys(CORNER_RADIUS_FRACTION) as TLGeoShapeCornerRadiusStyle[]
+)
+
+const geoShapeCornerRadiusPreviewCache = new WeakCache<TLGeoShape, number>()
+
+function getRectangleCornerRadius(
+	w: number,
+	h: number,
+	value: TLGeoShapeCornerRadiusStyle,
+	previewRadius: number | undefined
+) {
+	return clamp(
+		previewRadius ?? CORNER_RADIUS_FRACTION[value] * Math.min(w, h),
+		0,
+		Math.min(w, h) / 2
+	)
+}
+
+export function getGeoShapeRectangleCornerRadiusForStyle(
+	w: number,
+	h: number,
+	value: TLGeoShapeCornerRadiusStyle
+) {
+	return getRectangleCornerRadius(w, h, value, undefined)
+}
+
+export function getGeoShapeRectangleCornerRadius(shape: TLGeoShape) {
+	const w = Math.max(1, shape.props.w)
+	const h = Math.max(1, shape.props.h + shape.props.growY)
+	return getRectangleCornerRadius(
+		w,
+		h,
+		shape.props.cornerRadius,
+		geoShapeCornerRadiusPreviewCache.items.get(shape)
+	)
+}
+
+export function setGeoShapeCornerRadiusPreview(
+	shape: TLGeoShape,
+	previewRadius: number | undefined
+) {
+	if (previewRadius === undefined) {
+		geoShapeCornerRadiusPreviewCache.items.delete(shape)
+	} else {
+		geoShapeCornerRadiusPreviewCache.items.set(shape, previewRadius)
+	}
+	pathCache.items.delete(shape)
+}
+
+export function clearGeoShapeCornerRadiusPreview(shape: TLGeoShape) {
+	const previewRadius = geoShapeCornerRadiusPreviewCache.items.get(shape)
+	geoShapeCornerRadiusPreviewCache.items.delete(shape)
+	pathCache.items.delete(shape)
+	return previewRadius
+}
 
 /**
  * Defines the behavior for a geo shape type. Every built-in geo type is
@@ -66,11 +130,31 @@ export const defaultGeoTypeDefinitions = {
 		icon: 'geo-rectangle',
 		getPath(w, h, shape) {
 			const isFilled = shape.props.fill !== 'none'
+			const r = getRectangleCornerRadius(
+				w,
+				h,
+				shape.props.cornerRadius,
+				geoShapeCornerRadiusPreviewCache.items.get(shape)
+			)
+			if (r === 0) {
+				return new PathBuilder()
+					.moveTo(0, 0, { geometry: { isFilled } })
+					.lineTo(w, 0)
+					.lineTo(w, h)
+					.lineTo(0, h)
+					.close()
+			}
+
 			return new PathBuilder()
-				.moveTo(0, 0, { geometry: { isFilled } })
-				.lineTo(w, 0)
-				.lineTo(w, h)
-				.lineTo(0, h)
+				.moveTo(r, 0, { geometry: { isFilled } })
+				.lineTo(w - r, 0)
+				.circularArcTo(r, false, true, w, r)
+				.lineTo(w, h - r)
+				.circularArcTo(r, false, true, w - r, h)
+				.lineTo(r, h)
+				.circularArcTo(r, false, true, 0, h - r)
+				.lineTo(0, r)
+				.circularArcTo(r, false, true, r, 0)
 				.close()
 		},
 	},

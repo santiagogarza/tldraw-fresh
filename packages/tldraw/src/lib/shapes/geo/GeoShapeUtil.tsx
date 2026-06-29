@@ -7,11 +7,15 @@ import {
 	GeoShapeGeoStyle,
 	Group2d,
 	HTMLContainer,
+	IndexKey,
 	HandleSnapGeometry,
 	Rectangle2d,
 	SVGContainer,
 	SvgExportContext,
 	TLGeoShape,
+	TLGeoShapeCornerRadiusStyle,
+	TLHandle,
+	TLHandleDragInfo,
 	TLGeoShapeProps,
 	TLMeasureTextOpts,
 	TLResizeInfo,
@@ -56,10 +60,15 @@ import { useIsReadyForEditing } from '../shared/useEditablePlainText'
 import { useEfficientZoomThreshold } from '../shared/useEfficientZoomThreshold'
 import { GeoShapeBody } from './GeoShapeBody'
 import {
+	clearGeoShapeCornerRadiusPreview,
 	defaultGeoTypeDefinitions,
+	getGeoShapeRectangleCornerRadius,
+	getGeoShapeRectangleCornerRadiusForStyle,
 	type GeoTypeDefinition,
+	GEO_SHAPE_CORNER_RADIUS_STEPS,
 	getGeoShapePath,
 	getGeoTypeDefinition,
+	setGeoShapeCornerRadiusPreview,
 } from './getGeoShapePath'
 
 // imperfect but good enough, should be the width of the W in the font / size combo
@@ -89,6 +98,28 @@ const GEO_SHAPE_VERTICAL_ALIGNS = Object.freeze({
 } as const)
 
 const GEO_SHAPE_EMPTY_LABEL_SIZE = Object.freeze({ w: 0, h: 0 })
+
+function getGeoShapePathDimensions(shape: TLGeoShape) {
+	return {
+		w: Math.max(1, shape.props.w),
+		h: Math.max(1, shape.props.h + shape.props.growY),
+	}
+}
+
+function getNearestCornerRadiusStyle(
+	w: number,
+	h: number,
+	radius: number
+): TLGeoShapeCornerRadiusStyle {
+	const initial = GEO_SHAPE_CORNER_RADIUS_STEPS[0]
+	return GEO_SHAPE_CORNER_RADIUS_STEPS.reduce((nearest, style) => {
+		const nearestDistance = Math.abs(
+			getGeoShapeRectangleCornerRadiusForStyle(w, h, nearest) - radius
+		)
+		const nextDistance = Math.abs(getGeoShapeRectangleCornerRadiusForStyle(w, h, style) - radius)
+		return nextDistance < nearestDistance ? style : nearest
+	}, initial)
+}
 
 // Snapshot the built-in geo types at module init so that collision detection
 // in `configure()` only fires against the built-ins, not against keys added
@@ -234,6 +265,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			w: 100,
 			h: 100,
 			geo: 'rectangle',
+			cornerRadius: 'sharp',
 			dash: 'draw',
 			growY: 0,
 			url: '',
@@ -340,6 +372,41 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			return { outline: outline, points: [geometry.bounds.center] }
 		}
 		return { outline: outline, points: [...outline.vertices, geometry.bounds.center] }
+	}
+
+	override getHandles(shape: TLGeoShape): TLHandle[] {
+		if (shape.props.geo !== 'rectangle') return EMPTY_ARRAY
+		return [
+			{
+				id: 'corner-radius',
+				type: 'vertex',
+				index: 'a1' as IndexKey,
+				x: getGeoShapeRectangleCornerRadius(shape),
+				y: 0,
+			},
+		]
+	}
+
+	override onHandleDrag(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
+		if (shape.props.geo !== 'rectangle' || handle.id !== 'corner-radius') return
+		const { w, h } = getGeoShapePathDimensions(shape)
+		const next = Math.max(0, Math.min(handle.x, Math.min(w, h) / 2))
+		setGeoShapeCornerRadiusPreview(shape, next)
+	}
+
+	override onHandleDragEnd(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
+		if (shape.props.geo !== 'rectangle' || handle.id !== 'corner-radius') return
+		const previewRadius = clearGeoShapeCornerRadiusPreview(shape)
+		if (previewRadius === undefined) return
+		const { w, h } = getGeoShapePathDimensions(shape)
+		const cornerRadius = getNearestCornerRadiusStyle(w, h, previewRadius)
+		if (cornerRadius === shape.props.cornerRadius) return
+		return { id: shape.id, type: shape.type, props: { cornerRadius } }
+	}
+
+	override onHandleDragCancel(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
+		if (shape.props.geo !== 'rectangle' || handle.id !== 'corner-radius') return
+		clearGeoShapeCornerRadiusPreview(shape)
 	}
 
 	override getText(shape: TLGeoShape) {
