@@ -94,6 +94,23 @@ function fontIcon(font: TLThemeFont, name: string): string | TLUiIconJsx {
 	return defaultFontIcons[name] ?? 'font-draw'
 }
 
+function cornerRadiusIcon(r: number): TLUiIconJsx {
+	return (
+		<svg viewBox="0 0 16 16" width={16} height={16} fill="none">
+			<rect
+				x="2.5"
+				y="2.5"
+				width="11"
+				height="11"
+				rx={r}
+				ry={r}
+				stroke="currentColor"
+				strokeWidth="1.5"
+			/>
+		</svg>
+	) as TLUiIconJsx
+}
+
 // todo: default styles prop?
 export const STYLES = {
 	fill: [
@@ -166,5 +183,11 @@ export const STYLES = {
 	spline: [
 		{ value: 'line', icon: 'spline-line' },
 		{ value: 'cubic', icon: 'spline-cubic' },
+	],
+	cornerRadius: [
+		{ value: 'sharp', icon: cornerRadiusIcon(0) },
+		{ value: 'soft', icon: cornerRadiusIcon(1.5) },
+		{ value: 'round', icon: cornerRadiusIcon(3.5) },
+		{ value: 'pill', icon: cornerRadiusIcon(5.5) },
 	],
 } as const satisfies Record<string, StyleValuesForUi<string>>

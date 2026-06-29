@@ -10,11 +10,66 @@ import {
 	TLDefaultDashStyle,
 	TLDefaultSizeStyle,
 	TLGeoShape,
+	TLGeoShapeCornerRadiusStyle,
 	Vec,
 	VecModel,
 	WeakCache,
 } from '@tldraw/editor'
 import { PathBuilder } from '../shared/PathBuilder'
+
+/**
+ * Maps each corner radius style to a fraction of the rectangle's smaller
+ * dimension. `pill` (0.5) produces a fully rounded corner.
+ *
+ * @public
+ */
+export const CORNER_RADIUS_FRACTION: Record<TLGeoShapeCornerRadiusStyle, number> = {
+	sharp: 0,
+	soft: 0.08,
+	round: 0.2,
+	pill: 0.5,
+}
+
+/**
+ * The ordered corner radius steps, used to snap a continuous radius back to the
+ * nearest style value while dragging the corner radius handle.
+ *
+ * @public
+ */
+export const CORNER_RADIUS_STEPS = ['sharp', 'soft', 'round', 'pill'] as const
+
+/**
+ * Get the pixel corner radius for a rectangle geo shape given its dimensions and
+ * corner radius style.
+ *
+ * @public
+ */
+export function getRectangleCornerRadius(w: number, h: number, value: TLGeoShapeCornerRadiusStyle) {
+	return CORNER_RADIUS_FRACTION[value] * Math.min(w, h)
+}
+
+/**
+ * Snap a continuous pixel radius back to the nearest corner radius style step.
+ *
+ * @public
+ */
+export function getNearestCornerRadiusStep(
+	radius: number,
+	w: number,
+	h: number
+): TLGeoShapeCornerRadiusStyle {
+	const min = Math.min(w, h)
+	let nearest: TLGeoShapeCornerRadiusStyle = 'sharp'
+	let nearestDist = Infinity
+	for (const step of CORNER_RADIUS_STEPS) {
+		const dist = Math.abs(CORNER_RADIUS_FRACTION[step] * min - radius)
+		if (dist < nearestDist) {
+			nearestDist = dist
+			nearest = step
+		}
+	}
+	return nearest
+}
 
 /**
  * Defines the behavior for a geo shape type. Every built-in geo type is
@@ -66,11 +121,25 @@ export const defaultGeoTypeDefinitions = {
 		icon: 'geo-rectangle',
 		getPath(w, h, shape) {
 			const isFilled = shape.props.fill !== 'none'
+			const r = getRectangleCornerRadius(w, h, shape.props.cornerRadius)
+			if (r === 0) {
+				return new PathBuilder()
+					.moveTo(0, 0, { geometry: { isFilled } })
+					.lineTo(w, 0)
+					.lineTo(w, h)
+					.lineTo(0, h)
+					.close()
+			}
 			return new PathBuilder()
-				.moveTo(0, 0, { geometry: { isFilled } })
-				.lineTo(w, 0)
-				.lineTo(w, h)
-				.lineTo(0, h)
+				.moveTo(r, 0, { geometry: { isFilled } })
+				.lineTo(w - r, 0)
+				.circularArcTo(r, false, true, w, r)
+				.lineTo(w, h - r)
+				.circularArcTo(r, false, true, w - r, h)
+				.lineTo(r, h)
+				.circularArcTo(r, false, true, 0, h - r)
+				.lineTo(0, r)
+				.circularArcTo(r, false, true, r, 0)
 				.close()
 		},
 	},

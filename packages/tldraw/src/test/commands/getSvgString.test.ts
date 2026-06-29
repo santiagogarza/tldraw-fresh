@@ -125,6 +125,40 @@ it.each([
 	}
 })
 
+it('exports rounded rectangle corners as curves', async () => {
+	const sharpId = createShapeId('sharpRect')
+	const roundId = createShapeId('roundRect')
+	editor.createShapes([
+		{
+			id: sharpId,
+			type: 'geo',
+			x: 600,
+			y: 0,
+			props: { w: 100, h: 100, geo: 'rectangle', dash: 'solid', cornerRadius: 'sharp' },
+		},
+		{
+			id: roundId,
+			type: 'geo',
+			x: 600,
+			y: 200,
+			props: { w: 100, h: 100, geo: 'rectangle', dash: 'solid', cornerRadius: 'round' },
+		},
+	])
+
+	const sharpSvg = parseSvg(await editor.getSvgString([sharpId]))
+	const roundSvg = parseSvg(await editor.getSvgString([roundId]))
+
+	const getStrokePathData = (svg: SVGSVGElement) =>
+		Array.from(svg.querySelectorAll('path'))
+			.map((p) => p.getAttribute('d') ?? '')
+			.join(' ')
+
+	// A sharp rectangle is drawn with straight lines only; rounded corners add
+	// cubic bezier curve commands.
+	expect(getStrokePathData(sharpSvg)).not.toMatch(/[Cc]/)
+	expect(getStrokePathData(roundSvg)).toMatch(/[Cc]/)
+})
+
 it('Accepts a background option', async () => {
 	const svg1 = parseSvg(
 		await editor.getSvgString(editor.getSelectedShapeIds(), { background: true })

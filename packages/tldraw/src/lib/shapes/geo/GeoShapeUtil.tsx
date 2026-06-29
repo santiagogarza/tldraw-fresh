@@ -8,11 +8,14 @@ import {
 	Group2d,
 	HTMLContainer,
 	HandleSnapGeometry,
+	IndexKey,
 	Rectangle2d,
 	SVGContainer,
 	SvgExportContext,
 	TLGeoShape,
 	TLGeoShapeProps,
+	TLHandle,
+	TLHandleDragInfo,
 	TLMeasureTextOpts,
 	TLResizeInfo,
 	TLShape,
@@ -24,6 +27,7 @@ import {
 	WeakCache,
 	approximately,
 	areAnglesCompatible,
+	clamp,
 	geoShapeMigrations,
 	geoShapeProps,
 	getColorValue,
@@ -60,6 +64,8 @@ import {
 	type GeoTypeDefinition,
 	getGeoShapePath,
 	getGeoTypeDefinition,
+	getNearestCornerRadiusStep,
+	getRectangleCornerRadius,
 } from './getGeoShapePath'
 
 // imperfect but good enough, should be the width of the W in the font / size combo
@@ -234,6 +240,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			w: 100,
 			h: 100,
 			geo: 'rectangle',
+			cornerRadius: 'sharp',
 			dash: 'draw',
 			growY: 0,
 			url: '',
@@ -340,6 +347,45 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			return { outline: outline, points: [geometry.bounds.center] }
 		}
 		return { outline: outline, points: [...outline.vertices, geometry.bounds.center] }
+	}
+
+	override getHandles(shape: TLGeoShape): TLHandle[] {
+		// The corner radius handle only applies to rectangles.
+		if (shape.props.geo !== 'rectangle') return []
+
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const r = getRectangleCornerRadius(w, h, shape.props.cornerRadius)
+
+		return [
+			{
+				id: 'corner-radius',
+				type: 'vertex',
+				index: 'a1' as IndexKey,
+				x: r,
+				y: 0,
+			},
+		]
+	}
+
+	override onHandleDrag(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
+		if (shape.props.geo !== 'rectangle' || handle.id !== 'corner-radius') return
+
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const maxR = Math.min(w, h) / 2
+		// The handle slides along the top edge; its x position is the radius.
+		const radius = clamp(handle.x, 0, maxR)
+		const next = getNearestCornerRadiusStep(radius, w, h)
+
+		// Avoid redundant updates while scrubbing within the same step.
+		if (next === shape.props.cornerRadius) return
+
+		return {
+			id: shape.id,
+			type: shape.type,
+			props: { cornerRadius: next },
+		}
 	}
 
 	override getText(shape: TLGeoShape) {

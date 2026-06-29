@@ -182,6 +182,65 @@ describe('Resizing geo shapes with labels', () => {
 	})
 })
 
+describe('Corner radius', () => {
+	function getRectD(cornerRadius: 'sharp' | 'soft' | 'round' | 'pill') {
+		const id = createShapeId()
+		editor.createShapes([
+			{ id, type: 'geo', x: 0, y: 0, props: { geo: 'rectangle', w: 100, h: 100, cornerRadius } },
+		])
+		const shape = editor.getShape<TLGeoShape>(id)!
+		const util = editor.getShapeUtil('geo') as GeoShapeUtil
+		const geometry = util.getGeometry(shape) as Group2d
+		return geometry.children[0].toSimpleSvgPath()
+	}
+
+	test('rectangle path differs for each corner radius value', () => {
+		const sharp = getRectD('sharp')
+		const soft = getRectD('soft')
+		const round = getRectD('round')
+		const pill = getRectD('pill')
+
+		const all = [sharp, soft, round, pill]
+		const unique = new Set(all)
+		expect(unique.size).toBe(all.length)
+
+		// Sharp corners are a simple polygon; rounded variants sample the arcs into
+		// many more vertices.
+		const countVertices = (d: string) => (d.match(/[ML]/g) ?? []).length
+		const sharpVertices = countVertices(sharp)
+		expect(countVertices(soft)).toBeGreaterThan(sharpVertices)
+		expect(countVertices(round)).toBeGreaterThan(sharpVertices)
+		expect(countVertices(pill)).toBeGreaterThan(sharpVertices)
+	})
+
+	test('non-rectangle geo types ignore cornerRadius', () => {
+		function getEllipseD(cornerRadius: 'sharp' | 'pill') {
+			const id = createShapeId()
+			editor.createShapes([
+				{ id, type: 'geo', x: 0, y: 0, props: { geo: 'ellipse', w: 100, h: 100, cornerRadius } },
+			])
+			const shape = editor.getShape<TLGeoShape>(id)!
+			const util = editor.getShapeUtil('geo') as GeoShapeUtil
+			const geometry = util.getGeometry(shape) as Group2d
+			return geometry.children[0].toSimpleSvgPath()
+		}
+
+		expect(getEllipseD('sharp')).toBe(getEllipseD('pill'))
+	})
+
+	test('only rectangles expose the corner radius handle', () => {
+		const rectId = createShapeId()
+		const ellipseId = createShapeId()
+		editor.createShapes([
+			{ id: rectId, type: 'geo', x: 0, y: 0, props: { geo: 'rectangle', w: 100, h: 100 } },
+			{ id: ellipseId, type: 'geo', x: 200, y: 0, props: { geo: 'ellipse', w: 100, h: 100 } },
+		])
+		const util = editor.getShapeUtil('geo') as GeoShapeUtil
+		expect(util.getHandles!(editor.getShape<TLGeoShape>(rectId)!)).toHaveLength(1)
+		expect(util.getHandles!(editor.getShape<TLGeoShape>(ellipseId)!)).toHaveLength(0)
+	})
+})
+
 describe('GeoShapeUtil.configure with customGeoTypes', () => {
 	// Snapshot the built-in geo values so we can clean up any custom keys added
 	// during these tests. `GeoShapeUtil.configure({ customGeoTypes })` mutates
