@@ -43,12 +43,12 @@ export function DefaultStylePanelContent() {
 			<StylePanelSection>
 				<StylePanelColorPicker />
 				<StylePanelOpacityPicker />
+				<StylePanelAnimationPicker />
 			</StylePanelSection>
 			<StylePanelSection>
 				<StylePanelFillPicker />
 				<StylePanelDashPicker />
 				<StylePanelSizePicker />
-				<StylePanelAnimationPicker />
 			</StylePanelSection>
 			<StylePanelSection>
 				<StylePanelFontPicker />
