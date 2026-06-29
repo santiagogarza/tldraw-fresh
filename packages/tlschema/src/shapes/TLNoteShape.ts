@@ -20,6 +20,49 @@ import {
 import { TLBaseShape } from './TLBaseShape'
 
 /**
+ * The set of emojis available for reacting to a note shape.
+ *
+ * @public
+ */
+export const NOTE_REACTION_EMOJIS = [
+	'\u{1F44D}', // thumbs up
+	'\u2764\uFE0F', // heart
+	'\u{1F525}', // fire
+	'\u{1F602}', // laughing
+	'\u{1F440}', // eyes
+] as const
+
+/**
+ * A single reaction on a note shape. Reactions are keyed by the pair of `emoji` and
+ * `userId`, so a given user can react once per emoji, and multiple users can react with
+ * the same emoji.
+ *
+ * @public
+ * @example
+ * ```ts
+ * const reaction: TLNoteReaction = {
+ *   emoji: '\u{1F44D}',
+ *   userId: 'user:123',
+ *   userName: 'Alex',
+ * }
+ * ```
+ */
+export interface TLNoteReaction {
+	/** The emoji used for the reaction */
+	emoji: string
+	/** The id of the user who added the reaction */
+	userId: string
+	/** The display name of the user who added the reaction */
+	userName: string
+}
+
+const noteReactionValidator: T.Validator<TLNoteReaction> = T.object({
+	emoji: T.string,
+	userId: T.string,
+	userName: T.string,
+})
+
+/**
  * Properties for a note shape. Note shapes represent sticky notes or text annotations
  * with rich formatting capabilities and various styling options.
  *
@@ -66,6 +109,8 @@ export interface TLNoteShapeProps {
 	scale: number
 	/** User ID of the person who first edited the note text */
 	textFirstEditedBy: string | null
+	/** Emoji reactions added to the note by users */
+	reactions: TLNoteReaction[]
 }
 
 /**
@@ -133,6 +178,7 @@ export const noteShapeProps: RecordProps<TLNoteShape> = {
 	richText: richTextValidator,
 	scale: T.nonZeroNumber,
 	textFirstEditedBy: T.string.nullable(),
+	reactions: T.arrayOf(noteReactionValidator),
 }
 
 const Versions = createShapePropsMigrationIds('note', {
@@ -148,6 +194,7 @@ const Versions = createShapePropsMigrationIds('note', {
 	AddRichTextAttrs: 10,
 	AddFirstEditedBy: 11,
 	MakeFontSizeAdjustmentRatio: 12,
+	AddReactions: 13,
 })
 
 /**
@@ -290,6 +337,15 @@ export const noteShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				props.fontSizeAdjustment = 0
+			},
+		},
+		{
+			id: Versions.AddReactions,
+			up: (props) => {
+				props.reactions = []
+			},
+			down: (props) => {
+				delete props.reactions
 			},
 		},
 	],
