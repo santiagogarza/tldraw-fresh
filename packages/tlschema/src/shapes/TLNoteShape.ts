@@ -20,6 +20,40 @@ import {
 import { TLBaseShape } from './TLBaseShape'
 
 /**
+ * The default set of reactions available for note shapes.
+ *
+ * @public
+ */
+export const NOTE_REACTION_EMOJIS = [
+	'\u{1F44D}',
+	'\u2764\uFE0F',
+	'\u{1F525}',
+	'\u{1F602}',
+	'\u{1F440}',
+] as const
+
+/**
+ * A reaction on a note shape.
+ *
+ * @public
+ */
+export interface TLNoteReaction {
+	/** The emoji used for the reaction */
+	emoji: string
+	/** The ID of the user who added the reaction */
+	userId: string
+	/** The display name of the user who added the reaction */
+	userName: string
+}
+
+/** @public */
+export const noteReactionValidator: T.ObjectValidator<TLNoteReaction> = T.object({
+	emoji: T.string,
+	userId: T.string,
+	userName: T.string,
+})
+
+/**
  * Properties for a note shape. Note shapes represent sticky notes or text annotations
  * with rich formatting capabilities and various styling options.
  *
@@ -37,7 +71,8 @@ import { TLBaseShape } from './TLBaseShape'
  *   growY: 0,
  *   url: '',
  *   richText: toRichText('Hello **world**!'),
- *   scale: 1
+ *   scale: 1,
+ *   reactions: []
  * }
  * ```
  */
@@ -66,6 +101,8 @@ export interface TLNoteShapeProps {
 	scale: number
 	/** User ID of the person who first edited the note text */
 	textFirstEditedBy: string | null
+	/** Emoji reactions that users have added to the note */
+	reactions: TLNoteReaction[]
 }
 
 /**
@@ -97,7 +134,8 @@ export interface TLNoteShapeProps {
  *     growY: 50,
  *     url: 'https://example.com',
  *     richText: toRichText('Important **note**!'),
- *     scale: 1
+ *     scale: 1,
+ *     reactions: []
  *   },
  *   meta: {},
  *   typeName: 'shape'
@@ -133,6 +171,7 @@ export const noteShapeProps: RecordProps<TLNoteShape> = {
 	richText: richTextValidator,
 	scale: T.nonZeroNumber,
 	textFirstEditedBy: T.string.nullable(),
+	reactions: T.arrayOf(noteReactionValidator),
 }
 
 const Versions = createShapePropsMigrationIds('note', {
@@ -148,6 +187,7 @@ const Versions = createShapePropsMigrationIds('note', {
 	AddRichTextAttrs: 10,
 	AddFirstEditedBy: 11,
 	MakeFontSizeAdjustmentRatio: 12,
+	AddReactions: 13,
 })
 
 /**
@@ -290,6 +330,15 @@ export const noteShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				props.fontSizeAdjustment = 0
+			},
+		},
+		{
+			id: Versions.AddReactions,
+			up: (props) => {
+				props.reactions = []
+			},
+			down: (props) => {
+				delete props.reactions
 			},
 		},
 	],

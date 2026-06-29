@@ -186,7 +186,10 @@ it('Creates an adjacent note when dragging the clone handle', () => {
 		type: 'note',
 		x: 1000,
 		y: 1000,
-		props: { richText: toRichText('rich hello') },
+		props: {
+			richText: toRichText('rich hello'),
+			reactions: [{ emoji: '\u2764\uFE0F', userId: 'user:test', userName: 'Test' }],
+		},
 	})
 	const shapeB = editor.getLastCreatedShape()!
 
@@ -222,6 +225,7 @@ it('Creates an adjacent note when dragging the clone handle', () => {
 		y: handle.y + 30 - offset.y,
 		props: {
 			richText: toRichText(''),
+			reactions: [],
 		},
 	})
 

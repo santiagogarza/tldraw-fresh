@@ -55,6 +55,7 @@ import { RichTextLabel, RichTextSVG } from '../shared/RichTextLabel'
 import { useIsReadyForEditing } from '../shared/useEditablePlainText'
 import { useEfficientZoomThreshold } from '../shared/useEfficientZoomThreshold'
 import { CLONE_HANDLE_MARGIN, getNoteShapeForAdjacentPosition } from './noteHelpers'
+import { NoteReactions } from './NoteReactions'
 
 const NOTE_SHAPE_HORIZONTAL_ALIGNS = Object.freeze({
 	start: 'start',
@@ -179,6 +180,7 @@ export class NoteShapeUtil extends ShapeUtil<TLNoteShape> {
 			url: '',
 			scale: 1,
 			textFirstEditedBy: null,
+			reactions: [],
 		}
 	}
 
@@ -296,7 +298,9 @@ export class NoteShapeUtil extends ShapeUtil<TLNoteShape> {
 	}
 
 	override getReferencedUserIds(shape: TLNoteShape) {
-		return shape.props.textFirstEditedBy ? [shape.props.textFirstEditedBy] : []
+		const userIds = shape.props.reactions.map((reaction) => reaction.userId)
+		if (shape.props.textFirstEditedBy) userIds.push(shape.props.textFirstEditedBy)
+		return userIds.length ? Array.from(new Set(userIds)) : EMPTY_ARRAY
 	}
 
 	override getFontFaces(shape: TLNoteShape) {
@@ -415,6 +419,7 @@ export class NoteShapeUtil extends ShapeUtil<TLNoteShape> {
 					)}
 				</div>
 				{'url' in shape.props && shape.props.url && <HyperlinkButton url={shape.props.url} />}
+				<NoteReactions shape={shape} />
 			</>
 		)
 	}

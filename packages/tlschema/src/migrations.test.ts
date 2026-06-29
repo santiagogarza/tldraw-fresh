@@ -2638,6 +2638,18 @@ describe('Adding textFirstEditedBy to note shape', () => {
 	})
 })
 
+describe('Adding reactions to note shape', () => {
+	const { up, down } = getTestMigration(noteShapeVersions.AddReactions)
+
+	test('up works as expected', () => {
+		expect(up({ props: {} })).toEqual({ props: { reactions: [] } })
+	})
+
+	test('down works as expected', () => {
+		expect(down({ props: { reactions: [] } })).toEqual({ props: {} })
+	})
+})
+
 describe('TLUser initial migration', () => {
 	const { up } = getTestMigration(userVersions.Initial)
 
