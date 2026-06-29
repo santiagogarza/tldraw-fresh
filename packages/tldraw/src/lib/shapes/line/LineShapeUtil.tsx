@@ -83,6 +83,7 @@ export class LineShapeUtil extends ShapeUtil<TLLineShape> {
 		const [start, end] = getIndices(2)
 		return {
 			dash: 'draw',
+			animation: 'none',
 			size: 'm',
 			color: 'black',
 			spline: 'line',

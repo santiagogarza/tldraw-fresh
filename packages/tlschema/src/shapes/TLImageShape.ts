@@ -4,6 +4,7 @@ import { vecModelValidator } from '../misc/geometry-types'
 import { TLAssetId } from '../records/TLAsset'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { TLShapeCrop } from './ShapeWithCrop'
 import { TLBaseShape } from './TLBaseShape'
 
@@ -54,6 +55,8 @@ export interface TLImageShapeProps {
 	w: number
 	/** Height of the image shape in canvas units */
 	h: number
+	/** Looping animation style for presentational motion */
+	animation: TLDefaultAnimationStyle
 	/** Whether animated images (like GIFs) should play */
 	playing: boolean
 	/** URL of the image resource */
@@ -122,6 +125,7 @@ export type TLImageShape = TLBaseShape<'image', TLImageShapeProps>
 export const imageShapeProps: RecordProps<TLImageShape> = {
 	w: T.nonZeroNumber,
 	h: T.nonZeroNumber,
+	animation: DefaultAnimationStyle,
 	playing: T.boolean,
 	url: T.linkUrl,
 	assetId: assetIdValidator.nullable(),
@@ -137,6 +141,7 @@ const Versions = createShapePropsMigrationIds('image', {
 	MakeUrlsValid: 3,
 	AddFlipProps: 4,
 	AddAltText: 5,
+	AddAnimation: 6,
 })
 
 /**
@@ -201,6 +206,15 @@ export const imageShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				delete props.altText
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

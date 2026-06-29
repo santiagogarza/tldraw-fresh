@@ -99,6 +99,7 @@ export class DrawShapeUtil extends ShapeUtil<TLDrawShape> {
 			color: 'black',
 			fill: 'none',
 			dash: 'draw',
+			animation: 'none',
 			size: 'm',
 			isComplete: false,
 			isClosed: false,

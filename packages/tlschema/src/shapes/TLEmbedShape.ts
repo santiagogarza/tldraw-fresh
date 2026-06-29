@@ -2,6 +2,7 @@ import { safeParseUrl } from '@tldraw/utils'
 import { T } from '@tldraw/validate'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { TLBaseShape } from './TLBaseShape'
 
 // Only allow multiplayer embeds. If we add additional routes later for example '/help' this won't match
@@ -262,6 +263,8 @@ export interface TLEmbedShapeProps {
 	w: number
 	/** Height of the embed shape in pixels */
 	h: number
+	/** Looping animation style for presentational motion */
+	animation: TLDefaultAnimationStyle
 	/** URL of the content to embed (supports YouTube, Figma, CodePen, etc.) */
 	url: string
 }
@@ -309,6 +312,7 @@ export type TLEmbedShape = TLBaseShape<'embed', TLEmbedShapeProps>
 export const embedShapeProps: RecordProps<TLEmbedShape> = {
 	w: T.nonZeroNumber,
 	h: T.nonZeroNumber,
+	animation: DefaultAnimationStyle,
 	url: T.string,
 }
 
@@ -317,6 +321,7 @@ const Versions = createShapePropsMigrationIds('embed', {
 	RemoveDoesResize: 2,
 	RemoveTmpOldUrl: 3,
 	RemovePermissionOverrides: 4,
+	AddAnimation: 5,
 })
 
 /**
@@ -381,6 +386,15 @@ export const embedShapeMigrations = createShapePropsMigrationSequence({
 				delete props.overridePermissions
 			},
 			down: 'retired',
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
+			},
 		},
 	],
 })

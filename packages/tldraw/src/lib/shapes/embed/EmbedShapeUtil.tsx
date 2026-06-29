@@ -119,6 +119,7 @@ export class EmbedShapeUtil extends BaseBoxShapeUtil<TLEmbedShape> {
 		return {
 			w: 300,
 			h: 300,
+			animation: 'none',
 			url: '',
 		}
 	}

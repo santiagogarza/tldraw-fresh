@@ -91,6 +91,7 @@ export class ImageShapeUtil extends BaseBoxShapeUtil<TLImageShape> {
 		return {
 			w: 100,
 			h: 100,
+			animation: 'none',
 			assetId: null,
 			playing: true,
 			url: '',

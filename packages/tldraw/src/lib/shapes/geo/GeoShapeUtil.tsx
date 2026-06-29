@@ -235,6 +235,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			h: 100,
 			geo: 'rectangle',
 			dash: 'draw',
+			animation: 'none',
 			growY: 0,
 			url: '',
 			scale: 1,

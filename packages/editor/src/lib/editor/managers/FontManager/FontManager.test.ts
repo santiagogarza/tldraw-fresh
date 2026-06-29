@@ -61,6 +61,7 @@ describe('FontManager', () => {
 			size: 'xl',
 			font: 'serif',
 			textAlign: 'middle',
+			animation: 'none',
 			w: 100,
 			richText: toRichText('❤️'),
 			scale: 2,

@@ -83,6 +83,7 @@ export class BookmarkShapeUtil extends BaseBoxShapeUtil<TLBookmarkShape> {
 			url: '',
 			w: BOOKMARK_WIDTH,
 			h: BOOKMARK_HEIGHT,
+			animation: 'none',
 			assetId: null,
 		}
 	}

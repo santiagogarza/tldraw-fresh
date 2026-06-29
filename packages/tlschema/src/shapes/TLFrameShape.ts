@@ -1,6 +1,7 @@
 import { T } from '@tldraw/validate'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { DefaultColorStyle, TLDefaultColorStyle } from '../styles/TLColorStyle'
 import { TLBaseShape } from './TLBaseShape'
 
@@ -16,6 +17,8 @@ export interface TLFrameShapeProps {
 	h: number
 	/** Display name for the frame (shown in UI) */
 	name: string
+	/** Looping animation style for presentational motion */
+	animation: TLDefaultAnimationStyle
 	/** Color style for the frame border and label */
 	color: TLDefaultColorStyle
 }
@@ -65,6 +68,7 @@ export const frameShapeProps: RecordProps<TLFrameShape> = {
 	w: T.nonZeroNumber,
 	h: T.nonZeroNumber,
 	name: T.string,
+	animation: DefaultAnimationStyle,
 	// because shape colors are an option, we don't want them to be picked up by the editor as a
 	// style prop by default, so instead of a proper style we just supply an equivalent validator.
 	// Check `FrameShapeUtil.configure` for how we replace this with the original
@@ -76,6 +80,7 @@ export const frameShapeProps: RecordProps<TLFrameShape> = {
 
 const Versions = createShapePropsMigrationIds('frame', {
 	AddColorProp: 1,
+	AddAnimation: 2,
 })
 
 /**
@@ -100,6 +105,15 @@ export const frameShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				delete props.color
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

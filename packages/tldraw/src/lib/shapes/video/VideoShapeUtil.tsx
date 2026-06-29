@@ -69,6 +69,7 @@ export class VideoShapeUtil extends BaseBoxShapeUtil<TLVideoShape> {
 		return {
 			w: 100,
 			h: 100,
+			animation: 'none',
 			assetId: null,
 			autoplay: this.options.autoplay,
 			url: '',

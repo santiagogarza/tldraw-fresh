@@ -93,6 +93,7 @@ export class TextShapeUtil extends ShapeUtil<TLTextShape> {
 		return {
 			color: 'black',
 			size: 'm',
+			animation: 'none',
 			w: 8,
 			font: 'draw',
 			textAlign: 'start',

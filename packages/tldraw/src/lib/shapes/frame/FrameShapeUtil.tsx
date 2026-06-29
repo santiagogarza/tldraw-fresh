@@ -135,7 +135,7 @@ export class FrameShapeUtil extends BaseFrameLikeShapeUtil<TLFrameShape> {
 	}
 
 	override getDefaultProps(): TLFrameShape['props'] {
-		return { w: 160 * 2, h: 90 * 2, name: '', color: 'black' }
+		return { w: 160 * 2, h: 90 * 2, name: '', animation: 'none', color: 'black' }
 	}
 
 	override getAriaDescriptor(shape: TLFrameShape) {
