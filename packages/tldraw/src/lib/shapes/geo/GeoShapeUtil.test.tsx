@@ -11,7 +11,11 @@ import { vi } from 'vitest'
 import { TestEditor } from '../../../test/TestEditor'
 import { PathBuilder } from '../shared/PathBuilder'
 import { GeoShapeUtil } from './GeoShapeUtil'
-import { getGeoShapePath } from './getGeoShapePath'
+import {
+	consumeGeoShapeCornerRadiusPreview,
+	getGeoShapePath,
+	setGeoShapeCornerRadiusPreview,
+} from './getGeoShapePath'
 
 let editor: TestEditor
 let ids: Record<string, TLShapeId>
@@ -224,6 +228,24 @@ describe('Geo rectangle corner radius', () => {
 		})
 
 		expect(getGeoShapePath(sharp, 1).toD()).toBe(getGeoShapePath(pill, 1).toD())
+	})
+
+	test('applies corner radius preview across shape object instances', () => {
+		const shape = createGeoShape(createShapeId('preview-shape'), {
+			...editor.getShapeUtil<GeoShapeUtil>('geo').getDefaultProps(),
+			geo: 'rectangle',
+			w: 100,
+			h: 80,
+			cornerRadius: 'sharp',
+		})
+		const sameShapeIdDifferentObject = { ...shape, props: { ...shape.props } }
+
+		setGeoShapeCornerRadiusPreview(shape, 40)
+		try {
+			expect(getGeoShapePath(sameShapeIdDifferentObject, 1).toD()).toMatch(/[Cc]/)
+		} finally {
+			consumeGeoShapeCornerRadiusPreview(shape)
+		}
 	})
 })
 

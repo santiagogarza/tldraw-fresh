@@ -25,7 +25,7 @@ const CORNER_RADIUS_FRACTION = {
 	pill: 0.5,
 } as const satisfies Record<TLGeoShapeCornerRadiusStyle, number>
 
-const geoShapeCornerRadiusPreviewCache = new WeakCache<TLGeoShape, { radius: number | undefined }>()
+const geoShapeCornerRadiusPreviewCache = new Map<TLGeoShape['id'], number>()
 const geoShapeCornerRadiusPreviewVersion = atom('geoShapeCornerRadiusPreviewVersion', 0)
 
 export function getRectangleCornerRadius(w: number, h: number, value: TLGeoShapeCornerRadiusStyle) {
@@ -42,17 +42,20 @@ export function getGeoShapeCornerRadiusForRender(shape: TLGeoShape, w: number, h
 }
 
 export function setGeoShapeCornerRadiusPreview(shape: TLGeoShape, radius: number | undefined) {
-	const entry = geoShapeCornerRadiusPreviewCache.get(shape, () => ({ radius: undefined }))
-	if (entry.radius === radius) return
-	entry.radius = radius
+	const prevRadius = geoShapeCornerRadiusPreviewCache.get(shape.id)
+	if (prevRadius === radius) return
+	if (radius === undefined) {
+		geoShapeCornerRadiusPreviewCache.delete(shape.id)
+	} else {
+		geoShapeCornerRadiusPreviewCache.set(shape.id, radius)
+	}
 	geoShapeCornerRadiusPreviewVersion.set(geoShapeCornerRadiusPreviewVersion.get() + 1)
 }
 
 export function consumeGeoShapeCornerRadiusPreview(shape: TLGeoShape) {
-	const entry = geoShapeCornerRadiusPreviewCache.get(shape, () => ({ radius: undefined }))
-	const radius = entry.radius
-	if (entry.radius !== undefined) {
-		entry.radius = undefined
+	const radius = geoShapeCornerRadiusPreviewCache.get(shape.id)
+	if (geoShapeCornerRadiusPreviewCache.has(shape.id)) {
+		geoShapeCornerRadiusPreviewCache.delete(shape.id)
 		geoShapeCornerRadiusPreviewVersion.set(geoShapeCornerRadiusPreviewVersion.get() + 1)
 	}
 	return radius
@@ -64,7 +67,7 @@ export function getGeoShapeCornerRadiusPreviewVersion() {
 
 function getGeoShapeCornerRadiusPreview(shape: TLGeoShape) {
 	geoShapeCornerRadiusPreviewVersion.get()
-	return geoShapeCornerRadiusPreviewCache.get(shape, () => ({ radius: undefined })).radius
+	return geoShapeCornerRadiusPreviewCache.get(shape.id)
 }
 
 /**
