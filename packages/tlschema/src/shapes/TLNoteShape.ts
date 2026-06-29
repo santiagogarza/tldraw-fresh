@@ -2,6 +2,7 @@ import { T } from '@tldraw/validate'
 import { TLRichText, richTextValidator, toRichText } from '../misc/TLRichText'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import {
 	DefaultColorStyle,
 	DefaultLabelColorStyle,
@@ -48,6 +49,8 @@ export interface TLNoteShapeProps {
 	labelColor: TLDefaultColorStyle
 	/** Size style determining the font size and note dimensions */
 	size: TLDefaultSizeStyle
+	/** Looping animation style applied to the rendered shape */
+	animation: TLDefaultAnimationStyle
 	/** Font family style for the note text */
 	font: TLDefaultFontStyle
 	/** Ratio to scale the base font size when text needs to shrink to fit. Null means needs recomputation, 1 means no adjustment, and values less than 1 indicate shrinkage. */
@@ -124,6 +127,7 @@ export const noteShapeProps: RecordProps<TLNoteShape> = {
 	color: DefaultColorStyle,
 	labelColor: DefaultLabelColorStyle,
 	size: DefaultSizeStyle,
+	animation: DefaultAnimationStyle,
 	font: DefaultFontStyle,
 	fontSizeAdjustment: T.positiveNumber.nullable(),
 	align: DefaultHorizontalAlignStyle,
@@ -148,6 +152,7 @@ const Versions = createShapePropsMigrationIds('note', {
 	AddRichTextAttrs: 10,
 	AddFirstEditedBy: 11,
 	MakeFontSizeAdjustmentRatio: 12,
+	AddAnimation: 13,
 })
 
 /**
@@ -290,6 +295,15 @@ export const noteShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				props.fontSizeAdjustment = 0
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

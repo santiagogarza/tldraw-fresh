@@ -170,6 +170,7 @@ export class NoteShapeUtil extends ShapeUtil<TLNoteShape> {
 			color: 'black',
 			richText: toRichText(''),
 			size: 'm',
+			animation: 'none',
 			font: 'draw',
 			align: 'middle',
 			verticalAlign: 'middle',

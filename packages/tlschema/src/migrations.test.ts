@@ -2647,6 +2647,31 @@ describe('TLUser initial migration', () => {
 	})
 })
 
+describe.each([
+	['arrow', arrowShapeVersions.AddAnimation],
+	['bookmark', bookmarkShapeVersions.AddAnimation],
+	['draw', drawShapeVersions.AddAnimation],
+	['embed', embedShapeVersions.AddAnimation],
+	['frame', frameShapeVersions.AddAnimation],
+	['geo', geoShapeVersions.AddAnimation],
+	['highlight', highlightShapeVersions.AddAnimation],
+	['image', imageShapeVersions.AddAnimation],
+	['line', lineShapeVersions.AddAnimation],
+	['note', noteShapeVersions.AddAnimation],
+	['text', textShapeVersions.AddAnimation],
+	['video', videoShapeVersions.AddAnimation],
+])('Add animation to %s shape', (_name, versionId) => {
+	const { up, down } = getTestMigration(versionId)
+
+	test('up adds animation: none', () => {
+		expect(up({ props: {} })).toEqual({ props: { animation: 'none' } })
+	})
+
+	test('down removes animation', () => {
+		expect(down({ props: { animation: 'spin' } })).toEqual({ props: {} })
+	})
+})
+
 /* ---  PUT YOUR MIGRATIONS TESTS ABOVE HERE --- */
 
 // check that all migrator fns were called at least once

@@ -59,6 +59,7 @@ describe('FontManager', () => {
 		props: {
 			color: 'black',
 			size: 'xl',
+			animation: 'none',
 			font: 'serif',
 			textAlign: 'middle',
 			w: 100,

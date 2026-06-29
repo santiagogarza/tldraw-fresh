@@ -10,6 +10,7 @@ const packageDir = join(__dirname, '..')
 let combinedContent = [
 	join(packageDir, '..', 'editor', 'editor.css'),
 	join(packageDir, 'src', 'lib', 'ui.css'),
+	join(packageDir, 'src', 'lib', 'animations.css'),
 ].reduce(
 	(acc, path) => {
 		const content = readFileSync(path, 'utf8')

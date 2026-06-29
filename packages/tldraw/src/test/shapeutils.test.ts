@@ -481,6 +481,7 @@ describe('When interacting with a shape...', () => {
 			meta: {},
 			props: {
 				dash: 'draw',
+				animation: 'none',
 				size: 'm',
 				color: 'black',
 				spline: 'line',
@@ -564,6 +565,7 @@ describe('When interacting with a shape...', () => {
 			meta: {},
 			props: {
 				dash: 'draw',
+				animation: 'none',
 				size: 'm',
 				color: 'black',
 				spline: 'line',

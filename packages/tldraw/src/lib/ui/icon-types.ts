@@ -10,6 +10,10 @@ export type TLUiIconType =
 	| 'align-right'
 	| 'align-top'
 	| 'alt'
+	| 'animation-jiggle'
+	| 'animation-none'
+	| 'animation-pulse'
+	| 'animation-spin'
 	| 'arrow-arc'
 	| 'arrow-cycle'
 	| 'arrow-elbow'
@@ -175,6 +179,10 @@ export const iconTypes = [
 	'align-right',
 	'align-top',
 	'alt',
+	'animation-jiggle',
+	'animation-none',
+	'animation-pulse',
+	'animation-spin',
 	'arrow-arc',
 	'arrow-cycle',
 	'arrow-elbow',

@@ -2,6 +2,7 @@ import { T } from '@tldraw/validate'
 import { b64Vecs } from '../misc/b64Vecs'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { DefaultColorStyle, TLDefaultColorStyle } from '../styles/TLColorStyle'
 import { DefaultSizeStyle, TLDefaultSizeStyle } from '../styles/TLSizeStyle'
 import { TLBaseShape } from './TLBaseShape'
@@ -29,6 +30,8 @@ export interface TLHighlightShapeProps {
 	color: TLDefaultColorStyle
 	/** The size style determining the thickness of the highlight stroke */
 	size: TLDefaultSizeStyle
+	/** Looping animation style applied to the rendered shape */
+	animation: TLDefaultAnimationStyle
 	/** Array of segments that make up the highlight stroke path */
 	segments: TLDrawShapeSegment[]
 	/** Whether the highlight stroke has been completed by the user */
@@ -93,6 +96,7 @@ export type TLHighlightShape = TLBaseShape<'highlight', TLHighlightShapeProps>
 export const highlightShapeProps: RecordProps<TLHighlightShape> = {
 	color: DefaultColorStyle,
 	size: DefaultSizeStyle,
+	animation: DefaultAnimationStyle,
 	segments: T.arrayOf(DrawShapeSegment),
 	isComplete: T.boolean,
 	isPen: T.boolean,
@@ -105,6 +109,7 @@ const Versions = createShapePropsMigrationIds('highlight', {
 	AddScale: 1,
 	Base64: 2,
 	LegacyPointsConversion: 3,
+	AddAnimation: 4,
 })
 
 /**
@@ -180,6 +185,15 @@ export const highlightShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (_props) => {
 				// handled by the previous down migration
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

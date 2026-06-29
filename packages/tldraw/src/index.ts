@@ -585,6 +585,7 @@ export {
 } from './lib/ui/components/StylePanel/DefaultStylePanel'
 export {
 	DefaultStylePanelContent,
+	StylePanelAnimationPicker,
 	StylePanelArrowheadPicker,
 	StylePanelArrowKindPicker,
 	StylePanelColorPicker,

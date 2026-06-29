@@ -138,6 +138,7 @@ function convertTextShapeToTldrawShape(
 		opacity: defaultTextShape.opacity ?? 1,
 		props: {
 			size: textSize,
+			animation: defaultTextShape.props?.animation ?? 'none',
 			scale,
 			richText,
 			color: asColor(focusedShape.color ?? defaultTextShape.props?.color ?? 'black'),
@@ -242,6 +243,7 @@ function convertLineShapeToTldrawShape(
 			opacity: defaultLineShape.opacity ?? 1,
 			props: {
 				size: defaultLineShape.props?.size ?? 's',
+				animation: defaultLineShape.props?.animation ?? 'none',
 				points: {
 					a1: { id: 'a1', index: 'a1' as IndexKey, x: x1 - minX, y: y1 - minY },
 					a2: { id: 'a2', index: 'a2' as IndexKey, x: x2 - minX, y: y2 - minY },
@@ -299,6 +301,7 @@ function convertArrowShapeToTldrawShape(
 			bend: (focusedShape.bend ?? (defaultArrowShape.props?.bend ?? 0) * -1) * -1,
 			color: asColor(focusedShape.color ?? defaultArrowShape.props?.color ?? 'black'),
 			dash: defaultArrowShape.props?.dash ?? 'draw',
+			animation: defaultArrowShape.props?.animation ?? 'none',
 			elbowMidPoint: defaultArrowShape.props?.elbowMidPoint ?? 0.5,
 			end: { x: x2 - minX, y: y2 - minY },
 			fill: defaultArrowShape.props?.fill ?? 'none',
@@ -407,6 +410,7 @@ function convertGeoShapeToTldrawShape(
 				align: focusedShape.textAlign ?? defaultGeoShape.props?.align ?? 'start',
 				color: asColor(focusedShape.color ?? defaultGeoShape.props?.color ?? 'black'),
 				dash: defaultGeoShape.props?.dash ?? 'draw',
+				animation: defaultGeoShape.props?.animation ?? 'none',
 				fill,
 				font: defaultGeoShape.props?.font ?? 'draw',
 				geo: shapeType,
@@ -460,6 +464,7 @@ function convertNoteShapeToTldrawShape(
 				color: asColor(focusedShape.color ?? defaultNoteShape.props?.color ?? 'black'),
 				richText,
 				size: defaultNoteShape.props?.size ?? 's',
+				animation: defaultNoteShape.props?.animation ?? 'none',
 				align: defaultNoteShape.props?.align ?? 'middle',
 				font: defaultNoteShape.props?.font ?? 'draw',
 				fontSizeAdjustment: defaultNoteShape.props?.fontSizeAdjustment ?? 0,

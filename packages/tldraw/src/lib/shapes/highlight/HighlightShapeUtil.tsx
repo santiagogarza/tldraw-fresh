@@ -93,6 +93,7 @@ export class HighlightShapeUtil extends ShapeUtil<TLHighlightShape> {
 			segments: [],
 			color: 'black',
 			size: 'm',
+			animation: 'none',
 			isComplete: false,
 			isPen: false,
 			scale: 1,
