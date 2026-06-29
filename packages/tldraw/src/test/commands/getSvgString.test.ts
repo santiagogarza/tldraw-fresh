@@ -96,8 +96,9 @@ it('Matches a snapshot', async () => {
 	expect(elm).toMatchSnapshot('Basic SVG')
 })
 
-it('exports arc commands for rounded geo rectangles', async () => {
+it('exports rounded path commands for corner-radius rectangles', async () => {
 	const roundedRectangle = createShapeId('roundedRectangle')
+	const sharpRectangle = createShapeId('sharpRectangle')
 	editor.createShapes([
 		{
 			id: roundedRectangle,
@@ -111,11 +112,29 @@ it('exports arc commands for rounded geo rectangles', async () => {
 				cornerRadius: 'round',
 			},
 		},
+		{
+			id: sharpRectangle,
+			type: 'geo',
+			x: 860,
+			y: 700,
+			props: {
+				geo: 'rectangle',
+				w: 120,
+				h: 80,
+				cornerRadius: 'sharp',
+			},
+		},
 	])
 
-	const svg = parseSvg(await editor.getSvgString([roundedRectangle]))
-	const path = svg.querySelector('path')
-	expect(path?.getAttribute('d')).toMatch(/[Aa]/)
+	const roundedSvg = parseSvg(await editor.getSvgString([roundedRectangle]))
+	const roundedD = roundedSvg.querySelector('path')?.getAttribute('d') ?? ''
+
+	const sharpSvg = parseSvg(await editor.getSvgString([sharpRectangle]))
+	const sharpD = sharpSvg.querySelector('path')?.getAttribute('d') ?? ''
+
+	expect(roundedD).toContain('C')
+	expect(sharpD).not.toContain('C')
+	expect(roundedD).not.toBe(sharpD)
 })
 
 it('Accepts a scale option', async () => {

@@ -1,4 +1,5 @@
 import {
+	GeoShapeCornerRadiusStyle,
 	GeoShapeGeoStyle,
 	Group2d,
 	IndexKey,
@@ -184,6 +185,24 @@ describe('Resizing geo shapes with labels', () => {
 })
 
 describe('Geo rectangle corner radius paths', () => {
+	test('rectangle shared styles include corner radius style', () => {
+		const id = createShapeId('shared-corner-radius')
+		editor.createShapes([
+			{
+				id,
+				type: 'geo',
+				x: 0,
+				y: 0,
+				props: { geo: 'rectangle', w: 160, h: 100 },
+			},
+		])
+		editor.select(id)
+		expect(editor.getSharedStyles().get(GeoShapeCornerRadiusStyle)).toEqual({
+			type: 'shared',
+			value: 'sharp',
+		})
+	})
+
 	test('rectangle path changes for each corner radius step', () => {
 		const id = createShapeId('rounded-rectangle')
 		editor.createShapes([
@@ -208,8 +227,7 @@ describe('Geo rectangle corner radius paths', () => {
 		})
 
 		expect(new Set(paths).size).toBe(values.length)
-		expect(paths[0]).not.toMatch(/[Aa]/)
-		expect(paths.slice(1).every((path) => /[Aa]/.test(path))).toBe(true)
+		expect(paths.slice(1).every((path) => path !== paths[0])).toBe(true)
 	})
 
 	test('non-rectangle geo paths ignore corner radius style', () => {
