@@ -128,6 +128,7 @@ import { TLImageShapeProps } from '@tldraw/editor';
 import { TLKeyboardEventInfo } from '@tldraw/editor';
 import { TLLineShape } from '@tldraw/editor';
 import { TLLineShapePoint } from '@tldraw/editor';
+import { TLNoteReaction } from '@tldraw/tlschema';
 import { TLNoteShape } from '@tldraw/editor';
 import { TLNoteShapeProps } from '@tldraw/editor';
 import { TLOverlay } from '@tldraw/editor';
@@ -2852,6 +2853,7 @@ export class NoteShapeUtil extends ShapeUtil<TLNoteShape> {
             fontSizeAdjustment: number;
             growY: number;
             labelColor: TLDefaultColorStyle;
+            reactions: TLNoteReaction[];
             richText: {
                 attrs?: any;
                 content: unknown[];

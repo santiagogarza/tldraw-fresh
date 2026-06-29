@@ -1219,6 +1219,148 @@ input,
 	z-index: 1;
 }
 
+.tl-note__reactions {
+	position: absolute;
+	bottom: 4px;
+	left: 4px;
+	pointer-events: none;
+	transform-origin: bottom left;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+}
+
+.tl-note__reactions-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	border: none;
+	border-radius: 999px;
+	background: var(--tl-color-panel);
+	box-shadow: var(--tl-shadow-2);
+	cursor: pointer;
+	pointer-events: all;
+	font-size: 14px;
+	line-height: 1;
+}
+
+.tl-note__reactions-button:hover {
+	background: var(--tl-color-muted-2);
+}
+
+.tl-note__reactions-pill {
+	pointer-events: all;
+	cursor: pointer;
+}
+
+.tl-note__reactions-pill-condensed {
+	display: flex;
+	align-items: center;
+	padding: 2px 6px 2px 2px;
+	border-radius: 999px;
+	background: var(--tl-color-panel);
+	box-shadow: var(--tl-shadow-2);
+}
+
+.tl-note__reactions-badge {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 999px;
+	background: var(--tl-color-panel);
+	border: 1px solid var(--tl-color-muted-1);
+	font-size: 12px;
+	line-height: 1;
+	margin-left: -6px;
+}
+
+.tl-note__reactions-badge:first-child {
+	margin-left: 0;
+}
+
+.tl-note__reactions-extra {
+	margin-left: 2px;
+	font-family: var(--tl-font-sans);
+	font-size: 11px;
+	color: var(--tl-color-text-3);
+}
+
+.tl-note__reactions-expanded {
+	min-width: 120px;
+	max-width: 200px;
+	padding: 6px 8px;
+	border-radius: 8px;
+	background: var(--tl-color-panel);
+	box-shadow: var(--tl-shadow-2);
+}
+
+.tl-note__reactions-list {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.tl-note__reactions-list-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 6px;
+	font-family: var(--tl-font-sans);
+	font-size: 11px;
+	line-height: 1.3;
+}
+
+.tl-note__reactions-list-emoji {
+	flex-shrink: 0;
+	font-size: 14px;
+	line-height: 1;
+}
+
+.tl-note__reactions-list-names {
+	color: var(--tl-color-text-2);
+	word-break: break-word;
+}
+
+.tl-note__reactions-picker {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+	padding: 4px;
+	border-radius: 999px;
+	background: var(--tl-color-panel);
+	box-shadow: var(--tl-shadow-2);
+	pointer-events: all;
+}
+
+.tl-note__reactions-picker-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: none;
+	border-radius: 999px;
+	background: transparent;
+	cursor: pointer;
+	font-size: 16px;
+	line-height: 1;
+}
+
+.tl-note__reactions-picker-button:hover {
+	background: var(--tl-color-muted-2);
+}
+
+.tl-note__reactions-picker-button--active {
+	background: var(--tl-color-muted-1);
+}
+
 /* ------------------- Frame shape ------------------- */
 
 .tl-frame__body {
