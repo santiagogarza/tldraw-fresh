@@ -423,6 +423,9 @@ export const frameShapeMigrations: TLPropsMigrations;
 export const frameShapeProps: RecordProps<TLFrameShape>;
 
 // @public
+export const GeoShapeCornerRadiusStyle: EnumStyleProp<"pill" | "round" | "sharp" | "soft">;
+
+// @public
 export const GeoShapeGeoStyle: EnumStyleProp<"arrow-down" | "arrow-left" | "arrow-right" | "arrow-up" | "check-box" | "cloud" | "diamond" | "ellipse" | "heart" | "hexagon" | "octagon" | "oval" | "pentagon" | "rectangle" | "rhombus-2" | "rhombus" | "star" | "trapezoid" | "triangle" | "x-box">;
 
 // @public
@@ -1199,12 +1202,16 @@ export interface TLFrameShapeProps {
 export type TLGeoShape = TLBaseShape<'geo', TLGeoShapeProps>;
 
 // @public
+export type TLGeoShapeCornerRadiusStyle = T.TypeOf<typeof GeoShapeCornerRadiusStyle>;
+
+// @public
 export type TLGeoShapeGeoStyle = T.TypeOf<typeof GeoShapeGeoStyle>;
 
 // @public
 export interface TLGeoShapeProps {
     align: TLDefaultHorizontalAlignStyle;
     color: TLDefaultColorStyle;
+    cornerRadius: TLGeoShapeCornerRadiusStyle;
     dash: TLDefaultDashStyle;
     fill: TLDefaultFillStyle;
     font: TLDefaultFontStyle;

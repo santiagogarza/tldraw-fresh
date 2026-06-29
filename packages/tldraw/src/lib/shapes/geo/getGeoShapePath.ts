@@ -1,4 +1,5 @@
 import {
+	atom,
 	centerOfCircleFromThreePoints,
 	clamp,
 	getPointOnCircle,
@@ -10,11 +11,93 @@ import {
 	TLDefaultDashStyle,
 	TLDefaultSizeStyle,
 	TLGeoShape,
+	TLGeoShapeCornerRadiusStyle,
 	Vec,
 	VecModel,
 	WeakCache,
 } from '@tldraw/editor'
 import { PathBuilder } from '../shared/PathBuilder'
+
+const CORNER_RADIUS_FRACTION = { sharp: 0, soft: 0.08, round: 0.2, pill: 0.5 } as const
+const CORNER_RADIUS_STEPS = ['sharp', 'soft', 'round', 'pill'] as const
+
+function getRectangleCornerRadius(
+	w: number,
+	h: number,
+	value: TLGeoShapeCornerRadiusStyle
+): number {
+	return CORNER_RADIUS_FRACTION[value] * Math.min(w, h)
+}
+
+function nearestCornerRadiusStep(
+	w: number,
+	h: number,
+	radius: number
+): TLGeoShapeCornerRadiusStyle {
+	const minDim = Math.min(w, h)
+	let best: TLGeoShapeCornerRadiusStyle = 'sharp'
+	let bestDist = Infinity
+	for (const step of CORNER_RADIUS_STEPS) {
+		const stepR = CORNER_RADIUS_FRACTION[step] * minDim
+		const dist = Math.abs(stepR - radius)
+		if (dist < bestDist) {
+			bestDist = dist
+			best = step
+		}
+	}
+	return best
+}
+
+const cornerRadiusPreviewCache = new WeakMap<TLGeoShape, number>()
+const cornerRadiusPreviewEpoch = atom('geoCornerRadiusPreviewEpoch', 0)
+
+/** @internal */
+export function getPreviewCornerRadiusEpoch() {
+	return cornerRadiusPreviewEpoch
+}
+
+/** @internal */
+export function setPreviewCornerRadius(shape: TLGeoShape, radius: number) {
+	cornerRadiusPreviewCache.set(shape, radius)
+	cornerRadiusPreviewEpoch.set(cornerRadiusPreviewEpoch.get() + 1)
+}
+
+/** @internal */
+export function clearPreviewCornerRadius(shape: TLGeoShape) {
+	if (cornerRadiusPreviewCache.has(shape)) {
+		cornerRadiusPreviewCache.delete(shape)
+		cornerRadiusPreviewEpoch.set(cornerRadiusPreviewEpoch.get() + 1)
+	}
+}
+
+/** @internal */
+export function consumePreviewCornerRadius(shape: TLGeoShape): number | undefined {
+	const preview = cornerRadiusPreviewCache.get(shape)
+	if (preview !== undefined) {
+		cornerRadiusPreviewCache.delete(shape)
+		cornerRadiusPreviewEpoch.set(cornerRadiusPreviewEpoch.get() + 1)
+	}
+	return preview
+}
+
+/** @internal */
+export function getRectangleCornerRadiusForShape(shape: TLGeoShape): number {
+	const w = Math.max(1, shape.props.w)
+	const h = Math.max(1, shape.props.h + shape.props.growY)
+	const preview = cornerRadiusPreviewCache.get(shape)
+	if (preview !== undefined) return preview
+	return getRectangleCornerRadius(w, h, shape.props.cornerRadius)
+}
+
+/** @internal */
+export function snapCornerRadiusPreview(
+	shape: TLGeoShape,
+	preview: number
+): TLGeoShapeCornerRadiusStyle {
+	const w = Math.max(1, shape.props.w)
+	const h = Math.max(1, shape.props.h + shape.props.growY)
+	return nearestCornerRadiusStep(w, h, preview)
+}
 
 /**
  * Defines the behavior for a geo shape type. Every built-in geo type is
@@ -66,11 +149,25 @@ export const defaultGeoTypeDefinitions = {
 		icon: 'geo-rectangle',
 		getPath(w, h, shape) {
 			const isFilled = shape.props.fill !== 'none'
+			const r = getRectangleCornerRadiusForShape(shape)
+			if (r === 0) {
+				return new PathBuilder()
+					.moveTo(0, 0, { geometry: { isFilled } })
+					.lineTo(w, 0)
+					.lineTo(w, h)
+					.lineTo(0, h)
+					.close()
+			}
 			return new PathBuilder()
-				.moveTo(0, 0, { geometry: { isFilled } })
-				.lineTo(w, 0)
-				.lineTo(w, h)
-				.lineTo(0, h)
+				.moveTo(r, 0, { geometry: { isFilled } })
+				.lineTo(w - r, 0)
+				.circularArcTo(r, false, true, w, r)
+				.lineTo(w, h - r)
+				.circularArcTo(r, false, true, w - r, h)
+				.lineTo(r, h)
+				.circularArcTo(r, false, true, 0, h - r)
+				.lineTo(0, r)
+				.circularArcTo(r, false, true, r, 0)
 				.close()
 		},
 	},
@@ -359,6 +456,10 @@ export function getGeoShapePath(
 ) {
 	// Cache is keyed on shape only. For x-box, strokeWidth affects the diagonal
 	// inset, but theme changes are rare enough that stale cache entries are acceptable.
+	// Skip cache during corner-radius handle drag preview.
+	if (cornerRadiusPreviewCache.has(shape)) {
+		return _getGeoPath(shape, strokeWidth, customGeoTypes)
+	}
 	return pathCache.get(shape, (s) => _getGeoPath(s, strokeWidth, customGeoTypes))
 }
 

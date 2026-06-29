@@ -588,6 +588,7 @@ export {
 	StylePanelArrowheadPicker,
 	StylePanelArrowKindPicker,
 	StylePanelColorPicker,
+	StylePanelCornerRadiusPicker,
 	StylePanelDashPicker,
 	StylePanelFillPicker,
 	StylePanelFontPicker,

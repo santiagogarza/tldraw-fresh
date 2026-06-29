@@ -11,6 +11,7 @@ import { vi } from 'vitest'
 import { TestEditor } from '../../../test/TestEditor'
 import { PathBuilder } from '../shared/PathBuilder'
 import { GeoShapeUtil } from './GeoShapeUtil'
+import { getGeoShapePath } from './getGeoShapePath'
 
 let editor: TestEditor
 let ids: Record<string, TLShapeId>
@@ -179,6 +180,55 @@ describe('Resizing geo shapes with labels', () => {
 		const geo = getGeo()
 		expect(geo.props.w).toBeLessThan(50)
 		expect(geo.props.h).toBeLessThan(50)
+	})
+})
+
+describe('Rectangle corner radius', () => {
+	test('each corner radius value produces a distinct rectangle path', () => {
+		const util = editor.getShapeUtil('geo') as GeoShapeUtil
+		const paths = (['sharp', 'soft', 'round', 'pill'] as const).map((cornerRadius) => {
+			const id = createShapeId()
+			editor.createShapes([
+				{
+					id,
+					type: 'geo',
+					props: { w: 100, h: 80, geo: 'rectangle', cornerRadius },
+				},
+			])
+			const shape = editor.getShape<TLGeoShape>(id)!
+			const dv = util.options.getDefaultDisplayValues!(
+				editor,
+				shape,
+				editor.getCurrentTheme(),
+				editor.getColorMode()
+			)
+			return getGeoShapePath(shape, dv.strokeWidth).toD()
+		})
+		expect(new Set(paths).size).toBe(4)
+	})
+
+	test('non-rectangle geo types ignore corner radius', () => {
+		const id = createShapeId()
+		editor.createShapes([
+			{
+				id,
+				type: 'geo',
+				props: { w: 100, h: 80, geo: 'ellipse', cornerRadius: 'sharp' },
+			},
+		])
+		const util = editor.getShapeUtil('geo') as GeoShapeUtil
+		const sharpShape = editor.getShape<TLGeoShape>(id)!
+		const dv = util.options.getDefaultDisplayValues!(
+			editor,
+			sharpShape,
+			editor.getCurrentTheme(),
+			editor.getColorMode()
+		)
+		const sharpPath = getGeoShapePath(sharpShape, dv.strokeWidth).toD()
+		editor.updateShape({ id, type: 'geo', props: { cornerRadius: 'pill' } })
+		const pillShape = editor.getShape<TLGeoShape>(id)!
+		const pillPath = getGeoShapePath(pillShape, dv.strokeWidth).toD()
+		expect(sharpPath).toBe(pillPath)
 	})
 })
 
