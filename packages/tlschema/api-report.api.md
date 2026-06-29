@@ -699,6 +699,9 @@ export const lineShapeProps: RecordProps<TLLineShape>;
 export const LineShapeSplineStyle: EnumStyleProp<"cubic" | "line">;
 
 // @public
+export const NOTE_REACTION_EMOJIS: readonly ["👍", "❤️", "🔥", "😂", "👀"];
+
+// @public
 export const noteShapeMigrations: TLPropsMigrations;
 
 // @public
@@ -1499,6 +1502,16 @@ export interface TLLineShapeProps {
 export type TLLineShapeSplineStyle = T.TypeOf<typeof LineShapeSplineStyle>;
 
 // @public
+export interface TLNoteReaction {
+    // (undocumented)
+    emoji: string;
+    // (undocumented)
+    userId: string;
+    // (undocumented)
+    userName: string;
+}
+
+// @public
 export type TLNoteShape = TLBaseShape<'note', TLNoteShapeProps>;
 
 // @public
@@ -1509,6 +1522,7 @@ export interface TLNoteShapeProps {
     fontSizeAdjustment: null | number;
     growY: number;
     labelColor: TLDefaultColorStyle;
+    reactions: TLNoteReaction[];
     richText: TLRichText;
     scale: number;
     size: TLDefaultSizeStyle;
