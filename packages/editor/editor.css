@@ -956,6 +956,36 @@ input,
 	contain: size layout;
 }
 
+.tl-shape__content {
+	position: absolute;
+	inset: 0px;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+	pointer-events: none;
+	transform-origin: center;
+}
+
+.tl-shape__content--animation-jiggle {
+	animation: tl-shape-animation-jiggle 900ms cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+.tl-shape__content--animation-spin {
+	animation: tl-shape-animation-spin 1800ms cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+.tl-shape__content--animation-pulse {
+	animation: tl-shape-animation-pulse 1200ms cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.tl-shape__content--animation-jiggle,
+	.tl-shape__content--animation-spin,
+	.tl-shape__content--animation-pulse {
+		animation: none;
+	}
+}
+
 /* ---------------- Shape Containers ---------------- */
 
 .tl-svg-container {
@@ -981,6 +1011,53 @@ input,
 	/* content-visibility: auto; */
 	transform-origin: top left;
 	color: var(--tl-color-text-1);
+}
+
+@keyframes tl-shape-animation-jiggle {
+	0%,
+	100% {
+		transform: rotate(0deg) scale(1);
+	}
+	18% {
+		transform: rotate(-2.5deg) translate(-1px, 0px) scale(1.015);
+	}
+	36% {
+		transform: rotate(2deg) translate(1px, -1px) scale(0.99);
+	}
+	54% {
+		transform: rotate(-1.4deg) translate(-0.5px, 1px) scale(1.008);
+	}
+	72% {
+		transform: rotate(0.8deg) translate(0.5px, 0px) scale(0.997);
+	}
+}
+
+@keyframes tl-shape-animation-spin {
+	0% {
+		transform: rotate(0deg) scale(1);
+	}
+	72% {
+		transform: rotate(374deg) scale(1.025);
+	}
+	86% {
+		transform: rotate(354deg) scale(0.995);
+	}
+	100% {
+		transform: rotate(360deg) scale(1);
+	}
+}
+
+@keyframes tl-shape-animation-pulse {
+	0%,
+	100% {
+		transform: scale(1);
+	}
+	38% {
+		transform: scale(1.08);
+	}
+	62% {
+		transform: scale(0.985);
+	}
 }
 
 /* -------------------- Group shape ------------------ */

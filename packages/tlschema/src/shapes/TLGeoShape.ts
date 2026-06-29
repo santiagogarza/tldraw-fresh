@@ -3,6 +3,7 @@ import { TLRichText, richTextValidator, toRichText } from '../misc/TLRichText'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
 import { StyleProp } from '../styles/StyleProp'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import {
 	DefaultColorStyle,
 	DefaultLabelColorStyle,
@@ -90,6 +91,8 @@ export interface TLGeoShapeProps {
 	growY: number
 	/** Scale factor applied to the shape */
 	scale: number
+	/** Animation style for the shape */
+	animation: TLDefaultAnimationStyle
 
 	/** Color style for text label */
 	labelColor: TLDefaultColorStyle
@@ -170,6 +173,7 @@ export const geoShapeProps: RecordProps<TLGeoShape> = {
 	h: T.nonZeroNumber,
 	growY: T.positiveNumber,
 	scale: T.nonZeroNumber,
+	animation: DefaultAnimationStyle,
 
 	// Text properties
 	labelColor: DefaultLabelColorStyle,
@@ -194,6 +198,7 @@ const geoShapeVersions = createShapePropsMigrationIds('geo', {
 	AddScale: 9,
 	AddRichText: 10,
 	AddRichTextAttrs: 11,
+	AddAnimation: 12,
 })
 
 /**
@@ -316,6 +321,15 @@ export const geoShapeMigrations = createShapePropsMigrationSequence({
 				if (props.richText && 'attrs' in props.richText) {
 					delete props.richText.attrs
 				}
+			},
+		},
+		{
+			id: geoShapeVersions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

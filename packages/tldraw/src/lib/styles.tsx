@@ -96,6 +96,12 @@ function fontIcon(font: TLThemeFont, name: string): string | TLUiIconJsx {
 
 // todo: default styles prop?
 export const STYLES = {
+	animation: [
+		{ value: 'none', icon: 'cross-2' },
+		{ value: 'jiggle', icon: 'drag-handle-dots' },
+		{ value: 'spin', icon: 'rotate-cw' },
+		{ value: 'pulse', icon: 'zoom-in' },
+	],
 	fill: [
 		{ value: 'none', icon: 'fill-none' },
 		{ value: 'semi', icon: 'fill-semi' },
