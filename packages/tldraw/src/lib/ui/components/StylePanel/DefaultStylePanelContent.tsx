@@ -205,15 +205,21 @@ export function StylePanelAnimationPicker() {
 	const msg = useTranslation()
 	const animation = styles.get(DefaultAnimationStyle)
 	if (animation === undefined) return null
+	const title = msg('style-panel.animation')
 
 	return (
-		<StylePanelButtonPicker
-			title={msg('style-panel.animation')}
-			uiType="animation"
-			style={DefaultAnimationStyle}
-			items={STYLES.animation}
-			value={animation}
-		/>
+		<>
+			<StylePanelSubheading>{title}</StylePanelSubheading>
+			<TldrawUiToolbar orientation="horizontal" label={title}>
+				<StylePanelButtonPickerInline
+					title={title}
+					uiType="animation"
+					style={DefaultAnimationStyle}
+					items={STYLES.animation}
+					value={animation}
+				/>
+			</TldrawUiToolbar>
+		</>
 	)
 }
 
