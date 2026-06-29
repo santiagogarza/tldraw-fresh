@@ -1246,15 +1246,15 @@ input,
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 24px;
-	height: 24px;
+	width: 28px;
+	height: 28px;
 	padding: 0;
 	margin: 0;
 	border: none;
 	border-radius: 100%;
 	background-color: var(--tl-color-panel);
 	box-shadow: var(--tl-shadow-1);
-	font-size: 14px;
+	font-size: 16px;
 	line-height: 1;
 	cursor: var(--tl-cursor-pointer);
 	pointer-events: all;
@@ -1263,11 +1263,12 @@ input,
 .tl-note__reactions-pill {
 	display: flex;
 	align-items: center;
-	height: 24px;
-	padding: 0 8px 0 6px;
+	gap: 4px;
+	height: 28px;
+	padding: 3px 10px 3px 5px;
 	margin: 0;
 	border: none;
-	border-radius: 12px;
+	border-radius: 14px;
 	background-color: var(--tl-color-panel);
 	box-shadow: var(--tl-shadow-1);
 	cursor: var(--tl-cursor-pointer);
@@ -1278,12 +1279,17 @@ input,
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	width: 22px;
+	height: 22px;
+	border-radius: 100%;
+	background-color: var(--tl-color-panel);
+	box-shadow: 0 0 0 1px var(--tl-color-low);
 	font-size: 14px;
 	line-height: 1;
 }
 
 .tl-note__reactions-more {
-	margin-left: 4px;
+	margin-left: 2px;
 	font-size: 11px;
 	font-weight: 500;
 	color: var(--tl-color-text-1);

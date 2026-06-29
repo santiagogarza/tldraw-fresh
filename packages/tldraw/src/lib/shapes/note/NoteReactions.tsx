@@ -161,12 +161,8 @@ export function NoteReactions({ shape }: { shape: TLNoteShape }) {
 								setExpanded((open) => !open)
 							}}
 						>
-							{grouped.slice(0, 3).map((group, i) => (
-								<span
-									key={group.emoji}
-									className="tl-note__reactions-badge"
-									style={i > 0 ? { marginLeft: -6 } : undefined}
-								>
+							{grouped.slice(0, 3).map((group) => (
+								<span key={group.emoji} className="tl-note__reactions-badge">
 									{group.emoji}
 								</span>
 							))}
@@ -181,7 +177,7 @@ export function NoteReactions({ shape }: { shape: TLNoteShape }) {
 										<div key={group.emoji} className="tl-note__reactions-list-row">
 											<span className="tl-note__reactions-badge">{group.emoji}</span>
 											<span className="tl-note__reactions-names">
-												{group.users.map((u) => u.userName).join(', ')}
+												{group.users.map((u) => u.userName.trim() || 'Anonymous').join(', ')}
 											</span>
 										</div>
 									))}
