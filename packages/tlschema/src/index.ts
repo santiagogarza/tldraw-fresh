@@ -282,8 +282,10 @@ export {
 	type TLLineShapeSplineStyle,
 } from './shapes/TLLineShape'
 export {
+	NOTE_REACTION_EMOJIS,
 	noteShapeMigrations,
 	noteShapeProps,
+	type TLNoteReaction,
 	type TLNoteShape,
 	type TLNoteShapeProps,
 } from './shapes/TLNoteShape'
