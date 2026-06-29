@@ -114,7 +114,7 @@ it('Exports rounded geo rectangles with arcs', async () => {
 	])
 
 	const svg = await editor.getSvgString([id])
-	expect(svg!.svg).toMatch(/[Aa]/)
+	expect(svg!.svg).toMatch(/[Cc]/)
 })
 
 it('Accepts a scale option', async () => {

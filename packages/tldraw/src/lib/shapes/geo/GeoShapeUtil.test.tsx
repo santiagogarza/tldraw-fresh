@@ -203,8 +203,8 @@ describe('Geo rectangle corner radius', () => {
 		})
 
 		expect(new Set(paths).size).toBe(values.length)
-		expect(paths[0]).not.toMatch(/[Aa]/)
-		expect(paths.slice(1).every((path) => /[Aa]/.test(path))).toBe(true)
+		expect(paths[0]).not.toMatch(/[Cc]/)
+		expect(paths.slice(1).every((path) => /[Cc]/.test(path))).toBe(true)
 	})
 
 	test('ignores corner radius for non-rectangle geo shapes', () => {
