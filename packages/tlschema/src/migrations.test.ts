@@ -2638,7 +2638,7 @@ describe('Adding textFirstEditedBy to note shape', () => {
 	})
 })
 
-describe('Adding reactions to note shape', () => {
+describe('AddReactions to note shape', () => {
 	const { up, down } = getTestMigration(noteShapeVersions.AddReactions)
 
 	test('up works as expected', () => {
