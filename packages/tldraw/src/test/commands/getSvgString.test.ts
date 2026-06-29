@@ -96,6 +96,27 @@ it('Matches a snapshot', async () => {
 	expect(elm).toMatchSnapshot('Basic SVG')
 })
 
+it('Exports rounded geo rectangles with arcs', async () => {
+	const id = createShapeId('rounded-rectangle')
+	editor.createShapes([
+		{
+			id,
+			type: 'geo',
+			x: 800,
+			y: 800,
+			props: {
+				geo: 'rectangle',
+				w: 100,
+				h: 80,
+				cornerRadius: 'round',
+			},
+		},
+	])
+
+	const svg = await editor.getSvgString([id])
+	expect(svg!.svg).toMatch(/[Aa]/)
+})
+
 it('Accepts a scale option', async () => {
 	const svg1 = (await editor.getSvgString(editor.getSelectedShapeIds(), { scale: 1 }))!
 

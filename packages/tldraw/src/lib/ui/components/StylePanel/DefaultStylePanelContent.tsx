@@ -10,11 +10,13 @@ import {
 	DefaultSizeStyle,
 	DefaultTextAlignStyle,
 	DefaultVerticalAlignStyle,
+	GeoShapeCornerRadiusStyle,
 	GeoShapeGeoStyle,
 	kickoutOccludedShapes,
 	LineShapeSplineStyle,
 	minBy,
 	TLArrowShapeArrowheadStyle,
+	TLGeoShape,
 	useEditor,
 	useValue,
 } from '@tldraw/editor'
@@ -47,6 +49,7 @@ export function DefaultStylePanelContent() {
 				<StylePanelFillPicker />
 				<StylePanelDashPicker />
 				<StylePanelSizePicker />
+				<StylePanelCornerRadiusPicker />
 			</StylePanelSection>
 			<StylePanelSection>
 				<StylePanelFontPicker />
@@ -219,6 +222,39 @@ export function StylePanelSizePicker() {
 					kickoutOccludedShapes(editor, selectedShapeIds)
 				}
 			}}
+		/>
+	)
+}
+
+/** @public @react */
+export function StylePanelCornerRadiusPicker() {
+	const editor = useEditor()
+	const { styles } = useStylePanelContext()
+	const msg = useTranslation()
+	const cornerRadius = styles.get(GeoShapeCornerRadiusStyle)
+	const onlyRectangles = useValue(
+		'only selected geo rectangles',
+		() => {
+			const selectedShapes = editor.getSelectedShapes()
+			return (
+				selectedShapes.length > 0 &&
+				selectedShapes.every(
+					(shape) =>
+						editor.isShapeOfType<TLGeoShape>(shape, 'geo') && shape.props.geo === 'rectangle'
+				)
+			)
+		},
+		[editor]
+	)
+	if (cornerRadius === undefined || !onlyRectangles) return null
+
+	return (
+		<StylePanelButtonPicker
+			title={msg('style-panel.corner-radius')}
+			uiType="cornerRadius"
+			style={GeoShapeCornerRadiusStyle}
+			items={STYLES.cornerRadius}
+			value={cornerRadius}
 		/>
 	)
 }

@@ -10,11 +10,62 @@ import {
 	TLDefaultDashStyle,
 	TLDefaultSizeStyle,
 	TLGeoShape,
+	TLGeoShapeCornerRadiusStyle,
 	Vec,
 	VecModel,
 	WeakCache,
+	atom,
 } from '@tldraw/editor'
 import { PathBuilder } from '../shared/PathBuilder'
+
+const CORNER_RADIUS_FRACTION = {
+	sharp: 0,
+	soft: 0.08,
+	round: 0.2,
+	pill: 0.5,
+} as const satisfies Record<TLGeoShapeCornerRadiusStyle, number>
+
+const geoShapeCornerRadiusPreviewCache = new WeakCache<TLGeoShape, { radius: number | undefined }>()
+const geoShapeCornerRadiusPreviewVersion = atom('geoShapeCornerRadiusPreviewVersion', 0)
+
+export function getRectangleCornerRadius(w: number, h: number, value: TLGeoShapeCornerRadiusStyle) {
+	return CORNER_RADIUS_FRACTION[value] * Math.min(w, h)
+}
+
+export function getGeoShapeCornerRadiusForRender(shape: TLGeoShape, w: number, h: number) {
+	const maxRadius = Math.min(w, h) / 2
+	const previewRadius = getGeoShapeCornerRadiusPreview(shape)
+	if (previewRadius !== undefined) {
+		return clamp(previewRadius, 0, maxRadius)
+	}
+	return getRectangleCornerRadius(w, h, shape.props.cornerRadius)
+}
+
+export function setGeoShapeCornerRadiusPreview(shape: TLGeoShape, radius: number | undefined) {
+	const entry = geoShapeCornerRadiusPreviewCache.get(shape, () => ({ radius: undefined }))
+	if (entry.radius === radius) return
+	entry.radius = radius
+	geoShapeCornerRadiusPreviewVersion.set(geoShapeCornerRadiusPreviewVersion.get() + 1)
+}
+
+export function consumeGeoShapeCornerRadiusPreview(shape: TLGeoShape) {
+	const entry = geoShapeCornerRadiusPreviewCache.get(shape, () => ({ radius: undefined }))
+	const radius = entry.radius
+	if (entry.radius !== undefined) {
+		entry.radius = undefined
+		geoShapeCornerRadiusPreviewVersion.set(geoShapeCornerRadiusPreviewVersion.get() + 1)
+	}
+	return radius
+}
+
+export function getGeoShapeCornerRadiusPreviewVersion() {
+	return geoShapeCornerRadiusPreviewVersion.get()
+}
+
+function getGeoShapeCornerRadiusPreview(shape: TLGeoShape) {
+	geoShapeCornerRadiusPreviewVersion.get()
+	return geoShapeCornerRadiusPreviewCache.get(shape, () => ({ radius: undefined })).radius
+}
 
 /**
  * Defines the behavior for a geo shape type. Every built-in geo type is
@@ -66,11 +117,25 @@ export const defaultGeoTypeDefinitions = {
 		icon: 'geo-rectangle',
 		getPath(w, h, shape) {
 			const isFilled = shape.props.fill !== 'none'
+			const r = getGeoShapeCornerRadiusForRender(shape, w, h)
+			if (r === 0) {
+				return new PathBuilder()
+					.moveTo(0, 0, { geometry: { isFilled } })
+					.lineTo(w, 0)
+					.lineTo(w, h)
+					.lineTo(0, h)
+					.close()
+			}
 			return new PathBuilder()
-				.moveTo(0, 0, { geometry: { isFilled } })
-				.lineTo(w, 0)
-				.lineTo(w, h)
-				.lineTo(0, h)
+				.moveTo(r, 0, { geometry: { isFilled } })
+				.lineTo(w - r, 0)
+				.circularArcTo(r, false, true, w, r)
+				.lineTo(w, h - r)
+				.circularArcTo(r, false, true, w - r, h)
+				.lineTo(r, h)
+				.circularArcTo(r, false, true, 0, h - r)
+				.lineTo(0, r)
+				.circularArcTo(r, false, true, r, 0)
 				.close()
 		},
 	},
@@ -359,6 +424,9 @@ export function getGeoShapePath(
 ) {
 	// Cache is keyed on shape only. For x-box, strokeWidth affects the diagonal
 	// inset, but theme changes are rare enough that stale cache entries are acceptable.
+	if (getGeoShapeCornerRadiusPreview(shape) !== undefined) {
+		return _getGeoPath(shape, strokeWidth, customGeoTypes)
+	}
 	return pathCache.get(shape, (s) => _getGeoPath(s, strokeWidth, customGeoTypes))
 }
 

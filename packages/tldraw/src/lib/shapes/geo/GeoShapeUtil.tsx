@@ -11,8 +11,12 @@ import {
 	Rectangle2d,
 	SVGContainer,
 	SvgExportContext,
+	IndexKey,
 	TLGeoShape,
+	TLGeoShapeCornerRadiusStyle,
 	TLGeoShapeProps,
+	TLHandle,
+	TLHandleDragInfo,
 	TLMeasureTextOpts,
 	TLResizeInfo,
 	TLShape,
@@ -24,6 +28,7 @@ import {
 	WeakCache,
 	approximately,
 	areAnglesCompatible,
+	clamp,
 	geoShapeMigrations,
 	geoShapeProps,
 	getColorValue,
@@ -56,10 +61,15 @@ import { useIsReadyForEditing } from '../shared/useEditablePlainText'
 import { useEfficientZoomThreshold } from '../shared/useEfficientZoomThreshold'
 import { GeoShapeBody } from './GeoShapeBody'
 import {
+	consumeGeoShapeCornerRadiusPreview,
 	defaultGeoTypeDefinitions,
 	type GeoTypeDefinition,
 	getGeoShapePath,
+	getGeoShapeCornerRadiusForRender,
+	getGeoShapeCornerRadiusPreviewVersion,
 	getGeoTypeDefinition,
+	getRectangleCornerRadius,
+	setGeoShapeCornerRadiusPreview,
 } from './getGeoShapePath'
 
 // imperfect but good enough, should be the width of the W in the font / size combo
@@ -96,6 +106,27 @@ const GEO_SHAPE_EMPTY_LABEL_SIZE = Object.freeze({ w: 0, h: 0 })
 // the same custom key (e.g. when wrapping/extending the util) without having
 // the entry stripped from `options.customGeoTypes`.
 const BUILTIN_GEO_TYPES: ReadonlySet<string> = new Set(Object.keys(defaultGeoTypeDefinitions))
+const GEO_CORNER_RADIUS_HANDLE_ID = 'corner-radius'
+const GEO_CORNER_RADIUS_STEPS: TLGeoShapeCornerRadiusStyle[] = ['sharp', 'soft', 'round', 'pill']
+
+function getNearestCornerRadiusStyle(
+	w: number,
+	h: number,
+	radius: number
+): TLGeoShapeCornerRadiusStyle {
+	let nearest = GEO_CORNER_RADIUS_STEPS[0]
+	let nearestDistance = Infinity
+
+	for (const value of GEO_CORNER_RADIUS_STEPS) {
+		const distance = Math.abs(getRectangleCornerRadius(w, h, value) - radius)
+		if (distance < nearestDistance) {
+			nearest = value
+			nearestDistance = distance
+		}
+	}
+
+	return nearest
+}
 
 /** @public */
 export interface GeoShapeUtilDisplayValues {
@@ -234,6 +265,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			w: 100,
 			h: 100,
 			geo: 'rectangle',
+			cornerRadius: 'sharp',
 			dash: 'draw',
 			growY: 0,
 			url: '',
@@ -346,6 +378,55 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 		return renderPlaintextFromRichText(this.editor, shape.props.richText)
 	}
 
+	override getHandles(shape: TLGeoShape): TLHandle[] {
+		if (shape.props.geo !== 'rectangle') return EMPTY_ARRAY
+
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const r = getGeoShapeCornerRadiusForRender(shape, w, h)
+
+		return [
+			{
+				id: GEO_CORNER_RADIUS_HANDLE_ID,
+				type: 'vertex',
+				index: 'a1' as IndexKey,
+				x: r,
+				y: 0,
+			},
+		]
+	}
+
+	override onHandleDrag(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
+		if (shape.props.geo !== 'rectangle' || handle.id !== GEO_CORNER_RADIUS_HANDLE_ID) return
+
+		const maxRadius =
+			Math.min(Math.max(1, shape.props.w), Math.max(1, shape.props.h + shape.props.growY)) / 2
+		setGeoShapeCornerRadiusPreview(shape, clamp(handle.x, 0, maxRadius))
+	}
+
+	override onHandleDragEnd(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
+		if (shape.props.geo !== 'rectangle' || handle.id !== GEO_CORNER_RADIUS_HANDLE_ID) return
+
+		const previewRadius = consumeGeoShapeCornerRadiusPreview(shape)
+		if (previewRadius === undefined) return
+
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const cornerRadius = getNearestCornerRadiusStyle(w, h, previewRadius)
+		if (cornerRadius === shape.props.cornerRadius) return
+
+		return {
+			id: shape.id,
+			type: shape.type,
+			props: { cornerRadius },
+		}
+	}
+
+	override onHandleDragCancel(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
+		if (shape.props.geo !== 'rectangle' || handle.id !== GEO_CORNER_RADIUS_HANDLE_ID) return
+		consumeGeoShapeCornerRadiusPreview(shape)
+	}
+
 	override getFontFaces(shape: TLGeoShape) {
 		if (isEmptyRichText(shape.props.richText)) {
 			return EMPTY_ARRAY
@@ -370,6 +451,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 		const isReadyForEditing = useIsReadyForEditing(editor, shape.id)
 		const isForceSolid = useEfficientZoomThreshold(0.25 / shape.props.scale)
 		const colorMode = useColorMode()
+		useValue('geo corner radius preview version', getGeoShapeCornerRadiusPreviewVersion, [])
 		const dv = getDisplayValues(this, shape, colorMode)
 
 		const { w, h, richText, url } = props
