@@ -48,6 +48,7 @@ export function DefaultStylePanelContent() {
 				<StylePanelFillPicker />
 				<StylePanelDashPicker />
 				<StylePanelSizePicker />
+				<StylePanelAnimationPicker />
 			</StylePanelSection>
 			<StylePanelSection>
 				<StylePanelFontPicker />
@@ -59,9 +60,6 @@ export function DefaultStylePanelContent() {
 				<StylePanelArrowKindPicker />
 				<StylePanelArrowheadPicker />
 				<StylePanelSplinePicker />
-			</StylePanelSection>
-			<StylePanelSection>
-				<StylePanelAnimationPicker />
 			</StylePanelSection>
 		</>
 	)
