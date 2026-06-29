@@ -1,6 +1,7 @@
 import { T } from '@tldraw/validate'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { DefaultColorStyle, TLDefaultColorStyle } from '../styles/TLColorStyle'
 import { TLBaseShape } from './TLBaseShape'
 
@@ -18,6 +19,8 @@ export interface TLFrameShapeProps {
 	name: string
 	/** Color style for the frame border and label */
 	color: TLDefaultColorStyle
+	/** Looping presentation animation style */
+	animation: TLDefaultAnimationStyle
 }
 
 /**
@@ -72,10 +75,12 @@ export const frameShapeProps: RecordProps<TLFrameShape> = {
 	// We delegate to DefaultColorStyle.validate so custom colors from themes are
 	// picked up automatically.
 	color: { validate: (v: unknown) => DefaultColorStyle.validate(v) as TLDefaultColorStyle },
+	animation: DefaultAnimationStyle,
 }
 
 const Versions = createShapePropsMigrationIds('frame', {
 	AddColorProp: 1,
+	AddAnimation: 2,
 })
 
 /**
@@ -100,6 +105,15 @@ export const frameShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				delete props.color
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

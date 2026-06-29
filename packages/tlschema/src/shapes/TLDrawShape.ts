@@ -3,6 +3,7 @@ import { b64Vecs } from '../misc/b64Vecs'
 import { VecModel } from '../misc/geometry-types'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { DefaultColorStyle, TLDefaultColorStyle } from '../styles/TLColorStyle'
 import { DefaultDashStyle, TLDefaultDashStyle } from '../styles/TLDashStyle'
 import { DefaultFillStyle, TLDefaultFillStyle } from '../styles/TLFillStyle'
@@ -46,6 +47,8 @@ export interface TLDrawShapeProps {
 	fill: TLDefaultFillStyle
 	/** Dash pattern style for the stroke */
 	dash: TLDefaultDashStyle
+	/** Looping presentation animation style */
+	animation: TLDefaultAnimationStyle
 	/** Size/thickness of the drawing stroke */
 	size: TLDefaultSizeStyle
 	/** Array of segments that make up the complete drawing path */
@@ -123,6 +126,7 @@ export const drawShapeProps: RecordProps<TLDrawShape> = {
 	color: DefaultColorStyle,
 	fill: DefaultFillStyle,
 	dash: DefaultDashStyle,
+	animation: DefaultAnimationStyle,
 	size: DefaultSizeStyle,
 	segments: T.arrayOf(DrawShapeSegment),
 	isComplete: T.boolean,
@@ -138,6 +142,7 @@ const Versions = createShapePropsMigrationIds('draw', {
 	AddScale: 2,
 	Base64: 3,
 	LegacyPointsConversion: 4,
+	AddAnimation: 5,
 })
 
 /**
@@ -237,6 +242,15 @@ export const drawShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (_props) => {
 				// handled by the previous down migration
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

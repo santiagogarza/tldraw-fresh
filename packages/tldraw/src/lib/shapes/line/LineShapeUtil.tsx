@@ -85,6 +85,7 @@ export class LineShapeUtil extends ShapeUtil<TLLineShape> {
 			dash: 'draw',
 			size: 'm',
 			color: 'black',
+			animation: 'none',
 			spline: 'line',
 			points: {
 				[start]: { id: start, index: start, x: 0, y: 0 },

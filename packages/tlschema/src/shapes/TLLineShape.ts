@@ -3,6 +3,7 @@ import { T } from '@tldraw/validate'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
 import { StyleProp } from '../styles/StyleProp'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { DefaultColorStyle, TLDefaultColorStyle } from '../styles/TLColorStyle'
 import { DefaultDashStyle, TLDefaultDashStyle } from '../styles/TLDashStyle'
 import { DefaultSizeStyle, TLDefaultSizeStyle } from '../styles/TLSizeStyle'
@@ -96,6 +97,8 @@ export interface TLLineShapeProps {
 	dash: TLDefaultDashStyle
 	/** Size/thickness style of the line stroke */
 	size: TLDefaultSizeStyle
+	/** Looping presentation animation style */
+	animation: TLDefaultAnimationStyle
 	/** Interpolation style between points (straight lines or curved splines) */
 	spline: TLLineShapeSplineStyle
 	/** Dictionary of points that make up the line, keyed by point ID */
@@ -158,6 +161,7 @@ export const lineShapeProps: RecordProps<TLLineShape> = {
 	color: DefaultColorStyle,
 	dash: DefaultDashStyle,
 	size: DefaultSizeStyle,
+	animation: DefaultAnimationStyle,
 	spline: LineShapeSplineStyle,
 	points: T.dict(T.string, lineShapePointValidator),
 	scale: T.nonZeroNumber,
@@ -175,6 +179,7 @@ export const lineShapeVersions = createShapePropsMigrationIds('line', {
 	HandlesToPoints: 3,
 	PointIndexIds: 4,
 	AddScale: 5,
+	AddAnimation: 6,
 })
 
 /**
@@ -299,6 +304,15 @@ export const lineShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				delete props.scale
+			},
+		},
+		{
+			id: lineShapeVersions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

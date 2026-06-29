@@ -112,6 +112,12 @@ export const STYLES = {
 		{ value: 'dotted', icon: 'dash-dotted' },
 		{ value: 'solid', icon: 'dash-solid' },
 	],
+	animation: [
+		{ value: 'none', icon: 'animation-none' },
+		{ value: 'spin', icon: 'animation-spin' },
+		{ value: 'pulse', icon: 'animation-pulse' },
+		{ value: 'jiggle', icon: 'animation-jiggle' },
+	],
 	size: [
 		{ value: 's', icon: 'size-small' },
 		{ value: 'm', icon: 'size-medium' },

@@ -2,6 +2,7 @@ import { T } from '@tldraw/validate'
 import { TLRichText, richTextValidator, toRichText } from '../misc/TLRichText'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { DefaultColorStyle, TLDefaultColorStyle } from '../styles/TLColorStyle'
 import { DefaultFontStyle, TLDefaultFontStyle } from '../styles/TLFontStyle'
 import { DefaultSizeStyle, TLDefaultSizeStyle } from '../styles/TLSizeStyle'
@@ -29,6 +30,7 @@ import { TLBaseShape } from './TLBaseShape'
  */
 export interface TLTextShapeProps {
 	color: TLDefaultColorStyle
+	animation: TLDefaultAnimationStyle
 	size: TLDefaultSizeStyle
 	font: TLDefaultFontStyle
 	textAlign: TLDefaultTextAlignStyle
@@ -91,6 +93,7 @@ export type TLTextShape = TLBaseShape<'text', TLTextShapeProps>
  */
 export const textShapeProps: RecordProps<TLTextShape> = {
 	color: DefaultColorStyle,
+	animation: DefaultAnimationStyle,
 	size: DefaultSizeStyle,
 	font: DefaultFontStyle,
 	textAlign: DefaultTextAlignStyle,
@@ -105,6 +108,7 @@ const Versions = createShapePropsMigrationIds('text', {
 	AddTextAlign: 2,
 	AddRichText: 3,
 	AddRichTextAttrs: 4,
+	AddAnimation: 5,
 })
 
 /**
@@ -179,6 +183,15 @@ export const textShapeMigrations = createShapePropsMigrationSequence({
 				if (props.richText && 'attrs' in props.richText) {
 					delete props.richText.attrs
 				}
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

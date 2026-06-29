@@ -168,6 +168,7 @@ export class NoteShapeUtil extends ShapeUtil<TLNoteShape> {
 	getDefaultProps(): TLNoteShape['props'] {
 		return {
 			color: 'black',
+			animation: 'none',
 			richText: toRichText(''),
 			size: 'm',
 			font: 'draw',

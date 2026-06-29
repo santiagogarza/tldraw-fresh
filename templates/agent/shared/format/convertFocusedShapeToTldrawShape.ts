@@ -213,6 +213,7 @@ function convertTextShapeToTldrawShape(
 			scale,
 			richText,
 			color: asColor(focusedShape.color ?? defaultTextShape.props?.color ?? 'black'),
+			animation: defaultTextShape.props?.animation ?? 'none',
 			textAlign,
 			autoSize,
 			w:
@@ -333,6 +334,7 @@ function convertLineShapeToTldrawShape(
 					},
 				},
 				color: asColor(focusedShape.color ?? defaultLineShape.props?.color ?? 'black'),
+				animation: defaultLineShape.props?.animation ?? 'none',
 				dash: defaultLineShape.props?.dash ?? 'draw',
 				scale: defaultLineShape.props?.scale ?? 1,
 				spline: defaultLineShape.props?.spline ?? 'line',
@@ -385,6 +387,7 @@ function convertArrowShapeToTldrawShape(
 			arrowheadStart: defaultArrowShape.props?.arrowheadStart ?? 'none',
 			bend: (focusedShape.bend ?? (defaultArrowShape.props?.bend ?? 0) * -1) * -1,
 			color: asColor(focusedShape.color ?? defaultArrowShape.props?.color ?? 'black'),
+			animation: defaultArrowShape.props?.animation ?? 'none',
 			dash: defaultArrowShape.props?.dash ?? 'draw',
 			elbowMidPoint: defaultArrowShape.props?.elbowMidPoint ?? 0.5,
 			end: { x: x2 - minX, y: y2 - minY },
@@ -500,6 +503,7 @@ function convertGeoShapeToTldrawShape(
 			props: {
 				align: focusedShape.textAlign ?? defaultGeoShape.props?.align ?? 'middle',
 				color: asColor(focusedShape.color ?? defaultGeoShape.props?.color ?? 'black'),
+				animation: defaultGeoShape.props?.animation ?? 'none',
 				dash: defaultGeoShape.props?.dash ?? 'draw',
 				fill,
 				font: defaultGeoShape.props?.font ?? 'draw',
@@ -554,6 +558,7 @@ function convertNoteShapeToTldrawShape(
 			opacity: defaultNoteShape.opacity ?? 1,
 			props: {
 				color: asColor(focusedShape.color ?? defaultNoteShape.props?.color ?? 'black'),
+				animation: defaultNoteShape.props?.animation ?? 'none',
 				richText,
 				size: defaultNoteShape.props?.size ?? 's',
 				align: defaultNoteShape.props?.align ?? 'middle',

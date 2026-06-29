@@ -73,6 +73,7 @@ export class VideoShapeUtil extends BaseBoxShapeUtil<TLVideoShape> {
 			autoplay: this.options.autoplay,
 			url: '',
 			altText: '',
+			animation: 'none',
 			// Not used, but once upon a time were used to sync video state between users
 			time: 0,
 			playing: true,

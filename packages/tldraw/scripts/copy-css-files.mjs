@@ -9,6 +9,7 @@ const packageDir = join(__dirname, '..')
 
 let combinedContent = [
 	join(packageDir, '..', 'editor', 'editor.css'),
+	join(packageDir, 'src', 'lib', 'animations.css'),
 	join(packageDir, 'src', 'lib', 'ui.css'),
 ].reduce(
 	(acc, path) => {
@@ -18,7 +19,7 @@ let combinedContent = [
 	},
 	`/* THIS CSS FILE IS GENERATED! DO NOT EDIT. OR EDIT. I'M A COMMENT NOT A COP */ 
 /* This file is created by the copy-css-files.mjs script in packages/tldraw. */
-/* It combines @tldraw/editor's editor.css and tldraw's ui.css */
+/* It combines @tldraw/editor's editor.css, tldraw's animations.css, and tldraw's ui.css */
 
 `
 )

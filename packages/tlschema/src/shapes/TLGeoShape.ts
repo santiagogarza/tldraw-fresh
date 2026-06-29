@@ -3,6 +3,7 @@ import { TLRichText, richTextValidator, toRichText } from '../misc/TLRichText'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
 import { StyleProp } from '../styles/StyleProp'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import {
 	DefaultColorStyle,
 	DefaultLabelColorStyle,
@@ -80,6 +81,8 @@ export interface TLGeoShapeProps {
 	geo: TLGeoShapeGeoStyle
 	/** Dash pattern style for the shape outline */
 	dash: TLDefaultDashStyle
+	/** Looping presentation animation style */
+	animation: TLDefaultAnimationStyle
 	/** URL link associated with the shape */
 	url: string
 	/** Width of the shape in pixels */
@@ -165,6 +168,7 @@ export type TLGeoShape = TLBaseShape<'geo', TLGeoShapeProps>
 export const geoShapeProps: RecordProps<TLGeoShape> = {
 	geo: GeoShapeGeoStyle,
 	dash: DefaultDashStyle,
+	animation: DefaultAnimationStyle,
 	url: T.linkUrl,
 	w: T.nonZeroNumber,
 	h: T.nonZeroNumber,
@@ -194,6 +198,7 @@ const geoShapeVersions = createShapePropsMigrationIds('geo', {
 	AddScale: 9,
 	AddRichText: 10,
 	AddRichTextAttrs: 11,
+	AddAnimation: 12,
 })
 
 /**
@@ -316,6 +321,15 @@ export const geoShapeMigrations = createShapePropsMigrationSequence({
 				if (props.richText && 'attrs' in props.richText) {
 					delete props.richText.attrs
 				}
+			},
+		},
+		{
+			id: geoShapeVersions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

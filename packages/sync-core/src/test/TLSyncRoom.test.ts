@@ -1278,6 +1278,7 @@ describe('Migration and patch handling', () => {
 				kind: 'arc',
 				elbowMidPoint: 0.5,
 				dash: 'draw',
+				animation: 'none',
 				size: 'm',
 				fill: 'none',
 				color: 'black',
