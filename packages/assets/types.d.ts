@@ -30,6 +30,10 @@ export type AssetUrls = {
 		'align-right': string
 		'align-top': string
 		alt: string
+		'animation-jiggle': string
+		'animation-none': string
+		'animation-pulse': string
+		'animation-spin': string
 		'arrow-arc': string
 		'arrow-cycle': string
 		'arrow-elbow': string

@@ -4,6 +4,7 @@ import {
 	ArrowShapeKindStyle,
 	DefaultColorStyle,
 	DefaultDashStyle,
+	DefaultAnimationStyle,
 	DefaultFillStyle,
 	DefaultFontStyle,
 	DefaultHorizontalAlignStyle,
@@ -47,6 +48,9 @@ export function DefaultStylePanelContent() {
 				<StylePanelFillPicker />
 				<StylePanelDashPicker />
 				<StylePanelSizePicker />
+			</StylePanelSection>
+			<StylePanelSection>
+				<StylePanelAnimationPicker />
 			</StylePanelSection>
 			<StylePanelSection>
 				<StylePanelFontPicker />
@@ -193,6 +197,24 @@ export function StylePanelDashPicker() {
 			style={DefaultDashStyle}
 			items={STYLES.dash}
 			value={dash}
+		/>
+	)
+}
+
+/** @public @react */
+export function StylePanelAnimationPicker() {
+	const { styles } = useStylePanelContext()
+	const msg = useTranslation()
+	const animation = styles.get(DefaultAnimationStyle)
+	if (animation === undefined) return null
+
+	return (
+		<StylePanelButtonPicker
+			title={msg('style-panel.animation')}
+			uiType="animation"
+			style={DefaultAnimationStyle}
+			items={STYLES.animation}
+			value={animation}
 		/>
 	)
 }
