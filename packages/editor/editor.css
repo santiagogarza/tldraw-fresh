@@ -1221,20 +1221,17 @@ input,
 
 .tl-note__reactions {
 	position: absolute;
-	left: 0;
-	bottom: 0;
-	pointer-events: none;
+	left: 6px;
+	bottom: 6px;
 	transform-origin: bottom left;
 	z-index: 2;
 	font-family: var(--tl-font-sans);
 	color: var(--tl-color-text);
+	pointer-events: none;
 }
 
 .tl-note__reactions > * {
 	pointer-events: all;
-	position: absolute;
-	left: 6px;
-	bottom: 6px;
 }
 
 .tl-note__reactions-button,
