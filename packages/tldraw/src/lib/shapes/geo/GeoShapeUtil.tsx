@@ -61,6 +61,7 @@ import { useIsReadyForEditing } from '../shared/useEditablePlainText'
 import { useEfficientZoomThreshold } from '../shared/useEfficientZoomThreshold'
 import { GeoShapeBody } from './GeoShapeBody'
 import {
+	GEO_SHAPE_CORNER_RADIUS_PREVIEW_VERSION_KEY,
 	consumeGeoShapeCornerRadiusPreview,
 	defaultGeoTypeDefinitions,
 	type GeoTypeDefinition,
@@ -126,6 +127,26 @@ function getNearestCornerRadiusStyle(
 	}
 
 	return nearest
+}
+
+function bumpCornerRadiusPreviewVersion(editor: Editor) {
+	const meta = editor.getInstanceState().meta
+	const prevVersion = meta[GEO_SHAPE_CORNER_RADIUS_PREVIEW_VERSION_KEY]
+	editor.updateInstanceState({
+		meta: {
+			...meta,
+			[GEO_SHAPE_CORNER_RADIUS_PREVIEW_VERSION_KEY]:
+				typeof prevVersion === 'number' ? prevVersion + 1 : 1,
+		},
+	})
+}
+
+function clearCornerRadiusPreviewVersion(editor: Editor) {
+	const meta = editor.getInstanceState().meta
+	if (!(GEO_SHAPE_CORNER_RADIUS_PREVIEW_VERSION_KEY in meta)) return
+	const nextMeta = { ...meta }
+	delete nextMeta[GEO_SHAPE_CORNER_RADIUS_PREVIEW_VERSION_KEY]
+	editor.updateInstanceState({ meta: nextMeta })
 }
 
 /** @public */
@@ -402,12 +423,14 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 		const maxRadius =
 			Math.min(Math.max(1, shape.props.w), Math.max(1, shape.props.h + shape.props.growY)) / 2
 		setGeoShapeCornerRadiusPreview(shape, clamp(handle.x, 0, maxRadius))
+		bumpCornerRadiusPreviewVersion(this.editor)
 	}
 
 	override onHandleDragEnd(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
 		if (shape.props.geo !== 'rectangle' || handle.id !== GEO_CORNER_RADIUS_HANDLE_ID) return
 
 		const previewRadius = consumeGeoShapeCornerRadiusPreview(shape)
+		clearCornerRadiusPreviewVersion(this.editor)
 		if (previewRadius === undefined) return
 
 		const w = Math.max(1, shape.props.w)
@@ -425,6 +448,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 	override onHandleDragCancel(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
 		if (shape.props.geo !== 'rectangle' || handle.id !== GEO_CORNER_RADIUS_HANDLE_ID) return
 		consumeGeoShapeCornerRadiusPreview(shape)
+		clearCornerRadiusPreviewVersion(this.editor)
 	}
 
 	override getFontFaces(shape: TLGeoShape) {

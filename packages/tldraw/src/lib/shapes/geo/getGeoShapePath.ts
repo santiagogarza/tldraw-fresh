@@ -25,6 +25,7 @@ const CORNER_RADIUS_FRACTION = {
 	pill: 0.5,
 } as const satisfies Record<TLGeoShapeCornerRadiusStyle, number>
 
+export const GEO_SHAPE_CORNER_RADIUS_PREVIEW_VERSION_KEY = 'geoCornerRadiusPreviewVersion'
 const geoShapeCornerRadiusPreviewCache = new Map<TLGeoShape['id'], number>()
 const geoShapeCornerRadiusPreviewVersion = atom('geoShapeCornerRadiusPreviewVersion', 0)
 
