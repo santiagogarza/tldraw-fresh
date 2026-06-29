@@ -106,6 +106,7 @@ export class DrawShapeUtil extends ShapeUtil<TLDrawShape> {
 			scale: 1,
 			scaleX: 1,
 			scaleY: 1,
+			animation: 'none',
 		}
 	}
 

@@ -2647,6 +2647,31 @@ describe('TLUser initial migration', () => {
 	})
 })
 
+describe('Adding animation prop to default shapes', () => {
+	const animationMigrationIds = [
+		arrowShapeVersions.AddAnimation,
+		bookmarkShapeVersions.AddAnimation,
+		drawShapeVersions.AddAnimation,
+		embedShapeVersions.AddAnimation,
+		frameShapeVersions.AddAnimation,
+		geoShapeVersions.AddAnimation,
+		highlightShapeVersions.AddAnimation,
+		imageShapeVersions.AddAnimation,
+		lineShapeVersions.AddAnimation,
+		noteShapeVersions.AddAnimation,
+		textShapeVersions.AddAnimation,
+		videoShapeVersions.AddAnimation,
+	] as const
+
+	for (const id of animationMigrationIds) {
+		test(`${id} sets and removes 'none'`, () => {
+			const { up, down } = getTestMigration(id)
+			expect(up({ props: {} })).toEqual({ props: { animation: 'none' } })
+			expect(down({ props: { animation: 'spin' } })).toEqual({ props: {} })
+		})
+	}
+})
+
 /* ---  PUT YOUR MIGRATIONS TESTS ABOVE HERE --- */
 
 // check that all migrator fns were called at least once

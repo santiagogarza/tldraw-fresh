@@ -215,6 +215,7 @@ function convertTextShapeToTldrawShape(
 			color: asColor(focusedShape.color ?? defaultTextShape.props?.color ?? 'black'),
 			textAlign,
 			autoSize,
+			animation: defaultTextShape.props?.animation ?? 'none',
 			w:
 				focusedShape.maxWidth !== undefined && focusedShape.maxWidth !== null
 					? focusedShape.maxWidth
@@ -336,6 +337,7 @@ function convertLineShapeToTldrawShape(
 				dash: defaultLineShape.props?.dash ?? 'draw',
 				scale: defaultLineShape.props?.scale ?? 1,
 				spline: defaultLineShape.props?.spline ?? 'line',
+				animation: defaultLineShape.props?.animation ?? 'none',
 			},
 			meta: {
 				note: focusedShape.note ?? defaultLineShape.meta?.note ?? '',
@@ -397,6 +399,7 @@ function convertArrowShapeToTldrawShape(
 			scale: defaultArrowShape.props?.scale ?? 1,
 			size: defaultArrowShape.props?.size ?? 's',
 			start: { x: x1 - minX, y: y1 - minY },
+			animation: defaultArrowShape.props?.animation ?? 'none',
 		},
 		meta: {
 			note: focusedShape.note ?? defaultArrowShape.meta?.note ?? '',
@@ -513,6 +516,7 @@ function convertGeoShapeToTldrawShape(
 				url: defaultGeoShape.props?.url ?? '',
 				verticalAlign: defaultGeoShape.props?.verticalAlign ?? 'middle',
 				w: focusedShape.w ?? defaultGeoShape.props?.w ?? 100,
+				animation: defaultGeoShape.props?.animation ?? 'none',
 			},
 			meta: {
 				note: focusedShape.note ?? defaultGeoShape.meta?.note ?? '',
@@ -565,6 +569,7 @@ function convertNoteShapeToTldrawShape(
 				url: defaultNoteShape.props?.url ?? '',
 				verticalAlign: defaultNoteShape.props?.verticalAlign ?? 'middle',
 				textFirstEditedBy: defaultNoteShape.props?.textFirstEditedBy ?? null,
+				animation: defaultNoteShape.props?.animation ?? 'none',
 			},
 			meta: {
 				note: focusedShape.note ?? defaultNoteShape.meta?.note ?? '',

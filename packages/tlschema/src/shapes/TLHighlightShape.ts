@@ -2,6 +2,7 @@ import { T } from '@tldraw/validate'
 import { b64Vecs } from '../misc/b64Vecs'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { DefaultColorStyle, TLDefaultColorStyle } from '../styles/TLColorStyle'
 import { DefaultSizeStyle, TLDefaultSizeStyle } from '../styles/TLSizeStyle'
 import { TLBaseShape } from './TLBaseShape'
@@ -41,6 +42,8 @@ export interface TLHighlightShapeProps {
 	scaleX: number
 	/** Vertical scale factor for lazy resize */
 	scaleY: number
+	/** Looping CSS animation applied to the rendered shape */
+	animation: TLDefaultAnimationStyle
 }
 
 /**
@@ -99,12 +102,14 @@ export const highlightShapeProps: RecordProps<TLHighlightShape> = {
 	scale: T.nonZeroNumber,
 	scaleX: T.nonZeroFiniteNumber,
 	scaleY: T.nonZeroFiniteNumber,
+	animation: DefaultAnimationStyle,
 }
 
 const Versions = createShapePropsMigrationIds('highlight', {
 	AddScale: 1,
 	Base64: 2,
 	LegacyPointsConversion: 3,
+	AddAnimation: 4,
 })
 
 /**
@@ -180,6 +185,15 @@ export const highlightShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (_props) => {
 				// handled by the previous down migration
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

@@ -98,6 +98,7 @@ export class ImageShapeUtil extends BaseBoxShapeUtil<TLImageShape> {
 			flipX: false,
 			flipY: false,
 			altText: '',
+			animation: 'none',
 		}
 	}
 

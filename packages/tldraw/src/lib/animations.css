@@ -1,0 +1,81 @@
+/* Looping CSS animations applied via the `animation` style prop on tldraw shapes.
+   The wrapper is added to the rendered shape root by DefaultShapeWrapper when the
+   shape's animation prop is not 'none'. Animations are purely presentational and
+   do not affect bounds, hit-testing, or export. */
+
+.tl-shape__animation {
+	position: absolute;
+	inset: 0;
+	transform-origin: 50% 50%;
+	overflow: visible;
+	pointer-events: none;
+}
+
+@keyframes tl-anim-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	45% {
+		transform: rotate(380deg);
+	}
+	60% {
+		transform: rotate(350deg);
+	}
+	75% {
+		transform: rotate(365deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes tl-anim-pulse {
+	0% {
+		transform: scale(1);
+	}
+	25% {
+		transform: scale(1.12);
+	}
+	50% {
+		transform: scale(0.94);
+	}
+	75% {
+		transform: scale(1.06);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes tl-anim-jiggle {
+	0% {
+		transform: rotate(-4deg);
+	}
+	20% {
+		transform: rotate(4deg);
+	}
+	40% {
+		transform: rotate(-3deg);
+	}
+	60% {
+		transform: rotate(3deg);
+	}
+	80% {
+		transform: rotate(-1deg);
+	}
+	100% {
+		transform: rotate(0deg);
+	}
+}
+
+.tl-shape__animation[data-animation='spin'] {
+	animation: tl-anim-spin 2.4s cubic-bezier(0.5, 1.6, 0.4, 1) infinite;
+}
+
+.tl-shape__animation[data-animation='pulse'] {
+	animation: tl-anim-pulse 1.6s cubic-bezier(0.5, 1.6, 0.4, 1) infinite;
+}
+
+.tl-shape__animation[data-animation='jiggle'] {
+	animation: tl-anim-jiggle 1.2s cubic-bezier(0.5, 1.6, 0.4, 1) infinite;
+}

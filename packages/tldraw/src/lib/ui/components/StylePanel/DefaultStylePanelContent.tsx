@@ -2,6 +2,7 @@ import {
 	ArrowShapeArrowheadEndStyle,
 	ArrowShapeArrowheadStartStyle,
 	ArrowShapeKindStyle,
+	DefaultAnimationStyle,
 	DefaultColorStyle,
 	DefaultDashStyle,
 	DefaultFillStyle,
@@ -47,6 +48,9 @@ export function DefaultStylePanelContent() {
 				<StylePanelFillPicker />
 				<StylePanelDashPicker />
 				<StylePanelSizePicker />
+			</StylePanelSection>
+			<StylePanelSection>
+				<StylePanelAnimationPicker />
 			</StylePanelSection>
 			<StylePanelSection>
 				<StylePanelFontPicker />
@@ -393,6 +397,24 @@ export function StylePanelArrowheadPicker() {
 			valueB={arrowheadEnd}
 			labelA="style-panel.arrowhead-start"
 			labelB="style-panel.arrowhead-end"
+		/>
+	)
+}
+
+/** @public @react */
+export function StylePanelAnimationPicker() {
+	const { styles } = useStylePanelContext()
+	const msg = useTranslation()
+	const animation = styles.get(DefaultAnimationStyle)
+	if (animation === undefined) return null
+
+	return (
+		<StylePanelButtonPicker
+			title={msg('style-panel.animation')}
+			uiType="animation"
+			style={DefaultAnimationStyle}
+			items={STYLES.animation}
+			value={animation}
 		/>
 	)
 }

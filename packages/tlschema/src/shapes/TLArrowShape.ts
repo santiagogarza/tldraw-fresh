@@ -7,6 +7,7 @@ import { createBindingId } from '../records/TLBinding'
 import { TLShape, TLShapeId, createShapePropsMigrationIds } from '../records/TLShape'
 import { RecordProps, TLPropsMigration, createPropsMigration } from '../recordsWithProps'
 import { StyleProp } from '../styles/StyleProp'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import {
 	DefaultColorStyle,
 	DefaultLabelColorStyle,
@@ -179,6 +180,7 @@ export interface TLArrowShapeProps {
 	labelPosition: number
 	scale: number
 	elbowMidPoint: number
+	animation: TLDefaultAnimationStyle
 }
 
 /**
@@ -251,6 +253,7 @@ export const arrowShapeProps: RecordProps<TLArrowShape> = {
 	labelPosition: T.number,
 	scale: T.nonZeroNumber,
 	elbowMidPoint: T.number,
+	animation: DefaultAnimationStyle,
 }
 
 /**
@@ -278,6 +281,7 @@ export const arrowShapeVersions = createShapePropsMigrationIds('arrow', {
 	AddElbow: 6,
 	AddRichText: 7,
 	AddRichTextAttrs: 8,
+	AddAnimation: 9,
 })
 
 function propsMigration(migration: TLPropsMigration) {
@@ -466,6 +470,15 @@ export const arrowShapeMigrations = createMigrationSequence({
 				if (props.richText && 'attrs' in props.richText) {
 					delete props.richText.attrs
 				}
+			},
+		}),
+		propsMigration({
+			id: arrowShapeVersions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		}),
 	],
