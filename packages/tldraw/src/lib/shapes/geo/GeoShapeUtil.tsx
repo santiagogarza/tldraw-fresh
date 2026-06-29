@@ -8,15 +8,20 @@ import {
 	Group2d,
 	HTMLContainer,
 	HandleSnapGeometry,
+	IndexKey,
 	Rectangle2d,
 	SVGContainer,
 	SvgExportContext,
 	TLGeoShape,
+	TLGeoShapeCornerRadiusStyle,
 	TLGeoShapeProps,
+	TLHandle,
+	TLHandleDragInfo,
 	TLMeasureTextOpts,
 	TLResizeInfo,
 	TLShape,
 	TLShapeId,
+	TLShapePartial,
 	TLShapeUtilCanvasSvgDef,
 	TLShapeUtilConstructor,
 	Vec,
@@ -24,6 +29,7 @@ import {
 	WeakCache,
 	approximately,
 	areAnglesCompatible,
+	clamp,
 	geoShapeMigrations,
 	geoShapeProps,
 	getColorValue,
@@ -56,11 +62,55 @@ import { useIsReadyForEditing } from '../shared/useEditablePlainText'
 import { useEfficientZoomThreshold } from '../shared/useEfficientZoomThreshold'
 import { GeoShapeBody } from './GeoShapeBody'
 import {
+	CORNER_RADIUS_FRACTION,
+	clearCornerRadiusPreview,
 	defaultGeoTypeDefinitions,
 	type GeoTypeDefinition,
+	getCornerRadiusPreview,
 	getGeoShapePath,
 	getGeoTypeDefinition,
+	getRectangleCornerRadius,
+	setCornerRadiusPreview,
 } from './getGeoShapePath'
+
+const CORNER_RADIUS_HANDLE_ID = 'corner-radius'
+const CORNER_RADIUS_HANDLE_INDEX = 'a1' as IndexKey
+const CORNER_RADIUS_STEPS: readonly TLGeoShapeCornerRadiusStyle[] = [
+	'sharp',
+	'soft',
+	'round',
+	'pill',
+]
+
+function getCornerRadiusForDisplay(shape: TLGeoShape) {
+	const preview = getCornerRadiusPreview(shape.id)
+	if (preview !== undefined) {
+		const max = Math.min(shape.props.w, shape.props.h + shape.props.growY) / 2
+		return clamp(preview, 0, max)
+	}
+	const w = Math.max(1, shape.props.w)
+	const h = Math.max(1, shape.props.h + shape.props.growY)
+	return getRectangleCornerRadius(w, h, shape.props.cornerRadius)
+}
+
+function getNearestCornerRadiusStep(
+	radius: number,
+	w: number,
+	h: number
+): TLGeoShapeCornerRadiusStyle {
+	const min = Math.min(w, h)
+	let best: TLGeoShapeCornerRadiusStyle = 'sharp'
+	let bestDist = Infinity
+	for (const step of CORNER_RADIUS_STEPS) {
+		const stepRadius = CORNER_RADIUS_FRACTION[step] * min
+		const dist = Math.abs(stepRadius - radius)
+		if (dist < bestDist) {
+			bestDist = dist
+			best = step
+		}
+	}
+	return best
+}
 
 // imperfect but good enough, should be the width of the W in the font / size combo
 const GEO_SHAPE_MIN_WIDTHS = Object.freeze({
@@ -238,6 +288,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			growY: 0,
 			url: '',
 			scale: 1,
+			cornerRadius: 'sharp',
 
 			// Text properties
 			color: 'black',
@@ -325,6 +376,58 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 				}),
 			],
 		})
+	}
+
+	override getHandles(shape: TLGeoShape): TLHandle[] {
+		if (shape.props.geo !== 'rectangle') return []
+		const r = getCornerRadiusForDisplay(shape)
+		return [
+			{
+				id: CORNER_RADIUS_HANDLE_ID,
+				type: 'vertex',
+				index: CORNER_RADIUS_HANDLE_INDEX,
+				x: r,
+				y: 0,
+			},
+		]
+	}
+
+	override onHandleDrag(
+		shape: TLGeoShape,
+		{ handle }: TLHandleDragInfo<TLGeoShape>
+	): TLShapePartial<TLGeoShape> | void {
+		if (shape.props.geo !== 'rectangle' || handle.id !== CORNER_RADIUS_HANDLE_ID) return
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const maxR = Math.min(w, h) / 2
+		// Track the horizontal distance from the top-left corner; ignore the y axis
+		// so the handle scrubs along the top edge regardless of pointer drift.
+		const next = clamp(handle.x, 0, maxR)
+		setCornerRadiusPreview(shape.id, next)
+		return
+	}
+
+	override onHandleDragEnd(
+		shape: TLGeoShape,
+		{ handle }: TLHandleDragInfo<TLGeoShape>
+	): TLShapePartial<TLGeoShape> | void {
+		if (shape.props.geo !== 'rectangle' || handle.id !== CORNER_RADIUS_HANDLE_ID) return
+		const preview = getCornerRadiusPreview(shape.id)
+		clearCornerRadiusPreview(shape.id)
+		if (preview === undefined) return
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const nextStep = getNearestCornerRadiusStep(preview, w, h)
+		if (nextStep === shape.props.cornerRadius) return
+		return {
+			id: shape.id,
+			type: shape.type,
+			props: { cornerRadius: nextStep },
+		}
+	}
+
+	override onHandleDragCancel(shape: TLGeoShape): void {
+		clearCornerRadiusPreview(shape.id)
 	}
 
 	override getHandleSnapGeometry(shape: TLGeoShape): HandleSnapGeometry {

@@ -125,6 +125,42 @@ it.each([
 	}
 })
 
+it('Exports rounded rectangle corners as curve commands', async () => {
+	const sharpId = createShapeId('sharp')
+	const roundedId = createShapeId('rounded')
+	editor.createShapes([
+		{
+			id: sharpId,
+			type: 'geo',
+			x: 0,
+			y: 0,
+			props: { w: 100, h: 100, geo: 'rectangle', cornerRadius: 'sharp', dash: 'solid' },
+		},
+		{
+			id: roundedId,
+			type: 'geo',
+			x: 200,
+			y: 0,
+			props: { w: 100, h: 100, geo: 'rectangle', cornerRadius: 'round', dash: 'solid' },
+		},
+	])
+
+	const sharpSvg = (await editor.getSvgString([sharpId]))!
+	const roundedSvg = (await editor.getSvgString([roundedId]))!
+	const dFor = (svg: string) =>
+		Array.from(parseSvg({ svg }).querySelectorAll('path'))
+			.map((p) => p.getAttribute('d') ?? '')
+			.join(' ')
+
+	const sharpDs = dFor(sharpSvg.svg)
+	const roundedDs = dFor(roundedSvg.svg)
+
+	// Arcs are emitted as cubic bezier curves by PathBuilder, so the rounded
+	// variant should include `C` while a sharp rectangle should not.
+	expect(sharpDs).not.toMatch(/[Cc]\s*[-\d.]/)
+	expect(roundedDs).toMatch(/[Cc]\s*[-\d.]/)
+})
+
 it('Accepts a background option', async () => {
 	const svg1 = parseSvg(
 		await editor.getSvgString(editor.getSelectedShapeIds(), { background: true })

@@ -71,6 +71,25 @@ export const GeoShapeGeoStyle = StyleProp.defineEnum('tldraw:geo', {
 export type TLGeoShapeGeoStyle = T.TypeOf<typeof GeoShapeGeoStyle>
 
 /**
+ * Style property defining the rounded-corner step for rectangle geo shapes.
+ * Only affects geo shapes whose `geo` value is `'rectangle'`; other geo types
+ * ignore it.
+ *
+ * @public
+ */
+export const GeoShapeCornerRadiusStyle = StyleProp.defineEnum('tldraw:geoCornerRadius', {
+	defaultValue: 'sharp',
+	values: ['sharp', 'soft', 'round', 'pill'] as const,
+})
+
+/**
+ * Type representing valid rectangle corner radius steps for geo shapes.
+ *
+ * @public
+ */
+export type TLGeoShapeCornerRadiusStyle = T.TypeOf<typeof GeoShapeCornerRadiusStyle>
+
+/**
  * Properties for the geo shape, which renders various geometric forms with styling and text.
  *
  * @public
@@ -90,6 +109,8 @@ export interface TLGeoShapeProps {
 	growY: number
 	/** Scale factor applied to the shape */
 	scale: number
+	/** Corner radius step for rectangle geo shapes (ignored for other geo types) */
+	cornerRadius: TLGeoShapeCornerRadiusStyle
 
 	/** Color style for text label */
 	labelColor: TLDefaultColorStyle
@@ -170,6 +191,7 @@ export const geoShapeProps: RecordProps<TLGeoShape> = {
 	h: T.nonZeroNumber,
 	growY: T.positiveNumber,
 	scale: T.nonZeroNumber,
+	cornerRadius: GeoShapeCornerRadiusStyle,
 
 	// Text properties
 	labelColor: DefaultLabelColorStyle,
@@ -194,6 +216,7 @@ const geoShapeVersions = createShapePropsMigrationIds('geo', {
 	AddScale: 9,
 	AddRichText: 10,
 	AddRichTextAttrs: 11,
+	AddCornerRadius: 12,
 })
 
 /**
@@ -316,6 +339,15 @@ export const geoShapeMigrations = createShapePropsMigrationSequence({
 				if (props.richText && 'attrs' in props.richText) {
 					delete props.richText.attrs
 				}
+			},
+		},
+		{
+			id: geoShapeVersions.AddCornerRadius,
+			up: (props) => {
+				props.cornerRadius = 'sharp'
+			},
+			down: (props) => {
+				delete props.cornerRadius
 			},
 		},
 	],

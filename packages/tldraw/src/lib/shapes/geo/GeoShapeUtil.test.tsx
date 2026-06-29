@@ -3,6 +3,7 @@ import {
 	Group2d,
 	IndexKey,
 	TLGeoShape,
+	TLGeoShapeCornerRadiusStyle,
 	TLShapeId,
 	createShapeId,
 	toRichText,
@@ -11,6 +12,7 @@ import { vi } from 'vitest'
 import { TestEditor } from '../../../test/TestEditor'
 import { PathBuilder } from '../shared/PathBuilder'
 import { GeoShapeUtil } from './GeoShapeUtil'
+import { getGeoShapePath } from './getGeoShapePath'
 
 let editor: TestEditor
 let ids: Record<string, TLShapeId>
@@ -179,6 +181,53 @@ describe('Resizing geo shapes with labels', () => {
 		const geo = getGeo()
 		expect(geo.props.w).toBeLessThan(50)
 		expect(geo.props.h).toBeLessThan(50)
+	})
+})
+
+describe('Rectangle cornerRadius affects the rectangle path', () => {
+	const steps: TLGeoShapeCornerRadiusStyle[] = ['sharp', 'soft', 'round', 'pill']
+
+	test('each step produces a distinct path "d" string for a rectangle', () => {
+		const dStrings = new Set<string>()
+		for (const step of steps) {
+			const id = createShapeId(`rect-${step}`)
+			editor.createShapes([
+				{
+					id,
+					type: 'geo',
+					x: 0,
+					y: 0,
+					props: { geo: 'rectangle', w: 100, h: 100, cornerRadius: step },
+				},
+			])
+			const shape = editor.getShape<TLGeoShape>(id)!
+			dStrings.add(getGeoShapePath(shape, 2).toD())
+		}
+		expect(dStrings.size).toBe(steps.length)
+	})
+
+	test('non-rectangle geo types ignore the cornerRadius prop', () => {
+		const idA = createShapeId('ellipse-sharp')
+		const idB = createShapeId('ellipse-pill')
+		editor.createShapes([
+			{
+				id: idA,
+				type: 'geo',
+				x: 0,
+				y: 0,
+				props: { geo: 'ellipse', w: 100, h: 100, cornerRadius: 'sharp' },
+			},
+			{
+				id: idB,
+				type: 'geo',
+				x: 0,
+				y: 0,
+				props: { geo: 'ellipse', w: 100, h: 100, cornerRadius: 'pill' },
+			},
+		])
+		const a = getGeoShapePath(editor.getShape<TLGeoShape>(idA)!, 2).toD()
+		const b = getGeoShapePath(editor.getShape<TLGeoShape>(idB)!, 2).toD()
+		expect(a).toBe(b)
 	})
 })
 

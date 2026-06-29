@@ -1,4 +1,5 @@
 import {
+	atom,
 	centerOfCircleFromThreePoints,
 	clamp,
 	getPointOnCircle,
@@ -10,11 +11,94 @@ import {
 	TLDefaultDashStyle,
 	TLDefaultSizeStyle,
 	TLGeoShape,
+	TLGeoShapeCornerRadiusStyle,
+	TLShapeId,
 	Vec,
 	VecModel,
 	WeakCache,
 } from '@tldraw/editor'
 import { PathBuilder } from '../shared/PathBuilder'
+
+/**
+ * Mapping from the rectangle corner-radius enum to a fraction of `min(w, h)`.
+ * `sharp` is square, `pill` rounds to half the shortest side.
+ *
+ * @internal
+ */
+export const CORNER_RADIUS_FRACTION = {
+	sharp: 0,
+	soft: 0.08,
+	round: 0.2,
+	pill: 0.5,
+} as const satisfies Record<TLGeoShapeCornerRadiusStyle, number>
+
+/**
+ * The radius (in shape-local units) that the rectangle path generator uses
+ * for a given enum value and shape dimensions.
+ *
+ * @internal
+ */
+export function getRectangleCornerRadius(w: number, h: number, value: TLGeoShapeCornerRadiusStyle) {
+	return CORNER_RADIUS_FRACTION[value] * Math.min(w, h)
+}
+
+// Reactive ephemeral override used during a corner-radius handle drag so the
+// rectangle previews smoothly without touching the shape record (which would
+// otherwise spam the undo history). The path generator reads this atom, so
+// reading it inside getGeoShapePath() makes the editor's reactive geometry/
+// handle/indicator caches re-run when the preview changes.
+const cornerRadiusPreviews = atom<ReadonlyMap<TLShapeId, number>>(
+	'geoCornerRadiusPreviews',
+	new Map()
+)
+
+/** @internal */
+export function getCornerRadiusPreview(id: TLShapeId): number | undefined {
+	return cornerRadiusPreviews.get().get(id)
+}
+
+/** @internal */
+export function setCornerRadiusPreview(id: TLShapeId, radius: number) {
+	const next = new Map(cornerRadiusPreviews.get())
+	next.set(id, radius)
+	cornerRadiusPreviews.set(next)
+}
+
+/** @internal */
+export function clearCornerRadiusPreview(id: TLShapeId) {
+	const current = cornerRadiusPreviews.get()
+	if (!current.has(id)) return
+	const next = new Map(current)
+	next.delete(id)
+	cornerRadiusPreviews.set(next)
+}
+
+/**
+ * Build a rounded-rectangle PathBuilder for the given dimensions and radius.
+ * Falls back to a sharp rectangle when `r <= 0`.
+ */
+function getRectanglePath(w: number, h: number, r: number, isFilled: boolean) {
+	if (r <= 0) {
+		return new PathBuilder()
+			.moveTo(0, 0, { geometry: { isFilled } })
+			.lineTo(w, 0)
+			.lineTo(w, h)
+			.lineTo(0, h)
+			.close()
+	}
+	const cr = Math.min(r, Math.min(w, h) / 2)
+	return new PathBuilder()
+		.moveTo(cr, 0, { geometry: { isFilled } })
+		.lineTo(w - cr, 0)
+		.circularArcTo(cr, false, true, w, cr)
+		.lineTo(w, h - cr)
+		.circularArcTo(cr, false, true, w - cr, h)
+		.lineTo(cr, h)
+		.circularArcTo(cr, false, true, 0, h - cr)
+		.lineTo(0, cr)
+		.circularArcTo(cr, false, true, cr, 0)
+		.close()
+}
 
 /**
  * Defines the behavior for a geo shape type. Every built-in geo type is
@@ -66,12 +150,9 @@ export const defaultGeoTypeDefinitions = {
 		icon: 'geo-rectangle',
 		getPath(w, h, shape) {
 			const isFilled = shape.props.fill !== 'none'
-			return new PathBuilder()
-				.moveTo(0, 0, { geometry: { isFilled } })
-				.lineTo(w, 0)
-				.lineTo(w, h)
-				.lineTo(0, h)
-				.close()
+			const preview = getCornerRadiusPreview(shape.id)
+			const r = preview ?? getRectangleCornerRadius(w, h, shape.props.cornerRadius)
+			return getRectanglePath(w, h, r, isFilled)
 		},
 	},
 	ellipse: {
@@ -357,6 +438,15 @@ export function getGeoShapePath(
 	strokeWidth: number,
 	customGeoTypes?: Record<string, GeoTypeDefinition>
 ) {
+	// Read the preview atom even when no preview exists for this shape, so the
+	// reactive geometry/handle/indicator caches subscribe to it and re-run when
+	// a preview is set or cleared.
+	const previewRadius = getCornerRadiusPreview(shape.id)
+	if (previewRadius !== undefined) {
+		// Bypass the cache so the rectangle path tracks the live preview value;
+		// the shape record is intentionally untouched during the drag.
+		return _getGeoPath(shape, strokeWidth, customGeoTypes)
+	}
 	// Cache is keyed on shape only. For x-box, strokeWidth affects the diagonal
 	// inset, but theme changes are rare enough that stale cache entries are acceptable.
 	return pathCache.get(shape, (s) => _getGeoPath(s, strokeWidth, customGeoTypes))
