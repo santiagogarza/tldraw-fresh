@@ -20,6 +20,42 @@ import {
 import { TLBaseShape } from './TLBaseShape'
 
 /**
+ * The set of emoji available in the per-note reactions picker. Editors can react
+ * to a note with any of these emoji from the hover reaction control.
+ *
+ * @public
+ */
+export const NOTE_REACTION_EMOJIS = [
+	'\u{1F44D}', // thumbs up
+	'\u2764\uFE0F', // heart
+	'\u{1F525}', // fire
+	'\u{1F602}', // laughing
+	'\u{1F440}', // eyes
+] as const
+
+/**
+ * A single emoji reaction left on a note shape by a specific user. A note can carry
+ * multiple reactions, including the same emoji from different users. Reactions are
+ * keyed by the `(emoji, userId)` pair.
+ *
+ * @public
+ */
+export interface TLNoteReaction {
+	/** Emoji character (or grapheme cluster) used for this reaction. */
+	emoji: string
+	/** Stable id of the user who left the reaction. */
+	userId: string
+	/** Display name of the user at the time the reaction was added. */
+	userName: string
+}
+
+const noteReactionValidator: T.Validator<TLNoteReaction> = T.object({
+	emoji: T.string,
+	userId: T.string,
+	userName: T.string,
+})
+
+/**
  * Properties for a note shape. Note shapes represent sticky notes or text annotations
  * with rich formatting capabilities and various styling options.
  *
@@ -66,6 +102,8 @@ export interface TLNoteShapeProps {
 	scale: number
 	/** User ID of the person who first edited the note text */
 	textFirstEditedBy: string | null
+	/** Emoji reactions left on the note by users. Each reaction is keyed by `(emoji, userId)`. */
+	reactions: TLNoteReaction[]
 }
 
 /**
@@ -133,6 +171,7 @@ export const noteShapeProps: RecordProps<TLNoteShape> = {
 	richText: richTextValidator,
 	scale: T.nonZeroNumber,
 	textFirstEditedBy: T.string.nullable(),
+	reactions: T.arrayOf(noteReactionValidator),
 }
 
 const Versions = createShapePropsMigrationIds('note', {
@@ -148,6 +187,7 @@ const Versions = createShapePropsMigrationIds('note', {
 	AddRichTextAttrs: 10,
 	AddFirstEditedBy: 11,
 	MakeFontSizeAdjustmentRatio: 12,
+	AddReactions: 13,
 })
 
 /**
@@ -290,6 +330,15 @@ export const noteShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				props.fontSizeAdjustment = 0
+			},
+		},
+		{
+			id: Versions.AddReactions,
+			up: (props) => {
+				props.reactions = []
+			},
+			down: (props) => {
+				delete props.reactions
 			},
 		},
 	],

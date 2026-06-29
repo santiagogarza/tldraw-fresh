@@ -233,6 +233,7 @@ export function getNoteShapeForAdjacentPosition(
 				fontSizeAdjustment: 1,
 				url: '',
 				textFirstEditedBy: null,
+				reactions: [],
 			},
 		})
 
