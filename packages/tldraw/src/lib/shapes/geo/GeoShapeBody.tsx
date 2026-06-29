@@ -1,6 +1,10 @@
-import { TLGeoShape } from '@tldraw/editor'
+import { TLGeoShape, useValue } from '@tldraw/editor'
 import { PatternFill } from '../shared/PatternFill'
-import { GeoTypeDefinition, getGeoShapePath } from './getGeoShapePath'
+import {
+	GeoTypeDefinition,
+	getGeoShapeCornerRadiusPreviewVersion,
+	getGeoShapePath,
+} from './getGeoShapePath'
 
 export function GeoShapeBody({
 	shape,
@@ -24,6 +28,7 @@ export function GeoShapeBody({
 	const scaleToUse = shouldScale ? shape.props.scale : 1
 	const strokeWidth = unscaledStrokeWidth * scaleToUse
 	const { dash, fill } = shape.props
+	useValue('geo corner radius preview version', getGeoShapeCornerRadiusPreviewVersion, [])
 
 	const path = getGeoShapePath(shape, unscaledStrokeWidth, customGeoTypes)
 	const fillPath =
