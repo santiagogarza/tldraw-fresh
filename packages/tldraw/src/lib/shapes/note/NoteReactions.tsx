@@ -105,7 +105,10 @@ export function NoteReactions({ shape }: NoteReactionsProps) {
 			ref={containerRef}
 			className="tl-note__reactions"
 			style={{
-				transform: `scale(${inverseScale})`,
+				// Apply the 6px corner offset inside the transform so the offset stays
+				// at 6 screen pixels regardless of zoom (CSS `left`/`bottom` would
+				// otherwise be magnified by the camera transform).
+				transform: `scale(${inverseScale}) translate(6px, -6px)`,
 			}}
 			onPointerDown={markHandled}
 			onPointerMove={markHandled}
