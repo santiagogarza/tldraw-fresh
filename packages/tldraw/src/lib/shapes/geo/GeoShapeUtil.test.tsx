@@ -1,4 +1,5 @@
 import {
+	GeoShapeCornerRadiusStyle,
 	GeoShapeGeoStyle,
 	Group2d,
 	IndexKey,
@@ -211,6 +212,15 @@ describe('Rectangle corner radius', () => {
 		const ellipseA = getPathD({ geo: 'ellipse', w: 100, h: 100, cornerRadius: 'sharp' })
 		const ellipseB = getPathD({ geo: 'ellipse', w: 100, h: 100, cornerRadius: 'pill' })
 		expect(ellipseA).toBe(ellipseB)
+	})
+
+	test('exposes corner radius in shared styles for rectangles', () => {
+		const id = createShapeId('geo-style')
+		editor.createShapes([
+			{ id, type: 'geo', x: 0, y: 0, props: { geo: 'rectangle', w: 100, h: 100 } },
+		])
+		editor.select(id)
+		expect(editor.getSharedStyles().getAsKnownValue(GeoShapeCornerRadiusStyle)).toBe('sharp')
 	})
 })
 
