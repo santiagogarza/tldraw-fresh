@@ -18,6 +18,10 @@ export const DefaultShapeWrapper = forwardRef(function DefaultShapeWrapper(
 	ref: React.Ref<HTMLDivElement>
 ) {
 	const isFilledShape = 'fill' in shape.props && shape.props.fill !== 'none'
+	const animation =
+		!isBackground && 'animation' in shape.props && typeof shape.props.animation === 'string'
+			? (shape.props.animation as string)
+			: undefined
 
 	return (
 		<div
@@ -25,11 +29,16 @@ export const DefaultShapeWrapper = forwardRef(function DefaultShapeWrapper(
 			data-shape-type={shape.type}
 			data-shape-is-filled={isBackground ? undefined : isFilledShape}
 			data-shape-id={shape.id}
+			data-shape-animation={animation && animation !== 'none' ? animation : undefined}
 			draggable={false}
 			{...props}
 			className={classNames('tl-shape', isBackground && 'tl-shape-background', props.className)}
 		>
-			{children}
+			{animation && animation !== 'none' ? (
+				<div className="tl-shape__animation">{children}</div>
+			) : (
+				children
+			)}
 		</div>
 	)
 })

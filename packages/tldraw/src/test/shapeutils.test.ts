@@ -489,6 +489,7 @@ describe('When interacting with a shape...', () => {
 					a1: { id: 'a1', index: 'a1' as any, x: 0, y: 0 },
 					a2: { id: 'a2', index: 'a2' as any, x: 100, y: 100 },
 				},
+				animation: 'none',
 			},
 		}
 
@@ -572,6 +573,7 @@ describe('When interacting with a shape...', () => {
 					a1: { id: 'a1', index: 'a1' as any, x: 0, y: 0 },
 					a2: { id: 'a2', index: 'a2' as any, x: 100, y: 100 },
 				},
+				animation: 'none',
 			},
 		}
 

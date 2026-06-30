@@ -8,6 +8,7 @@ import {
 	DefaultLabelColorStyle,
 	TLDefaultColorStyle,
 } from '../styles/TLColorStyle'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { DefaultDashStyle, TLDefaultDashStyle } from '../styles/TLDashStyle'
 import { DefaultFillStyle, TLDefaultFillStyle } from '../styles/TLFillStyle'
 import { DefaultFontStyle, TLDefaultFontStyle } from '../styles/TLFontStyle'
@@ -107,6 +108,8 @@ export interface TLGeoShapeProps {
 	verticalAlign: TLDefaultVerticalAlignStyle
 	/** Rich text content displayed within the shape */
 	richText: TLRichText
+	/** Looping decorative animation applied to the rendered shape */
+	animation: TLDefaultAnimationStyle
 }
 
 /**
@@ -180,6 +183,7 @@ export const geoShapeProps: RecordProps<TLGeoShape> = {
 	align: DefaultHorizontalAlignStyle,
 	verticalAlign: DefaultVerticalAlignStyle,
 	richText: richTextValidator,
+	animation: DefaultAnimationStyle,
 }
 
 const geoShapeVersions = createShapePropsMigrationIds('geo', {
@@ -194,6 +198,7 @@ const geoShapeVersions = createShapePropsMigrationIds('geo', {
 	AddScale: 9,
 	AddRichText: 10,
 	AddRichTextAttrs: 11,
+	AddAnimation: 12,
 })
 
 /**
@@ -316,6 +321,15 @@ export const geoShapeMigrations = createShapePropsMigrationSequence({
 				if (props.richText && 'attrs' in props.richText) {
 					delete props.richText.attrs
 				}
+			},
+		},
+		{
+			id: geoShapeVersions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

@@ -1,4 +1,5 @@
 import {
+	DefaultAnimationStyle,
 	DefaultColorStyle,
 	DefaultDashStyle,
 	DefaultFillStyle,
@@ -15,6 +16,7 @@ const selectToolStyles: readonly StyleProp<any>[] = Object.freeze([
 	DefaultDashStyle,
 	DefaultFillStyle,
 	DefaultSizeStyle,
+	DefaultAnimationStyle,
 ])
 
 /** @public */

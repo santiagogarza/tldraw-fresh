@@ -257,6 +257,7 @@ export class ArrowShapeUtil extends ShapeUtil<TLArrowShape> {
 			labelPosition: 0.5,
 			font: 'draw',
 			scale: 1,
+			animation: 'none',
 		}
 	}
 

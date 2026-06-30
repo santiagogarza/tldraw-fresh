@@ -35,6 +35,7 @@ describe('Editor.styles', () => {
 	it('should return styles for a single shape', () => {
 		editor.select(defaultShapesIds.box1)
 		expect(asPlainObject(editor.getSharedStyles())).toStrictEqual({
+			'tldraw:animation': { type: 'shared', value: 'none' },
 			'tldraw:horizontalAlign': { type: 'shared', value: 'middle' },
 			'tldraw:labelColor': { type: 'shared', value: 'black' },
 			'tldraw:color': { type: 'shared', value: 'black' },
@@ -50,6 +51,7 @@ describe('Editor.styles', () => {
 	it('should return styles for two matching shapes', () => {
 		editor.select(defaultShapesIds.box1, defaultShapesIds.box2)
 		expect(asPlainObject(editor.getSharedStyles())).toStrictEqual({
+			'tldraw:animation': { type: 'shared', value: 'none' },
 			'tldraw:horizontalAlign': { type: 'shared', value: 'middle' },
 			'tldraw:labelColor': { type: 'shared', value: 'black' },
 			'tldraw:color': { type: 'shared', value: 'black' },
@@ -74,6 +76,7 @@ describe('Editor.styles', () => {
 		editor.select(defaultShapesIds.box1, defaultShapesIds.box2)
 
 		expect(asPlainObject(editor.getSharedStyles())).toStrictEqual({
+			'tldraw:animation': { type: 'shared', value: 'none' },
 			'tldraw:horizontalAlign': { type: 'shared', value: 'middle' },
 			'tldraw:labelColor': { type: 'shared', value: 'black' },
 			'tldraw:color': { type: 'mixed' },
@@ -114,6 +117,7 @@ describe('Editor.styles', () => {
 		editor.selectAll()
 
 		expect(asPlainObject(editor.getSharedStyles())).toStrictEqual({
+			'tldraw:animation': { type: 'shared', value: 'none' },
 			'tldraw:color': { type: 'mixed' },
 			'tldraw:dash': { type: 'mixed' },
 			'tldraw:fill': { type: 'mixed' },

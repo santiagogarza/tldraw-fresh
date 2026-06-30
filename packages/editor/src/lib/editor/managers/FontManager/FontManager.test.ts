@@ -65,6 +65,7 @@ describe('FontManager', () => {
 			richText: toRichText('❤️'),
 			scale: 2,
 			autoSize: true,
+			animation: 'none',
 		},
 		typeName: 'shape' as const,
 	})
