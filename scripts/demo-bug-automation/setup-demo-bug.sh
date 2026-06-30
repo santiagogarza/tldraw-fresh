@@ -32,6 +32,10 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 DEMO_BRANCH="santi-demo-bug-automation"
 DEMO_TAG="santi-demo-bug-v1"
 GITHUB_REPO="santiagogarza/tldraw-fresh"
+# Fallback path for Apple Silicon Homebrew (used only if the active `node` on
+# PATH isn't v20). Other install layouts (nvm/mise/fnm, Intel Homebrew at
+# /usr/local/opt/node@20, Linux distro packages) work as long as `node 20.x`
+# is on PATH first.
 NODE20_BIN="/opt/homebrew/opt/node@20/bin"
 
 LOG_DIR="$REPO_ROOT/.demo-bug-automation"
@@ -170,12 +174,31 @@ bash "$SCRIPT_DIR/plant-color-bug.sh"
 echo ""
 echo "setup-demo-bug: [3/8] checking toolchain..."
 
-if [ ! -x "${NODE20_BIN}/node" ]; then
-	echo "setup-demo-bug: node 20 not found at ${NODE20_BIN}/node." >&2
-	echo "  install it with: brew install node@20" >&2
-	exit 1
+# Prefer whatever `node` is already on PATH if it's v20 (works for nvm, mise,
+# fnm, Intel Homebrew, Linux distro packages, cloud-agent VMs, etc.). Fall
+# back to the Apple Silicon Homebrew layout only if PATH doesn't already
+# resolve to node 20.
+node_major() {
+	command -v node >/dev/null 2>&1 || return 1
+	node -p "process.versions.node.split('.')[0]" 2>/dev/null
+}
+CURRENT_NODE_MAJOR="$(node_major || true)"
+if [ "$CURRENT_NODE_MAJOR" != "20" ]; then
+	if [ -x "${NODE20_BIN}/node" ]; then
+		export PATH="${NODE20_BIN}:${PATH}"
+	else
+		if [ -n "$CURRENT_NODE_MAJOR" ]; then
+			echo "setup-demo-bug: node v$(node --version 2>/dev/null) is on PATH, but this repo requires node 20.x." >&2
+		else
+			echo "setup-demo-bug: node is not on PATH and no fallback found at ${NODE20_BIN}/node." >&2
+		fi
+		echo "  install node 20 and put it on PATH. options:" >&2
+		echo "    mise use node@20             # if you use mise" >&2
+		echo "    nvm install 20 && nvm use 20 # if you use nvm" >&2
+		echo "    brew install node@20         # macOS Homebrew" >&2
+		exit 1
+	fi
 fi
-export PATH="${NODE20_BIN}:${PATH}"
 echo "  node:  $(node --version)  ($(command -v node))"
 
 if ! command -v yarn >/dev/null 2>&1; then
