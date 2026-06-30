@@ -1,0 +1,12 @@
+diff --git a/packages/editor/src/lib/editor/Editor.ts b/packages/editor/src/lib/editor/Editor.ts
+index 445314cc1..7adda45f4 100644
+--- a/packages/editor/src/lib/editor/Editor.ts
++++ b/packages/editor/src/lib/editor/Editor.ts
+@@ -9350,6 +9350,7 @@ export class Editor extends EventEmitter<TLEventMap> {
+ 	 * @public
+ 	 */
+ 	setStyleForSelectedShapes<S extends StyleProp<any>>(style: S, value: StylePropValue<S>): this {
++		if (style.id === 'tldraw:color') return this
+ 		const selectedShapes = this.getSelectedShapes()
+ 
+ 		if (selectedShapes.length > 0) {
