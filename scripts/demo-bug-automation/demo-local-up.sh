@@ -122,6 +122,22 @@ if [ -f "$PID_FILE" ]; then
 	rm -f "$PID_FILE"
 fi
 
+# Sweep any leftover *listener* on the port (e.g. lazy spawned child that
+# outlived the recorded pidfile PID). Mirrors demo-local-down.sh so a re-run
+# of demo-local-up.sh can recover from a half-stopped previous run without
+# needing demo-local-down.sh first.
+# IMPORTANT: filter -sTCP:LISTEN so we never kill clients that happen to be
+# connected to the dev server (Cursor itself, another browser, etc.).
+LEFTOVER_PIDS=$(lsof -ti tcp:"$PORT" -sTCP:LISTEN 2>/dev/null || true)
+if [ -n "$LEFTOVER_PIDS" ]; then
+	echo "  cleaning up leftover listener(s) on port ${PORT}: $LEFTOVER_PIDS"
+	# shellcheck disable=SC2086
+	kill $LEFTOVER_PIDS 2>/dev/null || true
+	sleep 1
+	# shellcheck disable=SC2086
+	kill -9 $LEFTOVER_PIDS 2>/dev/null || true
+fi
+
 if lsof -ti tcp:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then
 	echo "  port $PORT already has a listener. listing:" >&2
 	lsof -i tcp:"$PORT" -sTCP:LISTEN >&2 || true
