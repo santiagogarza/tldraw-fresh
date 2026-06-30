@@ -99,8 +99,9 @@ AHEAD=$(git rev-list --count "origin/main..${TAG_SHA}" 2>/dev/null || echo "?")
 BEHIND=$(git rev-list --count "${TAG_SHA}..origin/main" 2>/dev/null || echo "?")
 echo "setup-demo-bug: ${DEMO_BRANCH} is ${AHEAD} commit(s) ahead of origin/main, ${BEHIND} behind."
 if [ "$AHEAD" != "1" ] || [ "$BEHIND" != "0" ]; then
-	echo "  expected exactly 1 commit ahead and 0 behind (just the planted bug)."
-	echo "  if you've moved main, refresh the patch and bump ${DEMO_TAG}, then rerun with --reset."
+	echo "  expected exactly 1 commit ahead and 0 behind (just the planted bug)." >&2
+	echo "  if you've moved main, refresh the patch and bump ${DEMO_TAG}, then rerun with --reset." >&2
+	exit 1
 fi
 
 echo ""
