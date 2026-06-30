@@ -1,10 +1,4 @@
-import {
-	Editor,
-	NOTE_REACTION_EMOJIS,
-	TLNoteShape,
-	useEditor,
-	useValue,
-} from '@tldraw/editor'
+import { Editor, NOTE_REACTION_EMOJIS, TLNoteShape, useEditor, useValue } from '@tldraw/editor'
 import { PointerEventHandler, useCallback, useEffect, useRef, useState } from 'react'
 
 function toggleReaction(
@@ -52,8 +46,26 @@ const stopPointerPropagation: PointerEventHandler = (e) => {
 export function NoteReactions({ shape }: { shape: TLNoteShape }) {
 	const editor = useEditor()
 	const containerRef = useRef<HTMLDivElement>(null)
+	const closeExpandedTimeoutRef = useRef<number | null>(null)
 	const [pickerOpen, setPickerOpen] = useState(false)
 	const [expanded, setExpanded] = useState(false)
+
+	const cancelExpandedClose = useCallback(() => {
+		if (closeExpandedTimeoutRef.current !== null) {
+			clearTimeout(closeExpandedTimeoutRef.current)
+			closeExpandedTimeoutRef.current = null
+		}
+	}, [])
+
+	const scheduleExpandedClose = useCallback(() => {
+		cancelExpandedClose()
+		closeExpandedTimeoutRef.current = editor.timers.setTimeout(() => {
+			setExpanded(false)
+			closeExpandedTimeoutRef.current = null
+		}, 100)
+	}, [editor, cancelExpandedClose])
+
+	useEffect(() => cancelExpandedClose, [cancelExpandedClose])
 
 	const isHovered = useValue(
 		'note reactions hovered',
@@ -62,7 +74,7 @@ export function NoteReactions({ shape }: { shape: TLNoteShape }) {
 	)
 
 	const zoom = useValue('zoom', () => editor.getEfficientZoomLevel(), [editor])
-	const inverseScale = 1 / (zoom * shape.props.scale)
+	const inverseScale = 1 / zoom
 
 	const userId = useValue('userId', () => editor.user.getId(), [editor])
 	const userName = useValue('userName', () => editor.user.getName() || 'Guest', [editor])
@@ -162,8 +174,15 @@ export function NoteReactions({ shape }: { shape: TLNoteShape }) {
 						style={{ pointerEvents: 'all' }}
 						onPointerDown={markAsHandled}
 						onPointerUp={markAsHandled}
-						onClick={() => setExpanded((open) => !open)}
-						onMouseEnter={() => setExpanded(true)}
+						onClick={() => {
+							cancelExpandedClose()
+							setExpanded((open) => !open)
+						}}
+						onMouseEnter={() => {
+							cancelExpandedClose()
+							setExpanded(true)
+						}}
+						onMouseLeave={scheduleExpandedClose}
 						aria-label="View reactions"
 					>
 						{uniqueEmojis.slice(0, 3).map((emoji, i) => (
@@ -185,7 +204,8 @@ export function NoteReactions({ shape }: { shape: TLNoteShape }) {
 							style={{ pointerEvents: 'all' }}
 							onPointerDown={stopPointerPropagation}
 							onPointerUp={stopPointerPropagation}
-							onMouseLeave={() => setExpanded(false)}
+							onMouseEnter={cancelExpandedClose}
+							onMouseLeave={scheduleExpandedClose}
 						>
 							<div className="tl-note__reactions-list">
 								{reactionGroups.map(({ emoji, names }) => (
