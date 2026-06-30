@@ -1,30 +1,35 @@
 #!/usr/bin/env bash
-# Stop the Vite dev server started by demo-local-up.sh and optionally
-# discard the planted-bug patch from the working tree.
+# Stop the local demo started by setup-demo-bug.sh: kill the background Vite
+# server, drop the listener on the demo port, and optionally restore the
+# planted-bug file.
 #
 # Usage:
 #   scripts/demo-bug-automation/demo-local-down.sh
-#   scripts/demo-bug-automation/demo-local-down.sh --reset   # also drop planted-bug uncommitted changes
+#   scripts/demo-bug-automation/demo-local-down.sh --reset       # also drop the planted-bug patch
+#   scripts/demo-bug-automation/demo-local-down.sh --port 5422   # non-default port
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-PORT=5420
 LOG_DIR="$REPO_ROOT/.demo-bug-automation"
 PID_FILE="$LOG_DIR/vite.pid"
 
 RESET=0
-for arg in "$@"; do
-	case "$arg" in
-		--reset) RESET=1 ;;
+PORT=5420
+
+while [ $# -gt 0 ]; do
+	case "$1" in
+		--reset) RESET=1; shift ;;
+		--port) PORT="${2:?--port needs a value}"; shift 2 ;;
+		--port=*) PORT="${1#*=}"; shift ;;
 		-h|--help)
 			sed -n '2,9p' "$0" | sed 's/^# \{0,1\}//'
 			exit 0
 			;;
 		*)
-			echo "demo-local-down: unknown argument: $arg" >&2
+			echo "demo-local-down: unknown argument: $1" >&2
 			exit 2
 			;;
 	esac
@@ -48,9 +53,8 @@ if [ -f "$PID_FILE" ]; then
 	rm -f "$PID_FILE"
 fi
 
-# Sweep any leftover *listener* on the port (e.g. lazy spawned child).
-# IMPORTANT: filter -sTCP:LISTEN so we never kill clients that happen to be
-# connected to the dev server (Cursor itself, another browser, etc.).
+# Sweep any leftover *listener* on the port. Filter -sTCP:LISTEN so we never
+# kill clients that happen to be connected to the dev server.
 LEFTOVER_PIDS=$(lsof -ti tcp:"$PORT" -sTCP:LISTEN 2>/dev/null || true)
 if [ -n "$LEFTOVER_PIDS" ]; then
 	echo "demo-local-down: cleaning up leftover listener(s) on port ${PORT}: $LEFTOVER_PIDS"
@@ -63,7 +67,7 @@ if [ -n "$LEFTOVER_PIDS" ]; then
 fi
 
 if [ "$STOPPED" -eq 0 ]; then
-	echo "demo-local-down: no running dev server found."
+	echo "demo-local-down: no running dev server found on port ${PORT}."
 fi
 
 if [ "$RESET" -eq 1 ]; then

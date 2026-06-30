@@ -18,6 +18,34 @@ style panel does nothing for selected shapes. Other styles (size,
 fill, dash, font, opacity) keep working, and new shapes still pick up
 the chosen color through `setStyleForNextShapes`.
 
+## One-command pre-flight
+
+```bash
+bash scripts/demo-bug-automation/setup-demo-bug.sh
+```
+
+That single command verifies the remote demo state, plants the bug
+in your working tree, pins node 20, runs `yarn install` if needed,
+runs the lazy `predev` + `refresh-assets` prep, kills any stale
+listener on `:5420`, starts Vite (`apps/examples`) in the background,
+waits for the server to actually respond, and opens
+`http://localhost:5420` in your browser.
+
+Flags:
+
+- `--check-only` — remote sanity check only, no local boot.
+- `--reset` — also force-reset `origin/santi-demo-bug-automation`
+  back to the `santi-demo-bug-v1` tag if it has drifted.
+- `--port NNNN` — pick a different local port (default `5420`).
+- `--no-open` — don't open the browser tab.
+
+After the demo, tear down with:
+
+```bash
+bash scripts/demo-bug-automation/demo-local-down.sh           # stop vite
+bash scripts/demo-bug-automation/demo-local-down.sh --reset   # stop vite + drop the planted patch
+```
+
 ## Files
 
 - `color-change-broken.patch` — single-hunk diff against `main` that
@@ -28,18 +56,9 @@ the chosen color through `setStyleForNextShapes`.
 - `reset-demo-bug.sh` — restores `Editor.ts` from `HEAD` and reapplies
   the patch. Use this on a long-lived workspace to start a fresh demo
   run.
-- `setup-demo-bug.sh` — remote-only sanity check. Confirms
-  `origin/santi-demo-bug-automation` is pinned to the
-  `santi-demo-bug-v1` tag and lists recent stacked demo PRs. Pass
-  `--reset` to force the demo branch back to the tag if it drifts.
-- `demo-local-up.sh` — pre-demo on your laptop. Runs the remote
-  check, plants the bug locally as uncommitted changes, runs
-  `yarn install`, starts Vite (`yarn dev`) in the background on
-  `localhost:5420`, and opens the browser once it's ready.
-  Flags: `--no-install`, `--no-open`, `--skip-remote`.
-- `demo-local-down.sh` — stops the dev server started by
-  `demo-local-up.sh`. Pass `--reset` to also `git restore` the
-  planted-bug file.
+- `setup-demo-bug.sh` — the one-command pre-flight described above.
+- `demo-local-down.sh` — stop the background Vite server started by
+  `setup-demo-bug.sh`. `--reset` also restores `Editor.ts` from HEAD.
 
 ## Mirror branch on origin
 
