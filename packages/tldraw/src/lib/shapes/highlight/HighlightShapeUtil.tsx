@@ -98,6 +98,7 @@ export class HighlightShapeUtil extends ShapeUtil<TLHighlightShape> {
 			scale: 1,
 			scaleX: 1,
 			scaleY: 1,
+			animation: 'none',
 		}
 	}
 
