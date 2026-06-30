@@ -28,6 +28,18 @@ the chosen color through `setStyleForNextShapes`.
 - `reset-demo-bug.sh` — restores `Editor.ts` from `HEAD` and reapplies
   the patch. Use this on a long-lived workspace to start a fresh demo
   run.
+- `setup-demo-bug.sh` — remote-only sanity check. Confirms
+  `origin/santi-demo-bug-automation` is pinned to the
+  `santi-demo-bug-v1` tag and lists recent stacked demo PRs. Pass
+  `--reset` to force the demo branch back to the tag if it drifts.
+- `demo-local-up.sh` — pre-demo on your laptop. Runs the remote
+  check, plants the bug locally as uncommitted changes, runs
+  `yarn install`, starts Vite (`yarn dev`) in the background on
+  `localhost:5420`, and opens the browser once it's ready.
+  Flags: `--no-install`, `--no-open`, `--skip-remote`.
+- `demo-local-down.sh` — stops the dev server started by
+  `demo-local-up.sh`. Pass `--reset` to also `git restore` the
+  planted-bug file.
 
 ## Mirror branch on origin
 

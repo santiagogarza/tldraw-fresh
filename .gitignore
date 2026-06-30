@@ -133,3 +133,6 @@ skills/pr-walkthrough/video/dist
 skills/pr-walkthrough/video/public/audio-*
 skills/pr-walkthrough/video/public/manifest.json
 todo.md
+
+# local Vite logs/pids for the bug-automation demo
+.demo-bug-automation/
