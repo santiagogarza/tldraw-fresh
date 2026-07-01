@@ -1,0 +1,161 @@
+/* Canvas theme picker trigger — 40px hit target to match menu row icon buttons */
+.canvas-theme-picker__trigger {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	min-width: 40px;
+	padding: 0;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	flex-shrink: 0;
+	pointer-events: all;
+	appearance: none;
+	-webkit-appearance: none;
+	color: inherit;
+	font: inherit;
+}
+
+.canvas-theme-picker__dot {
+	display: block;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	border: 1px solid var(--tl-color-muted-1);
+	box-sizing: border-box;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	flex-shrink: 0;
+}
+
+.canvas-theme-picker__dot[data-mode='light'] {
+	border-color: rgba(0, 0, 0, 0.14);
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.canvas-theme-picker__trigger:focus-visible {
+	outline: none;
+}
+
+.canvas-theme-picker__trigger:focus-visible .canvas-theme-picker__dot {
+	outline: 2px solid var(--tl-color-focus);
+	outline-offset: 2px;
+}
+
+@media (hover: hover) {
+	.canvas-theme-picker__trigger:hover .canvas-theme-picker__dot {
+		box-shadow:
+			inset 0 0 0 1px rgba(0, 0, 0, 0.04),
+			0 0 0 4px var(--tl-color-muted-2);
+	}
+
+	.canvas-theme-picker__trigger:hover .canvas-theme-picker__dot[data-mode='light'] {
+		box-shadow:
+			inset 0 0 0 1px rgba(0, 0, 0, 0.04),
+			0 0 0 4px var(--tl-color-muted-2);
+	}
+}
+
+/* Dropdown */
+.canvas-theme-picker__menu {
+	width: 176px;
+	padding: 4px;
+}
+
+.tlui-button__menu.canvas-theme-picker__item {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 8px;
+	width: 100%;
+	height: auto;
+	min-height: 32px;
+	margin-top: 0;
+	padding: 6px 8px;
+	border-radius: 6px;
+	font-size: 12px;
+	text-align: left;
+}
+
+.tlui-button__menu.canvas-theme-picker__item[data-isactive='true'] {
+	background: #ebebeb;
+	font-weight: 500;
+}
+
+.canvas-theme-picker__swatch {
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	flex-shrink: 0;
+	border: 1px solid var(--tl-color-muted-1);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+
+.canvas-theme-picker__swatch[data-mode='light'] {
+	border-color: #e0e0e0;
+}
+
+/* Theme variable overrides */
+.tl-container[data-canvas-theme='light'] {
+	--tl-color-selection-fill: hsl(210, 100%, 56%, 24%);
+	--tl-color-selection-stroke: hsl(214, 84%, 56%);
+	--tl-color-background: #f9fafb;
+	--tl-color-low: hsl(204, 16%, 94%);
+	--tl-color-panel: hsl(0, 0%, 99%);
+	--tl-color-selected: hsl(214, 84%, 56%);
+	--tl-color-primary: hsl(214, 84%, 56%);
+}
+
+.tl-container[data-canvas-theme='dark'] {
+	--tl-color-selection-fill: hsl(209, 100%, 57%, 20%);
+	--tl-color-selection-stroke: hsl(214, 84%, 56%);
+	--tl-color-background: #101011;
+	--tl-color-low: hsl(260, 4.5%, 10.5%);
+	--tl-color-panel: hsl(235, 6.8%, 13.5%);
+	--tl-color-selected: hsl(217, 89%, 61%);
+	--tl-color-primary: hsl(214, 84%, 56%);
+	--tl-color-text: hsl(210, 17%, 98%);
+	--tl-color-text-0: hsl(0, 9%, 94%);
+	--tl-color-text-1: hsl(0, 0%, 85%);
+}
+
+.tl-container[data-canvas-theme='sky'] {
+	--tl-color-selection-fill: hsl(200, 70%, 45%, 24%);
+	--tl-color-selection-stroke: hsl(200, 60%, 40%);
+	--tl-color-background: #85c2e0;
+	--tl-color-low: hsl(200, 40%, 88%);
+	--tl-color-panel: hsl(200, 30%, 96%);
+	--tl-color-selected: hsl(200, 60%, 38%);
+	--tl-color-primary: hsl(200, 60%, 35%);
+}
+
+.tl-container[data-canvas-theme='sunrise'] {
+	--tl-color-selection-fill: hsl(340, 60%, 70%, 30%);
+	--tl-color-selection-stroke: hsl(320, 50%, 55%);
+	--tl-color-background: #ffcdd2;
+	--tl-color-low: hsl(340, 40%, 92%);
+	--tl-color-panel: hsl(340, 30%, 97%);
+	--tl-color-selected: hsl(320, 45%, 55%);
+	--tl-color-primary: hsl(320, 45%, 50%);
+}
+
+.tl-container[data-canvas-theme='sunset'] {
+	--tl-color-selection-fill: hsl(20, 90%, 55%, 28%);
+	--tl-color-selection-stroke: hsl(15, 85%, 50%);
+	--tl-color-background: #ff7043;
+	--tl-color-low: hsl(25, 50%, 90%);
+	--tl-color-panel: hsl(25, 40%, 96%);
+	--tl-color-selected: hsl(15, 80%, 48%);
+	--tl-color-primary: hsl(15, 80%, 45%);
+}
+
+.tl-container[data-canvas-theme='sunrise'] .tl-background,
+.tl-container[data-canvas-theme='sunset'] .tl-background {
+	background-color: transparent;
+}
