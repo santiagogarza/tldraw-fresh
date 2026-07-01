@@ -956,6 +956,77 @@ input,
 	contain: size layout;
 }
 
+/* ---------------- Shape animations ---------------- */
+
+.tl-shape[data-shape-animation] {
+	transform-origin: 50% 50%;
+	will-change: transform;
+	animation-iteration-count: infinite;
+}
+
+.tl-shape[data-shape-animation='spin'] {
+	animation-name: tl-shape-spin;
+	animation-duration: 3s;
+	animation-timing-function: linear;
+}
+
+.tl-shape[data-shape-animation='jiggle'] {
+	animation-name: tl-shape-jiggle;
+	animation-duration: 0.6s;
+	animation-timing-function: ease-in-out;
+}
+
+.tl-shape[data-shape-animation='shake'] {
+	animation-name: tl-shape-shake;
+	animation-duration: 0.5s;
+	animation-timing-function: ease-in-out;
+}
+
+@keyframes tl-shape-spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes tl-shape-jiggle {
+	0% {
+		transform: rotate(-6deg);
+	}
+	50% {
+		transform: rotate(6deg);
+	}
+	100% {
+		transform: rotate(-6deg);
+	}
+}
+
+@keyframes tl-shape-shake {
+	0% {
+		transform: translateX(-4%);
+	}
+	25% {
+		transform: translateX(4%);
+	}
+	50% {
+		transform: translateX(-4%);
+	}
+	75% {
+		transform: translateX(4%);
+	}
+	100% {
+		transform: translateX(-4%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.tl-shape[data-shape-animation] {
+		animation: none;
+	}
+}
+
 /* ---------------- Shape Containers ---------------- */
 
 .tl-svg-container {

@@ -2647,6 +2647,25 @@ describe('TLUser initial migration', () => {
 	})
 })
 
+describe('Add animation style to shapes', () => {
+	const migrations = [
+		['geo shape', getTestMigration(geoShapeVersions.AddAnimation)],
+		['draw shape', getTestMigration(drawShapeVersions.AddAnimation)],
+		['text shape', getTestMigration(textShapeVersions.AddAnimation)],
+		['note shape', getTestMigration(noteShapeVersions.AddAnimation)],
+		['line shape', getTestMigration(lineShapeVersions.AddAnimation)],
+		['highlight shape', getTestMigration(highlightShapeVersions.AddAnimation)],
+		['arrow shape', getTestMigration(arrowShapeVersions.AddAnimation)],
+	] as const
+
+	for (const [shapeName, { up, down }] of migrations) {
+		it(`works for ${shapeName}`, () => {
+			expect(up({ props: {} })).toEqual({ props: { animation: 'none' } })
+			expect(down({ props: { animation: 'spin' } })).toEqual({ props: {} })
+		})
+	}
+})
+
 /* ---  PUT YOUR MIGRATIONS TESTS ABOVE HERE --- */
 
 // check that all migrator fns were called at least once

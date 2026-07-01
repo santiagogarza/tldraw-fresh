@@ -60,6 +60,7 @@ exports[`buildFromV1Document test fixtures > arrow-binding.tldr 1`] = `
     "opacity": 1,
     "parentId": "page:page",
     "props": {
+      "animation": "none",
       "arrowheadEnd": "arrow",
       "arrowheadStart": "none",
       "bend": -74.62876127600846,
@@ -105,6 +106,7 @@ exports[`buildFromV1Document test fixtures > arrow-binding.tldr 1`] = `
     "parentId": "page:page",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "red",
       "dash": "draw",
       "fill": "solid",
@@ -142,6 +144,7 @@ exports[`buildFromV1Document test fixtures > arrow-binding.tldr 1`] = `
     "parentId": "page:page",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "red",
       "dash": "draw",
       "fill": "solid",
@@ -241,6 +244,7 @@ exports[`buildFromV1Document test fixtures > exact-arrow-binding.tldr 1`] = `
     "opacity": 1,
     "parentId": "page:page",
     "props": {
+      "animation": "none",
       "arrowheadEnd": "arrow",
       "arrowheadStart": "arrow",
       "bend": -117.13359957478735,
@@ -286,6 +290,7 @@ exports[`buildFromV1Document test fixtures > exact-arrow-binding.tldr 1`] = `
     "parentId": "page:page",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "red",
       "dash": "draw",
       "fill": "solid",
@@ -323,6 +328,7 @@ exports[`buildFromV1Document test fixtures > exact-arrow-binding.tldr 1`] = `
     "parentId": "page:page",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "red",
       "dash": "draw",
       "fill": "solid",
@@ -404,6 +410,7 @@ exports[`buildFromV1Document test fixtures > incorrect-arrow-binding.tldr 1`] = 
     "opacity": 1,
     "parentId": "page:page",
     "props": {
+      "animation": "none",
       "arrowheadEnd": "arrow",
       "arrowheadStart": "none",
       "bend": -0.00010621283112062974,
@@ -449,6 +456,7 @@ exports[`buildFromV1Document test fixtures > incorrect-arrow-binding.tldr 1`] = 
     "parentId": "page:page",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "red",
       "dash": "draw",
       "fill": "solid",
@@ -486,6 +494,7 @@ exports[`buildFromV1Document test fixtures > incorrect-arrow-binding.tldr 1`] = 
     "parentId": "page:page",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "red",
       "dash": "draw",
       "fill": "solid",
