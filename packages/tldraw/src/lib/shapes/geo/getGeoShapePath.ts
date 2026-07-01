@@ -66,11 +66,28 @@ export const defaultGeoTypeDefinitions = {
 		icon: 'geo-rectangle',
 		getPath(w, h, shape) {
 			const isFilled = shape.props.fill !== 'none'
+			const r = getRectangleCornerRadius(w, h, shape.props.cornerRadius)
+			if (r <= 0) {
+				return new PathBuilder()
+					.moveTo(0, 0, { geometry: { isFilled } })
+					.lineTo(w, 0)
+					.lineTo(w, h)
+					.lineTo(0, h)
+					.close()
+			}
+			// Rounded rectangle: start on the top edge past the corner, then
+			// alternate line / arc for each side. `circularArcTo` uses the SVG
+			// arc parameters (radius, largeArcFlag, sweepFlag, x, y).
 			return new PathBuilder()
-				.moveTo(0, 0, { geometry: { isFilled } })
-				.lineTo(w, 0)
-				.lineTo(w, h)
-				.lineTo(0, h)
+				.moveTo(r, 0, { geometry: { isFilled } })
+				.lineTo(w - r, 0)
+				.circularArcTo(r, false, true, w, r)
+				.lineTo(w, h - r)
+				.circularArcTo(r, false, true, w - r, h)
+				.lineTo(r, h)
+				.circularArcTo(r, false, true, 0, h - r)
+				.lineTo(0, r)
+				.circularArcTo(r, false, true, r, 0)
 				.close()
 		},
 	},
@@ -376,6 +393,20 @@ function _getGeoPath(
 		throw new Error(`Unknown geo type: ${shape.props.geo}`)
 	}
 	return def.getPath(w, h, shape, sw)
+}
+
+/**
+ * Convert a normalized corner-radius value (0..1) into an absolute pixel
+ * radius for a rectangle of the given dimensions. The value is clamped to
+ * half of the shortest side so the corners never overlap; a value of 1
+ * produces a pill shape.
+ *
+ * @internal
+ */
+export function getRectangleCornerRadius(w: number, h: number, cornerRadius: number) {
+	if (!cornerRadius || cornerRadius <= 0) return 0
+	const maxRadius = Math.min(w, h) / 2
+	return clamp(cornerRadius, 0, 1) * maxRadius
 }
 
 function getXBoxPath(

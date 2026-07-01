@@ -421,6 +421,7 @@ export const DEFAULT_TRANSLATION = {
 	'style-panel.arrowhead-end': 'End',
 	'style-panel.arrow-kind': 'Line',
 	'style-panel.color': 'Color',
+	'style-panel.corner-radius': 'Corner radius',
 	'style-panel.dash': 'Dash',
 	'style-panel.fill': 'Fill',
 	'style-panel.font': 'Font',

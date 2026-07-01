@@ -71,6 +71,37 @@ export const GeoShapeGeoStyle = StyleProp.defineEnum('tldraw:geo', {
 export type TLGeoShapeGeoStyle = T.TypeOf<typeof GeoShapeGeoStyle>
 
 /**
+ * Style property defining the corner radius of rectangle geo shapes as a
+ * normalized value from 0 (sharp corners) to 1 (fully rounded, pill-shaped).
+ * The value is multiplied by half of the shape's shortest side to yield the
+ * actual corner radius in pixels, so shapes stay proportionally rounded when
+ * they are resized.
+ *
+ * Only rectangle geo shapes render this style today; other geo types ignore
+ * the value.
+ *
+ * @public
+ * @example
+ * ```ts
+ * const props = {
+ *   geo: 'rectangle',
+ *   cornerRadius: 0.5, // moderately rounded
+ * }
+ * ```
+ */
+export const GeoShapeCornerRadiusStyle = StyleProp.define('tldraw:geoCornerRadius', {
+	defaultValue: 0,
+	type: T.unitInterval,
+})
+
+/**
+ * Type representing the corner radius style value for geo shapes.
+ *
+ * @public
+ */
+export type TLGeoShapeCornerRadiusStyle = T.TypeOf<typeof GeoShapeCornerRadiusStyle>
+
+/**
  * Properties for the geo shape, which renders various geometric forms with styling and text.
  *
  * @public
@@ -107,6 +138,13 @@ export interface TLGeoShapeProps {
 	verticalAlign: TLDefaultVerticalAlignStyle
 	/** Rich text content displayed within the shape */
 	richText: TLRichText
+	/**
+	 * Corner radius for rectangle geo shapes, from 0 (sharp) to 1 (fully rounded).
+	 * The value is normalized to the shape's shortest side, so shapes stay
+	 * proportionally rounded when resized. Only rectangle geo shapes render this
+	 * today; other geo types ignore the value.
+	 */
+	cornerRadius: TLGeoShapeCornerRadiusStyle
 }
 
 /**
@@ -180,6 +218,7 @@ export const geoShapeProps: RecordProps<TLGeoShape> = {
 	align: DefaultHorizontalAlignStyle,
 	verticalAlign: DefaultVerticalAlignStyle,
 	richText: richTextValidator,
+	cornerRadius: GeoShapeCornerRadiusStyle,
 }
 
 const geoShapeVersions = createShapePropsMigrationIds('geo', {
@@ -194,6 +233,7 @@ const geoShapeVersions = createShapePropsMigrationIds('geo', {
 	AddScale: 9,
 	AddRichText: 10,
 	AddRichTextAttrs: 11,
+	AddCornerRadius: 12,
 })
 
 /**
@@ -316,6 +356,15 @@ export const geoShapeMigrations = createShapePropsMigrationSequence({
 				if (props.richText && 'attrs' in props.richText) {
 					delete props.richText.attrs
 				}
+			},
+		},
+		{
+			id: geoShapeVersions.AddCornerRadius,
+			up: (props) => {
+				props.cornerRadius = 0
+			},
+			down: (props) => {
+				delete props.cornerRadius
 			},
 		},
 	],

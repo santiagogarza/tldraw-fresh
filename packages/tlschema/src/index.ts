@@ -246,10 +246,12 @@ export {
 	type TLFrameShapeProps,
 } from './shapes/TLFrameShape'
 export {
+	GeoShapeCornerRadiusStyle,
 	GeoShapeGeoStyle,
 	geoShapeMigrations,
 	geoShapeProps,
 	type TLGeoShape,
+	type TLGeoShapeCornerRadiusStyle,
 	type TLGeoShapeGeoStyle,
 	type TLGeoShapeProps,
 } from './shapes/TLGeoShape'
