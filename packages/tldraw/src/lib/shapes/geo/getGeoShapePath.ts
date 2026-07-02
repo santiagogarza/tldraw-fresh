@@ -66,12 +66,7 @@ export const defaultGeoTypeDefinitions = {
 		icon: 'geo-rectangle',
 		getPath(w, h, shape) {
 			const isFilled = shape.props.fill !== 'none'
-			return new PathBuilder()
-				.moveTo(0, 0, { geometry: { isFilled } })
-				.lineTo(w, 0)
-				.lineTo(w, h)
-				.lineTo(0, h)
-				.close()
+			return getRoundedRectPath(w, h, shape.props.cornerRadius ?? 0, isFilled)
 		},
 	},
 	ellipse: {
@@ -376,6 +371,37 @@ function _getGeoPath(
 		throw new Error(`Unknown geo type: ${shape.props.geo}`)
 	}
 	return def.getPath(w, h, shape, sw)
+}
+
+/** Returns the effective corner radius in shape-local units. */
+export function getEffectiveCornerRadius(w: number, h: number, cornerRadius: number) {
+	const maxRadius = Math.min(w, h) / 2
+	return clamp(cornerRadius, 0, 1) * maxRadius
+}
+
+function getRoundedRectPath(w: number, h: number, cornerRadius: number, isFilled: boolean) {
+	const r = getEffectiveCornerRadius(w, h, cornerRadius)
+
+	if (r <= 0) {
+		return new PathBuilder()
+			.moveTo(0, 0, { geometry: { isFilled } })
+			.lineTo(w, 0)
+			.lineTo(w, h)
+			.lineTo(0, h)
+			.close()
+	}
+
+	return new PathBuilder()
+		.moveTo(r, 0, { geometry: { isFilled } })
+		.lineTo(w - r, 0)
+		.circularArcTo(r, false, true, w, r)
+		.lineTo(w, h - r)
+		.circularArcTo(r, false, true, w - r, h)
+		.lineTo(r, h)
+		.circularArcTo(r, false, true, 0, h - r)
+		.lineTo(0, r)
+		.circularArcTo(r, false, true, r, 0)
+		.close()
 }
 
 function getXBoxPath(

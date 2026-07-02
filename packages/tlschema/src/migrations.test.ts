@@ -2073,6 +2073,18 @@ describe('Add scale to geo shape', () => {
 	})
 })
 
+describe('Add corner radius to geo shape', () => {
+	const { up, down } = getTestMigration(geoShapeVersions.AddCornerRadius)
+
+	test('up works as expected', () => {
+		expect(up({ props: {} })).toEqual({ props: { cornerRadius: 0 } })
+	})
+
+	test('down works as expected', () => {
+		expect(down({ props: { cornerRadius: 0 } })).toEqual({ props: {} })
+	})
+})
+
 describe('Add scale to arrow shape', () => {
 	const { up, down } = getTestMigration(arrowShapeVersions.AddScale)
 

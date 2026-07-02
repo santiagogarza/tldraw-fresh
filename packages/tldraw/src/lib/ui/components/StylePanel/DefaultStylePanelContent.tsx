@@ -15,6 +15,7 @@ import {
 	LineShapeSplineStyle,
 	minBy,
 	TLArrowShapeArrowheadStyle,
+	TLGeoShape,
 	useEditor,
 	useValue,
 } from '@tldraw/editor'
@@ -55,6 +56,7 @@ export function DefaultStylePanelContent() {
 			</StylePanelSection>
 			<StylePanelSection>
 				<StylePanelGeoShapePicker />
+				<StylePanelCornerRadiusPicker />
 				<StylePanelArrowKindPicker />
 				<StylePanelArrowheadPicker />
 				<StylePanelSplinePicker />
@@ -350,6 +352,79 @@ export function StylePanelGeoShapePicker() {
 			items={items}
 			value={geo}
 		/>
+	)
+}
+
+const CORNER_RADIUS_STEPS = 100
+
+/** @public @react */
+export function StylePanelCornerRadiusPicker() {
+	const editor = useEditor()
+	const { onHistoryMark, enhancedA11yMode } = useStylePanelContext()
+	const msg = useTranslation()
+
+	const cornerRadius = useValue(
+		'corner radius',
+		() => {
+			const rectangles = editor
+				.getSelectedShapes()
+				.filter(
+					(s): s is TLGeoShape => editor.isShapeOfType(s, 'geo') && s.props.geo === 'rectangle'
+				)
+			if (rectangles.length === 0) return undefined
+
+			const values = rectangles.map((s) => s.props.cornerRadius ?? 0)
+			const first = values[0]
+			const isMixed = values.some((v) => v !== first)
+			return isMixed ? null : first
+		},
+		[editor]
+	)
+
+	const handleValueChange = React.useCallback(
+		(value: number) => {
+			const rectangles = editor
+				.getSelectedShapes()
+				.filter(
+					(s): s is TLGeoShape => editor.isShapeOfType(s, 'geo') && s.props.geo === 'rectangle'
+				)
+			if (rectangles.length === 0) return
+
+			editor.markHistoryStoppingPoint('corner radius')
+			editor.updateShapes(
+				rectangles.map((s) => ({
+					id: s.id,
+					type: 'geo' as const,
+					props: { cornerRadius: value / CORNER_RADIUS_STEPS },
+				}))
+			)
+		},
+		[editor]
+	)
+
+	if (cornerRadius === undefined) return null
+
+	const sliderValue =
+		cornerRadius === null ? null : Math.round(cornerRadius * CORNER_RADIUS_STEPS)
+
+	return (
+		<>
+			{enhancedA11yMode && (
+				<StylePanelSubheading>{msg('style-panel.corner-radius')}</StylePanelSubheading>
+			)}
+			<TldrawUiSlider
+				data-testid="style.corner-radius"
+				value={sliderValue ?? 0}
+				label={
+					cornerRadius === null ? 'style-panel.mixed' : 'style-panel.corner-radius'
+				}
+				onValueChange={handleValueChange}
+				steps={CORNER_RADIUS_STEPS}
+				title={msg('style-panel.corner-radius')}
+				onHistoryMark={onHistoryMark}
+				ariaValueModifier={1}
+			/>
+		</>
 	)
 }
 

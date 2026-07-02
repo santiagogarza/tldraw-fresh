@@ -406,6 +406,7 @@ function convertGeoShapeToTldrawShape(
 			props: {
 				align: focusedShape.textAlign ?? defaultGeoShape.props?.align ?? 'start',
 				color: asColor(focusedShape.color ?? defaultGeoShape.props?.color ?? 'black'),
+				cornerRadius: defaultGeoShape.props?.cornerRadius ?? 0,
 				dash: defaultGeoShape.props?.dash ?? 'draw',
 				fill,
 				font: defaultGeoShape.props?.font ?? 'draw',

@@ -2,17 +2,21 @@
 import {
 	BaseBoxShapeUtil,
 	Box,
+	clamp,
 	EMPTY_ARRAY,
 	Editor,
 	GeoShapeGeoStyle,
 	Group2d,
 	HTMLContainer,
 	HandleSnapGeometry,
+	IndexKey,
 	Rectangle2d,
 	SVGContainer,
 	SvgExportContext,
 	TLGeoShape,
 	TLGeoShapeProps,
+	TLHandle,
+	TLHandleDragInfo,
 	TLMeasureTextOpts,
 	TLResizeInfo,
 	TLShape,
@@ -58,6 +62,7 @@ import { GeoShapeBody } from './GeoShapeBody'
 import {
 	defaultGeoTypeDefinitions,
 	type GeoTypeDefinition,
+	getEffectiveCornerRadius,
 	getGeoShapePath,
 	getGeoTypeDefinition,
 } from './getGeoShapePath'
@@ -89,6 +94,10 @@ const GEO_SHAPE_VERTICAL_ALIGNS = Object.freeze({
 } as const)
 
 const GEO_SHAPE_EMPTY_LABEL_SIZE = Object.freeze({ w: 0, h: 0 })
+
+enum GeoCornerRadiusHandle {
+	CornerRadius = 'corner-radius',
+}
 
 // Snapshot the built-in geo types at module init so that collision detection
 // in `configure()` only fires against the built-ins, not against keys added
@@ -238,6 +247,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			growY: 0,
 			url: '',
 			scale: 1,
+			cornerRadius: 0,
 
 			// Text properties
 			color: 'black',
@@ -727,6 +737,38 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 		return
 	}
 
+	override getHandles(shape: TLGeoShape): TLHandle[] {
+		if (shape.props.geo !== 'rectangle') return EMPTY_ARRAY
+
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const maxRadius = Math.min(w, h) / 2
+		const r = getEffectiveCornerRadius(w, h, shape.props.cornerRadius)
+		const handleX = r > 0 ? r : Math.min(8, maxRadius)
+
+		return [
+			{
+				id: GeoCornerRadiusHandle.CornerRadius,
+				type: 'virtual',
+				index: 'a1' as IndexKey,
+				x: handleX,
+				y: 0,
+			},
+		]
+	}
+
+	override onHandleDrag(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
+		if (handle.id !== GeoCornerRadiusHandle.CornerRadius) return
+
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const maxRadius = Math.min(w, h) / 2
+		const newRadius = clamp(handle.x, 0, maxRadius)
+		const cornerRadius = maxRadius > 0 ? newRadius / maxRadius : 0
+
+		return { id: shape.id, type: shape.type, props: { cornerRadius } }
+	}
+
 	override getInterpolatedProps(
 		startShape: TLGeoShape,
 		endShape: TLGeoShape,
@@ -737,6 +779,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			w: lerp(startShape.props.w, endShape.props.w, t),
 			h: lerp(startShape.props.h, endShape.props.h, t),
 			scale: lerp(startShape.props.scale, endShape.props.scale, t),
+			cornerRadius: lerp(startShape.props.cornerRadius, endShape.props.cornerRadius, t),
 		}
 	}
 
