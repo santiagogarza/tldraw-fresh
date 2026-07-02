@@ -9,9 +9,7 @@ test.describe('Examples shell', () => {
 		const sidebarHeader = page.locator('.example__sidebar__category__header').first()
 		await expect(sidebarHeader).toBeVisible()
 
-		await page.evaluate(() => {
-			editor.user.updateUserPreferences({ colorScheme: 'light', animationSpeed: 0 })
-		})
+		await expect(page.locator('.tl-container')).toHaveClass(/tl-theme__light/)
 		await expect(sidebarHeader).toHaveCSS('color', 'rgb(28, 28, 28)')
 
 		await page.locator('.tl-container').focus()
