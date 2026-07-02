@@ -386,7 +386,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 
 	override onHandleDrag(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
 		if (shape.props.geo !== 'rectangle' || handle.id !== 'corner-radius') return
-		const maxR = Math.min(shape.props.w, shape.props.h) / 2
+		const maxR = Math.min(shape.props.w, shape.props.h + shape.props.growY) / 2
 		const next = clamp(handle.x, 0, maxR)
 		setPreviewCornerRadius(shape, next)
 	}
