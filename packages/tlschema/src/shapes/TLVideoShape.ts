@@ -3,6 +3,7 @@ import { assetIdValidator } from '../assets/TLBaseAsset'
 import { TLAssetId } from '../records/TLAsset'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { TLBaseShape } from './TLBaseShape'
 
 /**
@@ -34,6 +35,7 @@ export interface TLVideoShapeProps {
 	url: string
 	assetId: TLAssetId | null
 	altText: string
+	animation: TLDefaultAnimationStyle
 }
 
 /**
@@ -99,6 +101,7 @@ export const videoShapeProps: RecordProps<TLVideoShape> = {
 	url: T.linkUrl,
 	assetId: assetIdValidator.nullable(),
 	altText: T.string,
+	animation: DefaultAnimationStyle,
 }
 
 const Versions = createShapePropsMigrationIds('video', {
@@ -106,6 +109,7 @@ const Versions = createShapePropsMigrationIds('video', {
 	MakeUrlsValid: 2,
 	AddAltText: 3,
 	AddAutoplay: 4,
+	AddAnimation: 5,
 })
 
 /**
@@ -173,6 +177,15 @@ export const videoShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				delete props.autoplay
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

@@ -30,6 +30,7 @@ export function getDefaultShape(shapeType: FocusedShape['_type']): Partial<TLSha
 				url: '',
 				verticalAlign: 'middle',
 				w: 200,
+				animation: 'none',
 			},
 		} as any
 	}
@@ -51,6 +52,7 @@ export function getDefaultShape(shapeType: FocusedShape['_type']): Partial<TLSha
 					size: 'm',
 					textAlign: 'start',
 					w: 100,
+					animation: 'none',
 				},
 			} as any
 		case 'line':
@@ -70,6 +72,7 @@ export function getDefaultShape(shapeType: FocusedShape['_type']): Partial<TLSha
 					},
 					scale: 1,
 					spline: 'line',
+					animation: 'none',
 				},
 			} as any
 		case 'arrow':
@@ -96,6 +99,7 @@ export function getDefaultShape(shapeType: FocusedShape['_type']): Partial<TLSha
 					scale: 1,
 					size: 'm',
 					start: { x: 0, y: 0 },
+					animation: 'none',
 				},
 			} as any
 		case 'note':
@@ -117,6 +121,7 @@ export function getDefaultShape(shapeType: FocusedShape['_type']): Partial<TLSha
 					scale: 1,
 					url: '',
 					verticalAlign: 'middle',
+					animation: 'none',
 				},
 			} as any
 		case 'draw':
