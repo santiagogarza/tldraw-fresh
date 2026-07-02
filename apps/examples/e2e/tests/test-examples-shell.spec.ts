@@ -16,6 +16,6 @@ test.describe('Examples shell', () => {
 		await page.keyboard.press('Control+/')
 
 		await expect(page.locator('.tl-container')).toHaveClass(/tl-theme__dark/)
-		await expect(sidebarHeader).toHaveCSS('color', 'rgb(241, 239, 239)')
+		await expect(sidebarHeader).toHaveCSS('color', 'rgb(241, 238, 238)')
 	})
 })
