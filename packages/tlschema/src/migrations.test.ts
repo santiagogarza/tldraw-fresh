@@ -1472,6 +1472,30 @@ describe('Add rich text attrs', () => {
 	}
 })
 
+describe('Add animation style', () => {
+	const migrations = [
+		['arrow shape', getTestMigration(arrowShapeVersions.AddAnimation)],
+		['bookmark shape', getTestMigration(bookmarkShapeVersions.AddAnimation)],
+		['draw shape', getTestMigration(drawShapeVersions.AddAnimation)],
+		['embed shape', getTestMigration(embedShapeVersions.AddAnimation)],
+		['frame shape', getTestMigration(frameShapeVersions.AddAnimation)],
+		['geo shape', getTestMigration(geoShapeVersions.AddAnimation)],
+		['highlight shape', getTestMigration(highlightShapeVersions.AddAnimation)],
+		['image shape', getTestMigration(imageShapeVersions.AddAnimation)],
+		['line shape', getTestMigration(lineShapeVersions.AddAnimation)],
+		['note shape', getTestMigration(noteShapeVersions.AddAnimation)],
+		['text shape', getTestMigration(textShapeVersions.AddAnimation)],
+		['video shape', getTestMigration(videoShapeVersions.AddAnimation)],
+	] as const
+
+	for (const [shapeName, { up, down }] of migrations) {
+		it(`works for ${shapeName}`, () => {
+			expect(up({ props: {} })).toEqual({ props: { animation: 'none' } })
+			expect(down({ props: { animation: 'spin' } })).toEqual({ props: {} })
+		})
+	}
+})
+
 describe('Make urls valid for all the assets', () => {
 	const migrations = [
 		['bookmark asset', getTestMigration(bookmarkAssetVersions.MakeUrlsValid)],

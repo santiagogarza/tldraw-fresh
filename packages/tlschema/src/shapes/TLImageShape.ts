@@ -4,6 +4,7 @@ import { vecModelValidator } from '../misc/geometry-types'
 import { TLAssetId } from '../records/TLAsset'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { TLShapeCrop } from './ShapeWithCrop'
 import { TLBaseShape } from './TLBaseShape'
 
@@ -68,6 +69,8 @@ export interface TLImageShapeProps {
 	flipY: boolean
 	/** Alternative text for accessibility and when image fails to load */
 	altText: string
+	/** Looping decorative animation applied to the rendered image */
+	animation: TLDefaultAnimationStyle
 }
 
 /**
@@ -129,6 +132,7 @@ export const imageShapeProps: RecordProps<TLImageShape> = {
 	flipX: T.boolean,
 	flipY: T.boolean,
 	altText: T.string,
+	animation: DefaultAnimationStyle,
 }
 
 const Versions = createShapePropsMigrationIds('image', {
@@ -137,6 +141,7 @@ const Versions = createShapePropsMigrationIds('image', {
 	MakeUrlsValid: 3,
 	AddFlipProps: 4,
 	AddAltText: 5,
+	AddAnimation: 6,
 })
 
 /**
@@ -201,6 +206,15 @@ export const imageShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				delete props.altText
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],
