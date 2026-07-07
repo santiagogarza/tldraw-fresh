@@ -13,10 +13,7 @@ import {
 } from 'tldraw'
 import 'tldraw/tldraw.css'
 import { RoundedRectangleShapeTool } from './RoundedRectangleShapeTool'
-import {
-	ROUNDED_RECTANGLE_TYPE,
-	RoundedRectangleShapeUtil,
-} from './RoundedRectangleShapeUtil'
+import { ROUNDED_RECTANGLE_TYPE, RoundedRectangleShapeUtil } from './RoundedRectangleShapeUtil'
 
 // [1]
 const shapeUtils = [RoundedRectangleShapeUtil]
@@ -52,10 +49,7 @@ const components: TLComponents = {
 		const isSelected = useIsToolSelected(uiTools[ROUNDED_RECTANGLE_TYPE])
 		return (
 			<DefaultToolbar {...props}>
-				<TldrawUiMenuItem
-					{...uiTools[ROUNDED_RECTANGLE_TYPE]}
-					isSelected={isSelected}
-				/>
+				<TldrawUiMenuItem {...uiTools[ROUNDED_RECTANGLE_TYPE]} isSelected={isSelected} />
 				<DefaultToolbarContent />
 			</DefaultToolbar>
 		)
