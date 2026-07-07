@@ -26,6 +26,7 @@ import { useTranslation } from '../../hooks/useTranslation/useTranslation'
 import { TldrawUiButtonIcon } from '../primitives/Button/TldrawUiButtonIcon'
 import { TldrawUiSlider } from '../primitives/TldrawUiSlider'
 import { TldrawUiToolbar, TldrawUiToolbarButton } from '../primitives/TldrawUiToolbar'
+import { StylePanelAnimationPicker } from './StylePanelAnimationPicker'
 import { StylePanelButtonPicker, StylePanelButtonPickerInline } from './StylePanelButtonPicker'
 import { useStylePanelContext } from './StylePanelContext'
 import { StylePanelDoubleDropdownPicker } from './StylePanelDoubleDropdownPicker'
@@ -58,6 +59,9 @@ export function DefaultStylePanelContent() {
 				<StylePanelArrowKindPicker />
 				<StylePanelArrowheadPicker />
 				<StylePanelSplinePicker />
+			</StylePanelSection>
+			<StylePanelSection>
+				<StylePanelAnimationPicker />
 			</StylePanelSection>
 		</>
 	)
