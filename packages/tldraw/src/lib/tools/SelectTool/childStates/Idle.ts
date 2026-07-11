@@ -210,7 +210,7 @@ export class Idle extends StateNode {
 					case 'top_right_rotate':
 					case 'bottom_left_rotate':
 					case 'bottom_right_rotate': {
-						if (info.accelKey) {
+						if (info.accelKey && !info.metaKey) {
 							this.parent.transition('brushing', info)
 							break
 						}
