@@ -634,11 +634,17 @@ export async function defaultHandleExternalTldrawContent(
 			selectedBoundsAfter &&
 			selectionBoundsBefore?.collides(selectedBoundsAfter)
 		) {
-			// Creates a 'puff' to show content has been pasted
-			editor.updateInstanceState({ isChangingStyle: true })
-			editor.timers.setTimeout(() => {
-				editor.updateInstanceState({ isChangingStyle: false })
-			}, 150)
+			if (!point) {
+				// When pasting without an explicit target point, nudge pasted shapes
+				// down-and-right so they don't land exactly on top of the originals.
+				const margin = editor.options.adjacentShapeMargin
+				editor.nudgeShapes(editor.getSelectedShapeIds(), { x: margin, y: margin })
+			} else {
+				editor.updateInstanceState({ isChangingStyle: true })
+				editor.timers.setTimeout(() => {
+					editor.updateInstanceState({ isChangingStyle: false })
+				}, 150)
+			}
 		}
 	})
 }
