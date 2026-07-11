@@ -6199,6 +6199,9 @@ export interface TLZoomBrushOverlay extends TLOverlay {
 export function ToggleAutoSizeMenuItem(): JSX.Element | null;
 
 // @public (undocumented)
+export function ToggleColorMode(): JSX.Element;
+
+// @public (undocumented)
 export function ToggleDebugModeItem(): JSX.Element;
 
 // @public (undocumented)
