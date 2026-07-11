@@ -7,7 +7,7 @@ import {
 	CursorChatItem,
 	EditMenuSubmenu,
 	MoveToPageMenu,
-	ReorderMenuSubmenu,
+	ReorderMenuGroup,
 	SelectAllMenuItem,
 } from '../menu-items'
 import { TldrawUiMenuGroup } from '../primitives/menus/TldrawUiMenuGroup'
@@ -34,9 +34,9 @@ export function DefaultContextMenuContent() {
 			<TldrawUiMenuGroup id="modify">
 				<EditMenuSubmenu />
 				<ArrangeMenuSubmenu />
-				<ReorderMenuSubmenu />
 				{!isSinglePageMode && <MoveToPageMenu />}
 			</TldrawUiMenuGroup>
+			<ReorderMenuGroup />
 			<ClipboardMenuGroup />
 			<ConversionsMenuGroup />
 			<TldrawUiMenuGroup id="select-all">

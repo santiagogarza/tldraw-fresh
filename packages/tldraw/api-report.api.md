@@ -3250,6 +3250,9 @@ export function renderPlaintextFromRichText(editor: Editor, richText: TLRichText
 export function renderRichTextFromHTML(editor: Editor, html: string): TLRichText;
 
 // @public (undocumented)
+export function ReorderMenuGroup(): JSX.Element | null;
+
+// @public (undocumented)
 export function ReorderMenuItems(): JSX.Element;
 
 // @public (undocumented)
