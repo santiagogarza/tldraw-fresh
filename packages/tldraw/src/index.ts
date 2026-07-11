@@ -346,6 +346,7 @@ export {
 	type TLUiHelperButtonsProps,
 } from './lib/ui/components/HelperButtons/DefaultHelperButtons'
 export { DefaultHelperButtonsContent } from './lib/ui/components/HelperButtons/DefaultHelperButtonsContent'
+export { ToggleDarkMode } from './lib/ui/components/HelperButtons/ToggleDarkMode'
 export {
 	DefaultHelpMenu,
 	type TLUiHelpMenuProps,
