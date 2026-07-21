@@ -8,6 +8,22 @@ import {
 } from '@tldraw/editor'
 import { TLUiIconJsx } from './ui/components/primitives/TldrawUiIcon'
 
+const cornerIcon = (r: number): TLUiIconJsx => (
+	<svg viewBox="0 0 16 16" width={16} height={16}>
+		<rect
+			x="2"
+			y="2"
+			width="12"
+			height="12"
+			rx={r}
+			ry={r}
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="1.5"
+		/>
+	</svg>
+)
+
 /** @public */
 export type StyleValuesForUi<T> = readonly {
 	readonly value: T
@@ -166,5 +182,11 @@ export const STYLES = {
 	spline: [
 		{ value: 'line', icon: 'spline-line' },
 		{ value: 'cubic', icon: 'spline-cubic' },
+	],
+	cornerRadius: [
+		{ value: 'sharp', icon: cornerIcon(0) },
+		{ value: 'soft', icon: cornerIcon(1) },
+		{ value: 'round', icon: cornerIcon(3) },
+		{ value: 'pill', icon: cornerIcon(6) },
 	],
 } as const satisfies Record<string, StyleValuesForUi<string>>
