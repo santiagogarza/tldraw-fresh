@@ -19,6 +19,22 @@ import {
 } from '../styles/TLVerticalAlignStyle'
 import { TLBaseShape } from './TLBaseShape'
 
+/** @public */
+export const NOTE_REACTION_EMOJIS = ['\u{1F44D}', '\u2764\uFE0F', '\u{1F525}', '\u{1F602}', '\u{1F440}'] as const
+
+/** @public */
+export interface TLNoteReaction {
+	emoji: string
+	userId: string
+	userName: string
+}
+
+const noteReactionValidator = T.object({
+	emoji: T.string,
+	userId: T.string,
+	userName: T.string,
+})
+
 /**
  * Properties for a note shape. Note shapes represent sticky notes or text annotations
  * with rich formatting capabilities and various styling options.
@@ -66,6 +82,8 @@ export interface TLNoteShapeProps {
 	scale: number
 	/** User ID of the person who first edited the note text */
 	textFirstEditedBy: string | null
+	/** Emoji reactions from users on this note */
+	reactions: TLNoteReaction[]
 }
 
 /**
@@ -133,6 +151,7 @@ export const noteShapeProps: RecordProps<TLNoteShape> = {
 	richText: richTextValidator,
 	scale: T.nonZeroNumber,
 	textFirstEditedBy: T.string.nullable(),
+	reactions: T.arrayOf(noteReactionValidator),
 }
 
 const Versions = createShapePropsMigrationIds('note', {
@@ -148,6 +167,7 @@ const Versions = createShapePropsMigrationIds('note', {
 	AddRichTextAttrs: 10,
 	AddFirstEditedBy: 11,
 	MakeFontSizeAdjustmentRatio: 12,
+	AddReactions: 13,
 })
 
 /**
@@ -290,6 +310,15 @@ export const noteShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				props.fontSizeAdjustment = 0
+			},
+		},
+		{
+			id: Versions.AddReactions,
+			up: (props) => {
+				props.reactions = []
+			},
+			down: (props) => {
+				delete props.reactions
 			},
 		},
 	],

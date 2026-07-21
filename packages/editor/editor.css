@@ -1219,6 +1219,128 @@ input,
 	z-index: 1;
 }
 
+.tl-note__reactions {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	transform-origin: bottom left;
+	pointer-events: none;
+	z-index: 2;
+}
+
+.tl-note__reactions-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	margin: 4px;
+	border: none;
+	border-radius: 50%;
+	background-color: var(--tl-color-background);
+	box-shadow: 0 1px 4px rgba(15, 23, 31, 0.2);
+	cursor: var(--tl-cursor-pointer);
+	font-size: 14px;
+	line-height: 1;
+	pointer-events: all;
+}
+
+.tl-note__reactions-pill {
+	display: flex;
+	align-items: center;
+	padding: 2px 6px 2px 4px;
+	margin: 4px;
+	border: none;
+	border-radius: 12px;
+	background-color: var(--tl-color-background);
+	box-shadow: 0 1px 4px rgba(15, 23, 31, 0.2);
+	cursor: var(--tl-cursor-pointer);
+	pointer-events: all;
+}
+
+.tl-note__reactions-badge {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	font-size: 14px;
+	line-height: 1;
+}
+
+.tl-note__reactions-more {
+	margin-left: 2px;
+	font-family: var(--tl-font-sans);
+	font-size: 11px;
+	color: var(--tl-color-text-2);
+}
+
+.tl-note__reactions-expanded {
+	position: absolute;
+	bottom: 100%;
+	left: 0;
+	margin-bottom: 4px;
+	min-width: 160px;
+	padding: 8px;
+	border-radius: var(--tl-radius-2);
+	background-color: var(--tl-color-background);
+	box-shadow: 0 2px 8px rgba(15, 23, 31, 0.15);
+	pointer-events: all;
+}
+
+.tl-note__reactions-list {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-bottom: 8px;
+}
+
+.tl-note__reactions-row {
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
+	font-family: var(--tl-font-sans);
+	font-size: 12px;
+	line-height: 1.3;
+}
+
+.tl-note__reactions-row-emoji {
+	flex-shrink: 0;
+	font-size: 14px;
+}
+
+.tl-note__reactions-row-names {
+	color: var(--tl-color-text-2);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.tl-note__reactions-picker {
+	display: flex;
+	gap: 2px;
+}
+
+.tl-note__reactions-picker-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: none;
+	border-radius: var(--tl-radius-1);
+	background: none;
+	cursor: var(--tl-cursor-pointer);
+	font-size: 16px;
+	line-height: 1;
+}
+
+.tl-note__reactions-picker-button:hover {
+	background-color: var(--tl-color-muted-2);
+}
+
 /* ------------------- Frame shape ------------------- */
 
 .tl-frame__body {
