@@ -5,7 +5,7 @@
 #
 # Steps (default):
 #   1. Verify remote demo state (origin/santi-demo-bug-automation is pinned
-#      to the santi-demo-bug-v1 tag). With --reset, force the branch back.
+#      to the santi-demo-bug-v4 tag). With --reset, force the branch back.
 #   2. Plant the bug in the working tree as uncommitted changes.
 #   3. Ensure node 20 + healthy node_modules (re-run yarn install if broken).
 #   4. Run the lazy `predev` + `refresh-assets` prep so Vite has assets.
@@ -30,7 +30,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 DEMO_BRANCH="santi-demo-bug-automation"
-DEMO_TAG="santi-demo-bug-v3"
+DEMO_TAG="santi-demo-bug-v4"
 GITHUB_REPO="santiagogarza/tldraw-fresh"
 # Fallback path for Apple Silicon Homebrew (used only if the active `node` on
 # PATH isn't v20). Other install layouts (nvm/mise/fnm, Intel Homebrew at
@@ -152,7 +152,7 @@ if [ "$CHECK_ONLY" -eq 1 ]; then
 
 setup-demo-bug: --check-only complete. summary:
   - demo branch (PR base):        santi-demo-bug-automation
-  - planted-bug tag (truth):      santi-demo-bug-v1
+  - planted-bug tag (truth):      santi-demo-bug-v4
   - per-run agent branch:         cursor/<auto-name>-XXXX  (the VM creates this)
   - to bring the local demo up:   rerun without --check-only
 NOTE
@@ -362,13 +362,13 @@ setup-demo-bug: ready for demo.
   - vite pid:                       ${VITE_PID}   (file: ${PID_FILE})
   - vite logs:                      ${LOG_FILE}
   - planted bug 1 (color):          uncommitted changes in packages/editor/src/lib/editor/Editor.ts
-  - planted bug 2 (heart):          uncommitted changes in packages/tldraw/src/lib/shapes/geo/getGeoShapePath.ts
+  - planted bug 2 (star):           uncommitted changes in packages/tldraw/src/lib/shapes/geo/getGeoShapePath.ts
   - remote demo branch (PR base):   ${DEMO_BRANCH}  (= ${DEMO_TAG})
   - per-run agent branch:           cursor/<auto-name>-XXXX  (created by the cloud agent VM)
 
 Next steps:
   1. Open ${URL}, draw a shape, select it, click a color swatch. Nothing changes. Bug 1.
-  2. Draw a Heart (toolbar > More). It renders upside down. Bug 2.
+  2. Draw a Star (toolbar > More). It renders upside down. Bug 2.
   3. In Slack #santi-bug-automation, post a bug report mentioning @Cursor.
   4. The agent will thread its repro/screenshots/fix/PR under your message.
 

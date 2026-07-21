@@ -18,9 +18,11 @@ Two bugs are planted:
   style panel does nothing for selected shapes. Other styles (size,
   fill, dash, font, opacity) keep working, and new shapes still pick up
   the chosen color through `setStyleForNextShapes`.
-- **`heart-upside-down.patch`** flips the heart geo path vertically in
-  `getGeoShapePath.ts`, so the Heart shape (toolbar > More) renders
-  upside down: point at the top, lobes at the bottom.
+- **`star-upside-down.patch`** flips the star geo path vertically in
+  `getGeoShapePath.ts`, so the Star shape (toolbar > More) renders
+  upside down: one point at the bottom, two points at the top.
+  (Replaced the old upside-down-heart bug, which looked slightly
+  profane on stage.)
 
 ## One-command pre-flight
 
@@ -39,7 +41,7 @@ Flags:
 
 - `--check-only` — remote sanity check only, no local boot.
 - `--reset` — also force-reset `origin/santi-demo-bug-automation`
-  back to the `santi-demo-bug-v3` tag if it has drifted.
+  back to the `santi-demo-bug-v4` tag if it has drifted.
 - `--port NNNN` — pick a different local port (default `5420`).
 - `--no-open` — don't open the browser tab.
 
@@ -54,8 +56,8 @@ bash scripts/demo-bug-automation/demo-local-down.sh --reset   # stop vite + drop
 
 - `color-change-broken.patch` — single-hunk diff against `main` that
   plants the color bug in `packages/editor/src/lib/editor/Editor.ts`.
-- `heart-upside-down.patch` — single-hunk diff against `main` that
-  flips the heart path in
+- `star-upside-down.patch` — single-hunk diff against `main` that
+  flips the star path in
   `packages/tldraw/src/lib/shapes/geo/getGeoShapePath.ts`.
 - `plant-color-bug.sh` — idempotent: applies every `*.patch` in this
   directory to the working tree if not already applied. Safe to invoke
@@ -72,7 +74,8 @@ bash scripts/demo-bug-automation/demo-local-down.sh --reset   # stop vite + drop
 ## Mirror branch on origin
 
 `origin/santi-demo-bug-automation` mirrors `main + both patches` as a
-single commit, tagged `santi-demo-bug-v3`. Keep that branch in sync
+single commit, tagged `santi-demo-bug-v4` (v4 = upside-down star replacing
+the old heart bug). Keep that branch in sync
 with the patches whenever either side moves, so cloud agents that base
 off the branch and agents that use the setup-script path see the same
 broken state.

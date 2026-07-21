@@ -10,7 +10,7 @@
 # the Cursor dashboard invokes it by name). It now plants EVERY *.patch in
 # this directory:
 #   - color-change-broken.patch   color swatch does nothing for selected shapes
-#   - heart-upside-down.patch     heart geo shape renders flipped vertically
+#   - star-upside-down.patch      star geo shape renders flipped vertically
 #
 # Behaviour per patch:
 #   - Applies it to the working tree as uncommitted changes.
@@ -21,7 +21,7 @@
 #     refactor of the target file.
 #
 # Mirror branch on origin: santi-demo-bug-automation (= main + these
-# patches as a single commit, tagged santi-demo-bug-v2). Keep them in
+# patches as a single commit, tagged santi-demo-bug-v4). Keep them in
 # sync when main moves.
 
 set -euo pipefail
