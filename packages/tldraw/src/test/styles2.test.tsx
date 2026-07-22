@@ -44,6 +44,7 @@ describe('Editor.styles', () => {
 			'tldraw:font': { type: 'shared', value: 'draw' },
 			'tldraw:geo': { type: 'shared', value: 'rectangle' },
 			'tldraw:verticalAlign': { type: 'shared', value: 'middle' },
+			'tldraw:animation': { type: 'shared', value: 'none' },
 		})
 	})
 
@@ -59,6 +60,7 @@ describe('Editor.styles', () => {
 			'tldraw:font': { type: 'shared', value: 'draw' },
 			'tldraw:geo': { type: 'shared', value: 'rectangle' },
 			'tldraw:verticalAlign': { type: 'shared', value: 'middle' },
+			'tldraw:animation': { type: 'shared', value: 'none' },
 		})
 	})
 
@@ -83,6 +85,7 @@ describe('Editor.styles', () => {
 			'tldraw:font': { type: 'shared', value: 'draw' },
 			'tldraw:geo': { type: 'shared', value: 'rectangle' },
 			'tldraw:verticalAlign': { type: 'shared', value: 'middle' },
+			'tldraw:animation': { type: 'shared', value: 'none' },
 		})
 	})
 
@@ -123,6 +126,7 @@ describe('Editor.styles', () => {
 			'tldraw:labelColor': { type: 'shared', value: 'black' },
 			'tldraw:size': { type: 'mixed' },
 			'tldraw:verticalAlign': { type: 'mixed' },
+			'tldraw:animation': { type: 'shared', value: 'none' },
 		})
 	})
 

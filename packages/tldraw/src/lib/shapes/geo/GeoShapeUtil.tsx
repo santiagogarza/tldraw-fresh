@@ -248,6 +248,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			align: 'middle',
 			verticalAlign: 'middle',
 			richText: toRichText(''),
+			animation: 'none',
 		}
 	}
 

@@ -2,6 +2,7 @@ import {
 	ArrowShapeArrowheadEndStyle,
 	ArrowShapeArrowheadStartStyle,
 	ArrowShapeKindStyle,
+	DefaultAnimationStyle,
 	DefaultColorStyle,
 	DefaultDashStyle,
 	DefaultFillStyle,
@@ -58,6 +59,9 @@ export function DefaultStylePanelContent() {
 				<StylePanelArrowKindPicker />
 				<StylePanelArrowheadPicker />
 				<StylePanelSplinePicker />
+			</StylePanelSection>
+			<StylePanelSection>
+				<StylePanelAnimationPicker />
 			</StylePanelSection>
 		</>
 	)
@@ -413,6 +417,24 @@ export function StylePanelSplinePicker() {
 			style={LineShapeSplineStyle}
 			items={STYLES.spline}
 			value={spline}
+		/>
+	)
+}
+
+/** @public @react */
+export function StylePanelAnimationPicker() {
+	const { styles } = useStylePanelContext()
+	const msg = useTranslation()
+	const animation = styles.get(DefaultAnimationStyle)
+	if (animation === undefined) return null
+
+	return (
+		<StylePanelButtonPicker
+			title={msg('style-panel.animation')}
+			uiType="animation"
+			style={DefaultAnimationStyle}
+			items={STYLES.animation}
+			value={animation}
 		/>
 	)
 }

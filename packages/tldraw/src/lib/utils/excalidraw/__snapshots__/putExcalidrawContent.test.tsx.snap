@@ -61,6 +61,7 @@ exports[`putExcalidrawContent test fixtures > bound-arrows.json 1`] = `
     "parentId": "page:page",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "black",
       "dash": "draw",
       "fill": "none",
@@ -98,6 +99,7 @@ exports[`putExcalidrawContent test fixtures > bound-arrows.json 1`] = `
     "parentId": "page:page",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "black",
       "dash": "draw",
       "fill": "none",
@@ -134,6 +136,7 @@ exports[`putExcalidrawContent test fixtures > bound-arrows.json 1`] = `
     "opacity": 1,
     "parentId": "page:page",
     "props": {
+      "animation": "none",
       "arrowheadEnd": "arrow",
       "arrowheadStart": "none",
       "bend": 0,
@@ -242,6 +245,7 @@ exports[`putExcalidrawContent test fixtures > bound-elbow-arrows.json 1`] = `
     "parentId": "page:page",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "black",
       "dash": "draw",
       "fill": "none",
@@ -279,6 +283,7 @@ exports[`putExcalidrawContent test fixtures > bound-elbow-arrows.json 1`] = `
     "parentId": "page:page",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "black",
       "dash": "draw",
       "fill": "none",
@@ -315,6 +320,7 @@ exports[`putExcalidrawContent test fixtures > bound-elbow-arrows.json 1`] = `
     "opacity": 1,
     "parentId": "page:page",
     "props": {
+      "animation": "none",
       "arrowheadEnd": "arrow",
       "arrowheadStart": "none",
       "bend": 19.41200502641156,
@@ -452,6 +458,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -492,6 +499,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -526,6 +534,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -561,6 +570,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "parentId": "shape:38",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "fill": "none",
@@ -597,6 +607,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -649,6 +660,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -695,6 +707,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -747,6 +760,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "fill": "none",
@@ -778,6 +792,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "fill": "none",
@@ -809,6 +824,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -843,6 +859,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -883,6 +900,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -929,6 +947,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -981,6 +1000,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1033,6 +1053,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1085,6 +1106,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1131,6 +1153,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1165,6 +1188,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1205,6 +1229,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1251,6 +1276,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1304,6 +1330,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "parentId": "shape:38",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "fill": "none",
@@ -1340,6 +1367,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1392,6 +1420,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "fill": "none",
@@ -1423,6 +1452,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "fill": "none",
@@ -1454,6 +1484,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1512,6 +1543,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1559,6 +1591,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "parentId": "shape:38",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "fill": "none",
@@ -1595,6 +1628,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1650,6 +1684,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "parentId": "shape:38",
     "props": {
       "align": "middle",
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "fill": "none",
@@ -1686,6 +1721,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1738,6 +1774,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1790,6 +1827,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1836,6 +1874,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {
@@ -1900,6 +1939,7 @@ exports[`putExcalidrawContent test fixtures > line-drawing.json 1`] = `
     "opacity": 1,
     "parentId": "shape:38",
     "props": {
+      "animation": "none",
       "color": "black",
       "dash": "solid",
       "points": {

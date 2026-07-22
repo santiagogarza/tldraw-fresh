@@ -220,6 +220,7 @@ function convertTextShapeToTldrawShape(
 					? focusedShape.maxWidth
 					: (defaultTextShape.props?.w ?? 100),
 			font,
+			animation: 'none',
 		},
 		meta: {
 			note: focusedShape.note ?? defaultTextShape.meta?.note ?? '',
@@ -336,6 +337,7 @@ function convertLineShapeToTldrawShape(
 				dash: defaultLineShape.props?.dash ?? 'draw',
 				scale: defaultLineShape.props?.scale ?? 1,
 				spline: defaultLineShape.props?.spline ?? 'line',
+				animation: 'none',
 			},
 			meta: {
 				note: focusedShape.note ?? defaultLineShape.meta?.note ?? '',
@@ -397,6 +399,7 @@ function convertArrowShapeToTldrawShape(
 			scale: defaultArrowShape.props?.scale ?? 1,
 			size: defaultArrowShape.props?.size ?? 's',
 			start: { x: x1 - minX, y: y1 - minY },
+			animation: 'none' as const,
 		},
 		meta: {
 			note: focusedShape.note ?? defaultArrowShape.meta?.note ?? '',
@@ -513,6 +516,7 @@ function convertGeoShapeToTldrawShape(
 				url: defaultGeoShape.props?.url ?? '',
 				verticalAlign: defaultGeoShape.props?.verticalAlign ?? 'middle',
 				w: focusedShape.w ?? defaultGeoShape.props?.w ?? 100,
+				animation: 'none',
 			},
 			meta: {
 				note: focusedShape.note ?? defaultGeoShape.meta?.note ?? '',
@@ -565,6 +569,7 @@ function convertNoteShapeToTldrawShape(
 				url: defaultNoteShape.props?.url ?? '',
 				verticalAlign: defaultNoteShape.props?.verticalAlign ?? 'middle',
 				textFirstEditedBy: defaultNoteShape.props?.textFirstEditedBy ?? null,
+				animation: 'none',
 			},
 			meta: {
 				note: focusedShape.note ?? defaultNoteShape.meta?.note ?? '',
