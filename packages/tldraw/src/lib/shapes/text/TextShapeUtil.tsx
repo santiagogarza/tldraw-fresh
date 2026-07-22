@@ -99,6 +99,7 @@ export class TextShapeUtil extends ShapeUtil<TLTextShape> {
 			autoSize: true,
 			scale: 1,
 			richText: toRichText(''),
+			animation: 'none',
 		}
 	}
 

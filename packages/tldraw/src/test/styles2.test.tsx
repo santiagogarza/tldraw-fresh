@@ -1,5 +1,6 @@
 import {
 	createShapeId,
+	DefaultAnimationStyle,
 	DefaultColorStyle,
 	ReadonlySharedStyleMap,
 	SharedStyle,
@@ -35,6 +36,7 @@ describe('Editor.styles', () => {
 	it('should return styles for a single shape', () => {
 		editor.select(defaultShapesIds.box1)
 		expect(asPlainObject(editor.getSharedStyles())).toStrictEqual({
+			'tldraw:animation': { type: 'shared', value: 'none' },
 			'tldraw:horizontalAlign': { type: 'shared', value: 'middle' },
 			'tldraw:labelColor': { type: 'shared', value: 'black' },
 			'tldraw:color': { type: 'shared', value: 'black' },
@@ -50,6 +52,7 @@ describe('Editor.styles', () => {
 	it('should return styles for two matching shapes', () => {
 		editor.select(defaultShapesIds.box1, defaultShapesIds.box2)
 		expect(asPlainObject(editor.getSharedStyles())).toStrictEqual({
+			'tldraw:animation': { type: 'shared', value: 'none' },
 			'tldraw:horizontalAlign': { type: 'shared', value: 'middle' },
 			'tldraw:labelColor': { type: 'shared', value: 'black' },
 			'tldraw:color': { type: 'shared', value: 'black' },
@@ -74,6 +77,7 @@ describe('Editor.styles', () => {
 		editor.select(defaultShapesIds.box1, defaultShapesIds.box2)
 
 		expect(asPlainObject(editor.getSharedStyles())).toStrictEqual({
+			'tldraw:animation': { type: 'shared', value: 'none' },
 			'tldraw:horizontalAlign': { type: 'shared', value: 'middle' },
 			'tldraw:labelColor': { type: 'shared', value: 'black' },
 			'tldraw:color': { type: 'mixed' },
@@ -103,6 +107,7 @@ describe('Editor.styles', () => {
 				type: 'geo',
 				props: {
 					align: 'start',
+					animation: 'jiggle',
 					richText: toRichText('hello world this is a long sentence that should wrap'),
 					w: 100,
 					url: 'https://aol.com',
@@ -114,6 +119,7 @@ describe('Editor.styles', () => {
 		editor.selectAll()
 
 		expect(asPlainObject(editor.getSharedStyles())).toStrictEqual({
+			'tldraw:animation': { type: 'mixed' },
 			'tldraw:color': { type: 'mixed' },
 			'tldraw:dash': { type: 'mixed' },
 			'tldraw:fill': { type: 'mixed' },
@@ -161,6 +167,23 @@ describe('Editor.setStyle', () => {
 
 		expect(editor.getShape<TLGeoShape>(ids.A)!.props.color).toBe('red')
 		expect(editor.getShape<TLGeoShape>(ids.B)!.props.color).toBe('red')
+	})
+
+	it('should set animation style for selected shapes', () => {
+		const ids = {
+			A: createShapeId('A'),
+			B: createShapeId('B'),
+		}
+		editor.createShapes([
+			{ id: ids.A, type: 'geo', x: 0, y: 0, props: {} },
+			{ id: ids.B, type: 'geo', x: 0, y: 0, props: {} },
+		])
+
+		editor.setSelectedShapes([ids.A, ids.B])
+		editor.setStyleForSelectedShapes(DefaultAnimationStyle, 'pulse')
+
+		expect(editor.getShape<TLGeoShape>(ids.A)!.props.animation).toBe('pulse')
+		expect(editor.getShape<TLGeoShape>(ids.B)!.props.animation).toBe('pulse')
 	})
 
 	it('should traverse into groups and set styles in their children', () => {

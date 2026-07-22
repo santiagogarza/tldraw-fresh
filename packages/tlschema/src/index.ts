@@ -301,6 +301,10 @@ export {
 } from './shapes/TLVideoShape'
 export { EnumStyleProp, StyleProp, type StylePropValue } from './styles/StyleProp'
 export {
+	DefaultAnimationStyle,
+	type TLDefaultAnimationStyle,
+} from './styles/TLAnimationStyle'
+export {
 	DefaultColorStyle,
 	registerColorsFromThemes,
 	type TLDefaultColorStyle,

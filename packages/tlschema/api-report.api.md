@@ -53,6 +53,7 @@ export const arrowShapeProps: RecordProps<TLArrowShape>;
 
 // @public
 export const arrowShapeVersions: {
+    readonly AddAnimation: "com.tldraw.shape.arrow/9";
     readonly AddElbow: "com.tldraw.shape.arrow/6";
     readonly AddIsPrecise: "com.tldraw.shape.arrow/2";
     readonly AddLabelColor: "com.tldraw.shape.arrow/1";
@@ -244,6 +245,9 @@ export interface CustomRecordInfo {
     scope: RecordScope;
     validator: T.Validatable<any>;
 }
+
+// @public
+export const DefaultAnimationStyle: EnumStyleProp<"jiggle" | "none" | "pulse" | "spin">;
 
 // @public
 export const defaultAssetSchemas: {
@@ -847,6 +851,8 @@ export type TLArrowShapeKind = T.TypeOf<typeof ArrowShapeKindStyle>;
 // @public
 export interface TLArrowShapeProps {
     // (undocumented)
+    animation: TLDefaultAnimationStyle;
+    // (undocumented)
     arrowheadEnd: TLArrowShapeArrowheadStyle;
     // (undocumented)
     arrowheadStart: TLArrowShapeArrowheadStyle;
@@ -1008,6 +1014,7 @@ export type TLBookmarkShape = TLBaseShape<'bookmark', TLBookmarkShapeProps>;
 
 // @public
 export interface TLBookmarkShapeProps {
+    animation: TLDefaultAnimationStyle;
     assetId: null | TLAssetId;
     h: number;
     url: string;
@@ -1046,6 +1053,9 @@ export type TLCursorType = SetValue<typeof TL_CURSOR_TYPES>;
 
 // @public
 export type TLCustomRecord = TLIndexedRecords[keyof TLIndexedRecords];
+
+// @public (undocumented)
+export type TLDefaultAnimationStyle = T.TypeOf<typeof DefaultAnimationStyle>;
 
 // @public
 export type TLDefaultAsset = TLBookmarkAsset | TLImageAsset | TLVideoAsset;
@@ -1132,6 +1142,7 @@ export type TLDrawShape = TLBaseShape<'draw', TLDrawShapeProps>;
 
 // @public
 export interface TLDrawShapeProps {
+    animation: TLDefaultAnimationStyle;
     color: TLDefaultColorStyle;
     dash: TLDefaultDashStyle;
     fill: TLDefaultFillStyle;
@@ -1156,6 +1167,7 @@ export type TLEmbedShape = TLBaseShape<'embed', TLEmbedShapeProps>;
 
 // @public
 export interface TLEmbedShapeProps {
+    animation: TLDefaultAnimationStyle;
     h: number;
     url: string;
     w: number;
@@ -1189,6 +1201,7 @@ export type TLFrameShape = TLBaseShape<'frame', TLFrameShapeProps>;
 
 // @public
 export interface TLFrameShapeProps {
+    animation: TLDefaultAnimationStyle;
     color: TLDefaultColorStyle;
     h: number;
     name: string;
@@ -1204,6 +1217,7 @@ export type TLGeoShapeGeoStyle = T.TypeOf<typeof GeoShapeGeoStyle>;
 // @public
 export interface TLGeoShapeProps {
     align: TLDefaultHorizontalAlignStyle;
+    animation: TLDefaultAnimationStyle;
     color: TLDefaultColorStyle;
     dash: TLDefaultDashStyle;
     fill: TLDefaultFillStyle;
@@ -1265,6 +1279,7 @@ export type TLHighlightShape = TLBaseShape<'highlight', TLHighlightShapeProps>;
 
 // @public
 export interface TLHighlightShapeProps {
+    animation: TLDefaultAnimationStyle;
     color: TLDefaultColorStyle;
     isComplete: boolean;
     isPen: boolean;
@@ -1293,6 +1308,7 @@ export type TLImageShape = TLBaseShape<'image', TLImageShapeProps>;
 // @public
 export interface TLImageShapeProps {
     altText: string;
+    animation: TLDefaultAnimationStyle;
     assetId: null | TLAssetId;
     crop: null | TLShapeCrop;
     flipX: boolean;
@@ -1487,6 +1503,7 @@ export interface TLLineShapePoint {
 
 // @public
 export interface TLLineShapeProps {
+    animation: TLDefaultAnimationStyle;
     color: TLDefaultColorStyle;
     dash: TLDefaultDashStyle;
     points: Record<string, TLLineShapePoint>;
@@ -1504,6 +1521,7 @@ export type TLNoteShape = TLBaseShape<'note', TLNoteShapeProps>;
 // @public
 export interface TLNoteShapeProps {
     align: TLDefaultHorizontalAlignStyle;
+    animation: TLDefaultAnimationStyle;
     color: TLDefaultColorStyle;
     font: TLDefaultFontStyle;
     fontSizeAdjustment: null | number;
@@ -1653,6 +1671,8 @@ export type TLTextShape = TLBaseShape<'text', TLTextShapeProps>;
 
 // @public
 export interface TLTextShapeProps {
+    // (undocumented)
+    animation: TLDefaultAnimationStyle;
     // (undocumented)
     autoSize: boolean;
     // (undocumented)
@@ -1816,6 +1836,8 @@ export type TLVideoShape = TLBaseShape<'video', TLVideoShapeProps>;
 export interface TLVideoShapeProps {
     // (undocumented)
     altText: string;
+    // (undocumented)
+    animation: TLDefaultAnimationStyle;
     // (undocumented)
     assetId: null | TLAssetId;
     // (undocumented)

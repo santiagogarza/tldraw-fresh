@@ -2,6 +2,7 @@ import {
 	ArrowShapeArrowheadEndStyle,
 	ArrowShapeArrowheadStartStyle,
 	ArrowShapeKindStyle,
+	DefaultAnimationStyle,
 	DefaultColorStyle,
 	DefaultDashStyle,
 	DefaultFillStyle,
@@ -42,6 +43,7 @@ export function DefaultStylePanelContent() {
 			<StylePanelSection>
 				<StylePanelColorPicker />
 				<StylePanelOpacityPicker />
+				<StylePanelAnimationPicker />
 			</StylePanelSection>
 			<StylePanelSection>
 				<StylePanelFillPicker />
@@ -194,6 +196,30 @@ export function StylePanelDashPicker() {
 			items={STYLES.dash}
 			value={dash}
 		/>
+	)
+}
+
+/** @public @react */
+export function StylePanelAnimationPicker() {
+	const { styles } = useStylePanelContext()
+	const msg = useTranslation()
+	const animation = styles.get(DefaultAnimationStyle)
+	if (animation === undefined) return null
+	const title = msg('style-panel.animation')
+
+	return (
+		<>
+			<StylePanelSubheading>{title}</StylePanelSubheading>
+			<TldrawUiToolbar orientation="horizontal" label={title}>
+				<StylePanelButtonPickerInline
+					title={title}
+					uiType="animation"
+					style={DefaultAnimationStyle}
+					items={STYLES.animation}
+					value={animation}
+				/>
+			</TldrawUiToolbar>
+		</>
 	)
 }
 

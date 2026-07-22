@@ -179,6 +179,7 @@ export class NoteShapeUtil extends ShapeUtil<TLNoteShape> {
 			url: '',
 			scale: 1,
 			textFirstEditedBy: null,
+			animation: 'none',
 		}
 	}
 

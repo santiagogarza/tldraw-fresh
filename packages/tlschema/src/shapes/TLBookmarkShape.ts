@@ -3,6 +3,7 @@ import { assetIdValidator } from '../assets/TLBaseAsset'
 import { TLAssetId } from '../records/TLAsset'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { TLBaseShape } from './TLBaseShape'
 
 /**
@@ -19,6 +20,8 @@ export interface TLBookmarkShapeProps {
 	assetId: TLAssetId | null
 	/** The URL that this bookmark points to */
 	url: string
+	/** Animation style for the shape */
+	animation: TLDefaultAnimationStyle
 }
 
 /**
@@ -66,11 +69,13 @@ export const bookmarkShapeProps: RecordProps<TLBookmarkShape> = {
 	h: T.nonZeroNumber,
 	assetId: assetIdValidator.nullable(),
 	url: T.linkUrl,
+	animation: DefaultAnimationStyle,
 }
 
 const Versions = createShapePropsMigrationIds('bookmark', {
 	NullAssetId: 1,
 	MakeUrlsValid: 2,
+	AddAnimation: 3,
 })
 
 /**
@@ -106,6 +111,15 @@ export const bookmarkShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (_props) => {
 				// noop
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],
