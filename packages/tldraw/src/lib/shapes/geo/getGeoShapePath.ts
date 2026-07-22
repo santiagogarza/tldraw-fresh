@@ -495,7 +495,7 @@ function getStarPath(w: number, h: number, isFilled: boolean) {
 			const theta = -HALF_PI + i * step
 			return new Vec(
 				cx + (i % 2 ? ix : ox) * Math.cos(theta),
-				cy + (i % 2 ? iy : oy) * Math.sin(theta)
+				cy - (i % 2 ? iy : oy) * Math.sin(theta)
 			)
 		}),
 		{ geometry: { isFilled } }
