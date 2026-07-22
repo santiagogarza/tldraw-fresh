@@ -3,8 +3,9 @@
 	top: 64px;
 	left: 16px;
 	width: 280px;
-	background: white;
-	border: 1px solid #ccc;
+	background: var(--tl-color-panel);
+	border: 1px solid var(--tl-color-panel-contrast);
+	color: var(--tl-color-text);
 	padding: 12px;
 	font-family: system-ui, sans-serif;
 	font-size: 12px;
@@ -22,7 +23,7 @@
 	margin: 8px 0 4px 0;
 	font-size: 11px;
 	font-weight: 600;
-	color: #666;
+	color: var(--tl-color-text-3);
 }
 
 .coordinate-section {
@@ -36,7 +37,7 @@
 }
 
 .coordinate-label {
-	color: #666;
+	color: var(--tl-color-text-3);
 }
 
 .coordinate-value {
