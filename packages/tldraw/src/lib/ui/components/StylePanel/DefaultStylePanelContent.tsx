@@ -2,6 +2,7 @@ import {
 	ArrowShapeArrowheadEndStyle,
 	ArrowShapeArrowheadStartStyle,
 	ArrowShapeKindStyle,
+	clamp,
 	DefaultColorStyle,
 	DefaultDashStyle,
 	DefaultFillStyle,
@@ -10,6 +11,7 @@ import {
 	DefaultSizeStyle,
 	DefaultTextAlignStyle,
 	DefaultVerticalAlignStyle,
+	GeoShapeCornerRadiusStyle,
 	GeoShapeGeoStyle,
 	kickoutOccludedShapes,
 	LineShapeSplineStyle,
@@ -55,6 +57,7 @@ export function DefaultStylePanelContent() {
 			</StylePanelSection>
 			<StylePanelSection>
 				<StylePanelGeoShapePicker />
+				<StylePanelCornerRadiusPicker />
 				<StylePanelArrowKindPicker />
 				<StylePanelArrowheadPicker />
 				<StylePanelSplinePicker />
@@ -349,6 +352,52 @@ export function StylePanelGeoShapePicker() {
 			style={GeoShapeGeoStyle}
 			items={items}
 			value={geo}
+		/>
+	)
+}
+
+const CORNER_RADIUS_SLIDER_STEPS = 20
+
+/**
+ * Slider for adjusting the corner radius of rectangle geo shapes, from sharp
+ * (0) to fully rounded (1). The slider is only shown when the current
+ * selection or shape-tool defaults include a rectangle geo shape.
+ *
+ * @public @react
+ */
+export function StylePanelCornerRadiusPicker() {
+	const { styles, onValueChange, onHistoryMark } = useStylePanelContext()
+	const msg = useTranslation()
+	const cornerRadius = styles.get(GeoShapeCornerRadiusStyle)
+	const geo = styles.get(GeoShapeGeoStyle)
+
+	// Only show for rectangles. If the selection is mixed across geo types we
+	// hide the control since the effect is confusing when other geos ignore it.
+	if (cornerRadius === undefined) return null
+	if (!geo || geo.type !== 'shared' || geo.value !== 'rectangle') return null
+
+	const value =
+		cornerRadius.type === 'mixed'
+			? null
+			: Math.round(clamp(cornerRadius.value, 0, 1) * CORNER_RADIUS_SLIDER_STEPS)
+
+	const title = msg('style-panel.corner-radius')
+
+	return (
+		<TldrawUiSlider
+			data-testid="style.cornerRadius"
+			value={value}
+			label={cornerRadius.type === 'mixed' ? 'style-panel.mixed' : 'style-panel.corner-radius'}
+			onValueChange={(step) => {
+				onValueChange(
+					GeoShapeCornerRadiusStyle,
+					clamp(step / CORNER_RADIUS_SLIDER_STEPS, 0, 1)
+				)
+			}}
+			steps={CORNER_RADIUS_SLIDER_STEPS}
+			title={title}
+			onHistoryMark={onHistoryMark}
+			ariaValueModifier={100 / CORNER_RADIUS_SLIDER_STEPS}
 		/>
 	)
 }

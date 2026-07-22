@@ -1472,6 +1472,20 @@ describe('Add rich text attrs', () => {
 	}
 })
 
+describe('Add corner radius to geo shape', () => {
+	const { up, down } = getTestMigration(geoShapeVersions.AddCornerRadius)
+
+	it('up adds cornerRadius: 0 when missing', () => {
+		const shape = { props: { geo: 'rectangle' } }
+		expect(up(shape)).toEqual({ props: { geo: 'rectangle', cornerRadius: 0 } })
+	})
+
+	it('down removes cornerRadius', () => {
+		const shape = { props: { geo: 'rectangle', cornerRadius: 0.5 } }
+		expect(down(shape)).toEqual({ props: { geo: 'rectangle' } })
+	})
+})
+
 describe('Make urls valid for all the assets', () => {
 	const migrations = [
 		['bookmark asset', getTestMigration(bookmarkAssetVersions.MakeUrlsValid)],

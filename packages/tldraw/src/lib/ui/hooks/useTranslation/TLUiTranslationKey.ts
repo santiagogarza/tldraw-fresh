@@ -418,6 +418,7 @@ export type TLUiTranslationKey =
 	| 'style-panel.arrowhead-end'
 	| 'style-panel.arrow-kind'
 	| 'style-panel.color'
+	| 'style-panel.corner-radius'
 	| 'style-panel.dash'
 	| 'style-panel.fill'
 	| 'style-panel.font'

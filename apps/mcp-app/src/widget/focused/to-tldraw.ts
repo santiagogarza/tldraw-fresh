@@ -419,6 +419,7 @@ function convertGeoShapeToTldrawShape(
 				url: defaultGeoShape.props?.url ?? '',
 				verticalAlign: defaultGeoShape.props?.verticalAlign ?? 'start',
 				w: focusedShape.w ?? defaultGeoShape.props?.w ?? 100,
+				cornerRadius: defaultGeoShape.props?.cornerRadius ?? 0,
 			},
 			meta: {
 				note: focusedShape.note ?? defaultGeoShape.meta?.note ?? '',
