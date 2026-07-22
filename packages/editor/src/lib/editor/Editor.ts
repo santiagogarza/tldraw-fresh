@@ -9350,7 +9350,6 @@ export class Editor extends EventEmitter<TLEventMap> {
 	 * @public
 	 */
 	setStyleForSelectedShapes<S extends StyleProp<any>>(style: S, value: StylePropValue<S>): this {
-		if (style.id === 'tldraw:color') return this
 		const selectedShapes = this.getSelectedShapes()
 
 		if (selectedShapes.length > 0) {
