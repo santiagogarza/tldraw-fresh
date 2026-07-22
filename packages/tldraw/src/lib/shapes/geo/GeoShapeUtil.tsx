@@ -8,11 +8,14 @@ import {
 	Group2d,
 	HTMLContainer,
 	HandleSnapGeometry,
+	IndexKey,
 	Rectangle2d,
 	SVGContainer,
 	SvgExportContext,
 	TLGeoShape,
 	TLGeoShapeProps,
+	TLHandle,
+	TLHandleDragInfo,
 	TLMeasureTextOpts,
 	TLResizeInfo,
 	TLShape,
@@ -24,6 +27,7 @@ import {
 	WeakCache,
 	approximately,
 	areAnglesCompatible,
+	clamp,
 	geoShapeMigrations,
 	geoShapeProps,
 	getColorValue,
@@ -58,8 +62,14 @@ import { GeoShapeBody } from './GeoShapeBody'
 import {
 	defaultGeoTypeDefinitions,
 	type GeoTypeDefinition,
+	getCornerRadiusPreviewEpoch,
+	getCurrentCornerRadius,
 	getGeoShapePath,
 	getGeoTypeDefinition,
+	nearestCornerRadiusStep,
+	setPreviewCornerRadius,
+	consumePreviewCornerRadius,
+	clearPreviewCornerRadius,
 } from './getGeoShapePath'
 
 // imperfect but good enough, should be the width of the W in the font / size combo
@@ -234,6 +244,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 			w: 100,
 			h: 100,
 			geo: 'rectangle',
+			cornerRadius: 'sharp',
 			dash: 'draw',
 			growY: 0,
 			url: '',
@@ -346,6 +357,44 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 		return renderPlaintextFromRichText(this.editor, shape.props.richText)
 	}
 
+	override getHandles(shape: TLGeoShape): TLHandle[] {
+		if (shape.props.geo !== 'rectangle') return []
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const r = getCurrentCornerRadius(shape, w, h)
+		return [
+			{
+				id: 'corner-radius',
+				type: 'vertex',
+				index: 'a1' as IndexKey,
+				x: r,
+				y: 0,
+			},
+		]
+	}
+
+	override onHandleDrag(shape: TLGeoShape, { handle }: TLHandleDragInfo<TLGeoShape>) {
+		if (shape.props.geo !== 'rectangle' || handle.id !== 'corner-radius') return
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const maxR = Math.min(w, h) / 2
+		const next = clamp(handle.x, 0, maxR)
+		setPreviewCornerRadius(shape, next)
+	}
+
+	override onHandleDragEnd(shape: TLGeoShape) {
+		const preview = consumePreviewCornerRadius(shape)
+		if (preview === undefined) return
+		const w = Math.max(1, shape.props.w)
+		const h = Math.max(1, shape.props.h + shape.props.growY)
+		const next = nearestCornerRadiusStep(w, h, preview)
+		return { id: shape.id, type: shape.type, props: { cornerRadius: next } }
+	}
+
+	override onHandleDragCancel(shape: TLGeoShape) {
+		clearPreviewCornerRadius(shape)
+	}
+
 	override getFontFaces(shape: TLGeoShape) {
 		if (isEmptyRichText(shape.props.richText)) {
 			return EMPTY_ARRAY
@@ -362,6 +411,7 @@ export class GeoShapeUtil extends BaseBoxShapeUtil<TLGeoShape> {
 	component(shape: TLGeoShape) {
 		const { id, type, props } = shape
 		const { editor } = this
+		useValue('geoCornerRadiusPreview', () => getCornerRadiusPreviewEpoch(), [shape.id])
 		const isOnlySelected = useValue(
 			'isGeoOnlySelected',
 			() => shape.id === editor.getOnlySelectedShapeId(),

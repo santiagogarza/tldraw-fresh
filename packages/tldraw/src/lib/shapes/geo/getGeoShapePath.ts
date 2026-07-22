@@ -10,11 +10,83 @@ import {
 	TLDefaultDashStyle,
 	TLDefaultSizeStyle,
 	TLGeoShape,
+	TLGeoShapeCornerRadiusStyle,
 	Vec,
 	VecModel,
 	WeakCache,
 } from '@tldraw/editor'
+import { atom } from '@tldraw/state'
 import { PathBuilder } from '../shared/PathBuilder'
+
+const CORNER_RADIUS_FRACTION = { sharp: 0, soft: 0.08, round: 0.2, pill: 0.5 } as const
+const CORNER_RADIUS_STEPS = ['sharp', 'soft', 'round', 'pill'] as const satisfies readonly TLGeoShapeCornerRadiusStyle[]
+
+function getRectangleCornerRadius(w: number, h: number, value: TLGeoShapeCornerRadiusStyle) {
+	return CORNER_RADIUS_FRACTION[value] * Math.min(w, h)
+}
+
+const previewRadiusCache = new WeakCache<TLGeoShape, number>()
+const previewRadiusEpoch = atom('geoCornerRadiusPreviewEpoch', 0)
+
+function bumpPreviewRadiusEpoch() {
+	previewRadiusEpoch.set(previewRadiusEpoch.get() + 1)
+}
+
+/** @internal */
+export function getCornerRadiusPreviewEpoch() {
+	return previewRadiusEpoch.get()
+}
+
+/** @internal */
+export function setPreviewCornerRadius(shape: TLGeoShape, radius: number) {
+	previewRadiusCache.items.set(shape, radius)
+	bumpPreviewRadiusEpoch()
+}
+
+/** @internal */
+export function clearPreviewCornerRadius(shape: TLGeoShape) {
+	if (previewRadiusCache.items.has(shape)) {
+		previewRadiusCache.items.delete(shape)
+		bumpPreviewRadiusEpoch()
+	}
+}
+
+/** @internal */
+export function consumePreviewCornerRadius(shape: TLGeoShape): number | undefined {
+	const preview = previewRadiusCache.items.get(shape)
+	previewRadiusCache.items.delete(shape)
+	if (preview !== undefined) {
+		bumpPreviewRadiusEpoch()
+	}
+	return preview
+}
+
+/** @internal */
+export function getCurrentCornerRadius(shape: TLGeoShape, w: number, h: number): number {
+	const preview = previewRadiusCache.items.get(shape)
+	if (preview !== undefined) return preview
+	if (shape.props.geo !== 'rectangle') return 0
+	return getRectangleCornerRadius(w, h, shape.props.cornerRadius)
+}
+
+/** @internal */
+export function nearestCornerRadiusStep(
+	w: number,
+	h: number,
+	radius: number
+): TLGeoShapeCornerRadiusStyle {
+	let best: TLGeoShapeCornerRadiusStyle = 'sharp'
+	let bestDist = Infinity
+	for (const step of CORNER_RADIUS_STEPS) {
+		const stepRadius = getRectangleCornerRadius(w, h, step)
+		const dist = Math.abs(stepRadius - radius)
+		if (dist < bestDist) {
+			bestDist = dist
+			best = step
+		}
+	}
+	return best
+}
 
 /**
  * Defines the behavior for a geo shape type. Every built-in geo type is
@@ -66,11 +138,25 @@ export const defaultGeoTypeDefinitions = {
 		icon: 'geo-rectangle',
 		getPath(w, h, shape) {
 			const isFilled = shape.props.fill !== 'none'
+			const r = getCurrentCornerRadius(shape, w, h)
+			if (r === 0) {
+				return new PathBuilder()
+					.moveTo(0, 0, { geometry: { isFilled } })
+					.lineTo(w, 0)
+					.lineTo(w, h)
+					.lineTo(0, h)
+					.close()
+			}
 			return new PathBuilder()
-				.moveTo(0, 0, { geometry: { isFilled } })
-				.lineTo(w, 0)
-				.lineTo(w, h)
-				.lineTo(0, h)
+				.moveTo(r, 0, { geometry: { isFilled } })
+				.lineTo(w - r, 0)
+				.circularArcTo(r, false, true, w, r)
+				.lineTo(w, h - r)
+				.circularArcTo(r, false, true, w - r, h)
+				.lineTo(r, h)
+				.circularArcTo(r, false, true, 0, h - r)
+				.lineTo(0, r)
+				.circularArcTo(r, false, true, r, 0)
 				.close()
 		},
 	},
@@ -359,6 +445,10 @@ export function getGeoShapePath(
 ) {
 	// Cache is keyed on shape only. For x-box, strokeWidth affects the diagonal
 	// inset, but theme changes are rare enough that stale cache entries are acceptable.
+	// Bypass the cache while a corner-radius handle drag is in progress.
+	if (previewRadiusCache.items.has(shape)) {
+		return _getGeoPath(shape, strokeWidth, customGeoTypes)
+	}
 	return pathCache.get(shape, (s) => _getGeoPath(s, strokeWidth, customGeoTypes))
 }
 

@@ -136,3 +136,24 @@ it('Accepts a background option', async () => {
 	)
 	expect(svg2.style.backgroundColor).toBe('transparent')
 })
+
+it('exports rounded rectangle corners as arcs', async () => {
+	const roundRectId = createShapeId('roundRect')
+	editor.createShapes([
+		{
+			id: roundRectId,
+			type: 'geo',
+			x: 0,
+			y: 0,
+			props: {
+				w: 100,
+				h: 100,
+				geo: 'rectangle',
+				cornerRadius: 'round',
+			},
+		},
+	])
+	const result = await editor.getSvgString([roundRectId])
+	expect(result).toBeDefined()
+	expect(result!.svg).toMatch(/[Aa]/)
+})
