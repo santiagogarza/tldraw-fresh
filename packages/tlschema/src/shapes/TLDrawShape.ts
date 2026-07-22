@@ -4,6 +4,7 @@ import { VecModel } from '../misc/geometry-types'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
 import { DefaultColorStyle, TLDefaultColorStyle } from '../styles/TLColorStyle'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import { DefaultDashStyle, TLDefaultDashStyle } from '../styles/TLDashStyle'
 import { DefaultFillStyle, TLDefaultFillStyle } from '../styles/TLFillStyle'
 import { DefaultSizeStyle, TLDefaultSizeStyle } from '../styles/TLSizeStyle'
@@ -62,6 +63,8 @@ export interface TLDrawShapeProps {
 	scaleX: number
 	/** Vertical scale factor for lazy resize */
 	scaleY: number
+	/** Looping animation style applied to the rendered shape (presentational only) */
+	animation: TLDefaultAnimationStyle
 }
 
 /**
@@ -131,6 +134,7 @@ export const drawShapeProps: RecordProps<TLDrawShape> = {
 	scale: T.nonZeroNumber,
 	scaleX: T.nonZeroFiniteNumber,
 	scaleY: T.nonZeroFiniteNumber,
+	animation: DefaultAnimationStyle,
 }
 
 const Versions = createShapePropsMigrationIds('draw', {
@@ -138,6 +142,7 @@ const Versions = createShapePropsMigrationIds('draw', {
 	AddScale: 2,
 	Base64: 3,
 	LegacyPointsConversion: 4,
+	AddAnimation: 5,
 })
 
 /**
@@ -237,6 +242,15 @@ export const drawShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (_props) => {
 				// handled by the previous down migration
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

@@ -76,6 +76,7 @@ export class VideoShapeUtil extends BaseBoxShapeUtil<TLVideoShape> {
 			// Not used, but once upon a time were used to sync video state between users
 			time: 0,
 			playing: true,
+			animation: 'none',
 		}
 	}
 

@@ -167,4 +167,10 @@ export const STYLES = {
 		{ value: 'line', icon: 'spline-line' },
 		{ value: 'cubic', icon: 'spline-cubic' },
 	],
+	animation: [
+		{ value: 'none', icon: 'animation-none' },
+		{ value: 'spin', icon: 'animation-spin' },
+		{ value: 'pulse', icon: 'animation-pulse' },
+		{ value: 'jiggle', icon: 'animation-jiggle' },
+	],
 } as const satisfies Record<string, StyleValuesForUi<string>>

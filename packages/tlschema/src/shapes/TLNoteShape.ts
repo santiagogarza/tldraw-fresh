@@ -2,6 +2,7 @@ import { T } from '@tldraw/validate'
 import { TLRichText, richTextValidator, toRichText } from '../misc/TLRichText'
 import { createShapePropsMigrationIds, createShapePropsMigrationSequence } from '../records/TLShape'
 import { RecordProps } from '../recordsWithProps'
+import { DefaultAnimationStyle, TLDefaultAnimationStyle } from '../styles/TLAnimationStyle'
 import {
 	DefaultColorStyle,
 	DefaultLabelColorStyle,
@@ -66,6 +67,8 @@ export interface TLNoteShapeProps {
 	scale: number
 	/** User ID of the person who first edited the note text */
 	textFirstEditedBy: string | null
+	/** Looping animation style applied to the rendered shape (presentational only) */
+	animation: TLDefaultAnimationStyle
 }
 
 /**
@@ -133,6 +136,7 @@ export const noteShapeProps: RecordProps<TLNoteShape> = {
 	richText: richTextValidator,
 	scale: T.nonZeroNumber,
 	textFirstEditedBy: T.string.nullable(),
+	animation: DefaultAnimationStyle,
 }
 
 const Versions = createShapePropsMigrationIds('note', {
@@ -148,6 +152,7 @@ const Versions = createShapePropsMigrationIds('note', {
 	AddRichTextAttrs: 10,
 	AddFirstEditedBy: 11,
 	MakeFontSizeAdjustmentRatio: 12,
+	AddAnimation: 13,
 })
 
 /**
@@ -290,6 +295,15 @@ export const noteShapeMigrations = createShapePropsMigrationSequence({
 			},
 			down: (props) => {
 				props.fontSizeAdjustment = 0
+			},
+		},
+		{
+			id: Versions.AddAnimation,
+			up: (props) => {
+				props.animation = 'none'
+			},
+			down: (props) => {
+				delete props.animation
 			},
 		},
 	],

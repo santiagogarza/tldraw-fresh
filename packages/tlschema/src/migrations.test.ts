@@ -2647,6 +2647,35 @@ describe('TLUser initial migration', () => {
 	})
 })
 
+describe('Adding animation to default shapes', () => {
+	const cases = [
+		{ name: 'arrow', id: arrowShapeVersions.AddAnimation },
+		{ name: 'bookmark', id: bookmarkShapeVersions.AddAnimation },
+		{ name: 'draw', id: drawShapeVersions.AddAnimation },
+		{ name: 'embed', id: embedShapeVersions.AddAnimation },
+		{ name: 'frame', id: frameShapeVersions.AddAnimation },
+		{ name: 'geo', id: geoShapeVersions.AddAnimation },
+		{ name: 'highlight', id: highlightShapeVersions.AddAnimation },
+		{ name: 'image', id: imageShapeVersions.AddAnimation },
+		{ name: 'line', id: lineShapeVersions.AddAnimation },
+		{ name: 'note', id: noteShapeVersions.AddAnimation },
+		{ name: 'text', id: textShapeVersions.AddAnimation },
+		{ name: 'video', id: videoShapeVersions.AddAnimation },
+	] as const
+
+	for (const { name, id } of cases) {
+		test(`${name} up adds animation: 'none'`, () => {
+			const { up } = getTestMigration(id)
+			expect(up({ props: {} })).toEqual({ props: { animation: 'none' } })
+		})
+
+		test(`${name} down removes animation`, () => {
+			const { down } = getTestMigration(id)
+			expect(down({ props: { animation: 'spin' } })).toEqual({ props: {} })
+		})
+	}
+})
+
 /* ---  PUT YOUR MIGRATIONS TESTS ABOVE HERE --- */
 
 // check that all migrator fns were called at least once

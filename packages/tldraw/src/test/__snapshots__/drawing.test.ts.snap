@@ -8,6 +8,7 @@ exports[`Draws a bunch > draw shape 1`] = `
   "opacity": 1,
   "parentId": "page:page",
   "props": {
+    "animation": "none",
     "color": "black",
     "dash": "draw",
     "fill": "none",

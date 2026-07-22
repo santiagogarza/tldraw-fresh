@@ -9,6 +9,7 @@ exports[`Misc > resizes > line shape after resize 1`] = `
   "opacity": 1,
   "parentId": "page:page",
   "props": {
+    "animation": "none",
     "color": "black",
     "dash": "draw",
     "points": {
