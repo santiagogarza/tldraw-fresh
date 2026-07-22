@@ -2,6 +2,7 @@ import {
 	ArrowShapeArrowheadEndStyle,
 	ArrowShapeArrowheadStartStyle,
 	ArrowShapeKindStyle,
+	DefaultAnimationStyle,
 	DefaultColorStyle,
 	DefaultDashStyle,
 	DefaultFillStyle,
@@ -44,6 +45,7 @@ export function DefaultStylePanelContent() {
 				<StylePanelOpacityPicker />
 			</StylePanelSection>
 			<StylePanelSection>
+				<StylePanelAnimationPicker />
 				<StylePanelFillPicker />
 				<StylePanelDashPicker />
 				<StylePanelSizePicker />
@@ -140,6 +142,24 @@ export function StylePanelOpacityPicker() {
 				ariaValueModifier={25}
 			/>
 		</>
+	)
+}
+
+/** @public @react */
+export function StylePanelAnimationPicker() {
+	const { styles } = useStylePanelContext()
+	const msg = useTranslation()
+	const animation = styles.get(DefaultAnimationStyle)
+	if (animation === undefined) return null
+
+	return (
+		<StylePanelButtonPicker
+			title={msg('style-panel.animation')}
+			uiType="animation"
+			style={DefaultAnimationStyle}
+			items={STYLES.animation}
+			value={animation}
+		/>
 	)
 }
 

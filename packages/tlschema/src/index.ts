@@ -305,6 +305,7 @@ export {
 	registerColorsFromThemes,
 	type TLDefaultColorStyle,
 } from './styles/TLColorStyle'
+export { DefaultAnimationStyle, type TLDefaultAnimationStyle } from './styles/TLAnimationStyle'
 export { DefaultDashStyle, type TLDefaultDashStyle } from './styles/TLDashStyle'
 export { DefaultFillStyle, type TLDefaultFillStyle } from './styles/TLFillStyle'
 export { type TLFontFace, type TLFontFaceSource } from './styles/TLFontFace'

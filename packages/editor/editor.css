@@ -956,6 +956,67 @@ input,
 	contain: size layout;
 }
 
+@keyframes tl-shape-spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes tl-shape-jiggle {
+	0%,
+	100% {
+		transform: rotate(0deg);
+	}
+	25% {
+		transform: rotate(-6deg);
+	}
+	75% {
+		transform: rotate(6deg);
+	}
+}
+
+@keyframes tl-shape-shake {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(-4px);
+	}
+	75% {
+		transform: translateX(4px);
+	}
+}
+
+.tl-shape-animation-spin,
+.tl-shape-animation-jiggle,
+.tl-shape-animation-shake {
+	transform-origin: center center;
+}
+
+.tl-shape-animation-spin {
+	animation: tl-shape-spin 2s linear infinite;
+}
+
+.tl-shape-animation-jiggle {
+	animation: tl-shape-jiggle 0.4s ease-in-out infinite;
+}
+
+.tl-shape-animation-shake {
+	animation: tl-shape-shake 0.25s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.tl-shape-animation-spin,
+	.tl-shape-animation-jiggle,
+	.tl-shape-animation-shake {
+		animation: none;
+	}
+}
+
 /* ---------------- Shape Containers ---------------- */
 
 .tl-svg-container {

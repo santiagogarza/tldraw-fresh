@@ -1291,6 +1291,7 @@ describe('Migration and patch handling', () => {
 				font: 'draw',
 				labelPosition: 0.5,
 				scale: 1,
+				animation: 'none',
 			},
 			meta: {},
 		}
