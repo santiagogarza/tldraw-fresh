@@ -11,6 +11,7 @@ import { vi } from 'vitest'
 import { TestEditor } from '../../../test/TestEditor'
 import { PathBuilder } from '../shared/PathBuilder'
 import { GeoShapeUtil } from './GeoShapeUtil'
+import { getEffectiveCornerRadius, getGeoShapePath } from './getGeoShapePath'
 
 let editor: TestEditor
 let ids: Record<string, TLShapeId>
@@ -179,6 +180,80 @@ describe('Resizing geo shapes with labels', () => {
 		const geo = getGeo()
 		expect(geo.props.w).toBeLessThan(50)
 		expect(geo.props.h).toBeLessThan(50)
+	})
+})
+
+describe('Rectangle corner radius', () => {
+	test('getEffectiveCornerRadius scales with the smaller dimension', () => {
+		expect(getEffectiveCornerRadius(200, 100, 0)).toBe(0)
+		expect(getEffectiveCornerRadius(200, 100, 1)).toBe(50)
+		expect(getEffectiveCornerRadius(200, 100, 0.5)).toBe(25)
+	})
+
+	test('rounded rectangle path uses corner radius', () => {
+		const shape: TLGeoShape = {
+			id: createShapeId('rounded-rect'),
+			type: 'geo',
+			typeName: 'shape',
+			x: 0,
+			y: 0,
+			rotation: 0,
+			index: 'a1' as IndexKey,
+			parentId: 'page:page' as TLShapeId,
+			isLocked: false,
+			opacity: 1,
+			meta: {},
+			props: {
+				geo: 'rectangle',
+				w: 200,
+				h: 100,
+				cornerRadius: 0.5,
+				dash: 'draw',
+				url: '',
+				growY: 0,
+				scale: 1,
+				color: 'black',
+				labelColor: 'black',
+				fill: 'none',
+				size: 'm',
+				font: 'draw',
+				align: 'middle',
+				verticalAlign: 'middle',
+				richText: toRichText(''),
+			},
+		}
+
+		const path = getGeoShapePath(shape, 2)
+		const sharpPath = getGeoShapePath({ ...shape, props: { ...shape.props, cornerRadius: 0 } }, 2)
+		expect(path.toD()).not.toEqual(sharpPath.toD())
+		expect(path.toD()).toContain('C')
+	})
+
+	test('corner radius handle updates shape props', () => {
+		const id = createShapeId('rect')
+		editor.createShapes([
+			{ id, type: 'geo', x: 0, y: 0, props: { geo: 'rectangle', w: 200, h: 100 } },
+		])
+		editor.select(id)
+
+		const shape = editor.getShape(id)!
+		assert(editor.isShapeOfType(shape, 'geo'))
+		const handles = editor.getShapeUtil('geo').getHandles!(shape)
+		expect(handles).toHaveLength(1)
+
+		const handlePagePoint = editor.getShapePageTransform(id)!.applyToPoint(handles[0])
+		editor
+			.pointerDown(handlePagePoint.x, handlePagePoint.y, {
+				target: 'handle',
+				shape,
+				handle: handles[0],
+			})
+			.pointerMove(25, 0)
+			.pointerUp()
+
+		const updated = editor.getShape(id)!
+		assert(editor.isShapeOfType(updated, 'geo'))
+		expect(updated.props.cornerRadius).toBeCloseTo(0.5, 2)
 	})
 })
 

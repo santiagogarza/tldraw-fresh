@@ -90,6 +90,8 @@ export interface TLGeoShapeProps {
 	growY: number
 	/** Scale factor applied to the shape */
 	scale: number
+	/** Corner radius as a ratio from 0 (sharp) to 1 (fully rounded) for rectangle shapes */
+	cornerRadius: number
 
 	/** Color style for text label */
 	labelColor: TLDefaultColorStyle
@@ -170,6 +172,7 @@ export const geoShapeProps: RecordProps<TLGeoShape> = {
 	h: T.nonZeroNumber,
 	growY: T.positiveNumber,
 	scale: T.nonZeroNumber,
+	cornerRadius: T.number,
 
 	// Text properties
 	labelColor: DefaultLabelColorStyle,
@@ -194,6 +197,7 @@ const geoShapeVersions = createShapePropsMigrationIds('geo', {
 	AddScale: 9,
 	AddRichText: 10,
 	AddRichTextAttrs: 11,
+	AddCornerRadius: 12,
 })
 
 /**
@@ -316,6 +320,15 @@ export const geoShapeMigrations = createShapePropsMigrationSequence({
 				if (props.richText && 'attrs' in props.richText) {
 					delete props.richText.attrs
 				}
+			},
+		},
+		{
+			id: geoShapeVersions.AddCornerRadius,
+			up: (props) => {
+				props.cornerRadius = 0
+			},
+			down: (props) => {
+				delete props.cornerRadius
 			},
 		},
 	],
