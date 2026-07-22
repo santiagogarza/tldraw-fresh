@@ -196,3 +196,13 @@ Dependencies:
 - Use semantic PR titles for pull requests: `<type>(<scope>): <description>`.
 - Never add yourself or an AI tool as a co-author.
 - See `skills/pr/` and `skills/issue/` for GitHub workflows, and `skills/write-pr/` and `skills/write-issue/` for repository content standards.
+
+## Cursor Cloud specific instructions
+
+- Dependencies are installed by the startup update script (`corepack enable` then `yarn install`). You normally do not need to reinstall.
+- Yarn 4 only works after `corepack enable`; if `yarn` reports the wrong version in a fresh shell, run `corepack enable` first. The cloud VM ships Node 22, which works fine even though `engines` says `^20` and CI pins 24.13.1.
+- Primary dev experience: `yarn dev` (from repo root) serves the examples app at http://localhost:5420 and also starts `apps/bemo-worker` (http://localhost:8989) and `apps/dotcom/image-resize-worker` (http://localhost:8786). This is the main loop for SDK work and needs no secrets.
+- The wrangler workers print `Unable to fetch the Request.cf object` / `read ECONNRESET` warnings on startup because the VM has no Cloudflare network access. These are non-fatal — the workers still report "Ready" and serve locally.
+- `yarn install` logs a build failure for `@modelcontextprotocol/ext-apps` (`setup-bun.mjs ... failed or not available`). This is non-fatal and only affects the optional `apps/mcp-app`; the install completes with `Done with warnings`.
+- The `apps/dotcom/*` stack (tldraw.com) is NOT runnable here without setup: it needs Clerk auth keys, a Postgres database via Docker (`apps/dotcom/zero-cache` runs `docker compose`), and several Cloudflare workers. See `apps/dotcom/README.md`. Use the examples app for canvas/SDK verification instead.
+- `yarn typecheck` uses the native `tsgo` type checker and is fast; standard lint/test/build commands are documented above under "Common commands".
