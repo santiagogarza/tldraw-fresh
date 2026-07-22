@@ -2294,3 +2294,73 @@ tldraw? probably.
 		transform: translateX(calc(-100% - var(--tl-space-3)));
 	}
 }
+
+/* ------------------- Shape animations ------------------- */
+/*
+ * A shape's animation is rendered on a nested element inside `.tl-shape` so
+ * the outer shape wrapper's `transform` (which places the shape on the
+ * canvas) is not overwritten. The animations use the individual transform
+ * properties (`rotate`, `translate`) rather than the shorthand `transform`,
+ * so they compose with any transform the shape's own contents set.
+ */
+.tl-shape__animation {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	transform-origin: 50% 50%;
+	pointer-events: inherit;
+}
+
+.tl-shape__animation[data-animation='spin'] {
+	animation: tl-shape-spin 4s linear infinite;
+}
+
+.tl-shape__animation[data-animation='jiggle'] {
+	animation: tl-shape-jiggle 0.6s ease-in-out infinite;
+}
+
+.tl-shape__animation[data-animation='shake'] {
+	animation: tl-shape-shake 0.45s ease-in-out infinite;
+}
+
+@keyframes tl-shape-spin {
+	from {
+		rotate: 0deg;
+	}
+	to {
+		rotate: 360deg;
+	}
+}
+
+@keyframes tl-shape-jiggle {
+	0%,
+	100% {
+		rotate: -6deg;
+	}
+	50% {
+		rotate: 6deg;
+	}
+}
+
+@keyframes tl-shape-shake {
+	0%,
+	100% {
+		translate: -3px 0;
+	}
+	25% {
+		translate: 3px 0;
+	}
+	50% {
+		translate: -2px 0;
+	}
+	75% {
+		translate: 2px 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.tl-shape__animation {
+		animation: none !important;
+	}
+}

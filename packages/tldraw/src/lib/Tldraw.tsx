@@ -19,6 +19,7 @@ import { TLAnyAssetUtilConstructor } from '@tldraw/editor'
 import { useMemo } from 'react'
 import { ImageAssetUtil } from './assets/ImageAssetUtil'
 import { VideoAssetUtil } from './assets/VideoAssetUtil'
+import { TldrawShapeWrapper } from './canvas/TldrawShapeWrapper'
 import { defaultAssetUtils } from './defaultAssetUtils'
 import { defaultBindingUtils } from './defaultBindingUtils'
 import { TLEmbedDefinition } from './defaultEmbedDefinitions'
@@ -189,6 +190,7 @@ export function Tldraw(props: TldrawProps) {
 		() => ({
 			Spinner,
 			LoadingScreen,
+			ShapeWrapper: TldrawShapeWrapper,
 			..._components,
 			InFrontOfTheCanvas,
 		}),

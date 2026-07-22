@@ -22,6 +22,14 @@ export {
 	type PathBuilderToDOpts,
 	type SolidPathBuilderOpts,
 } from './lib/shapes/shared/PathBuilder'
+export { TldrawShapeWrapper } from './lib/canvas/TldrawShapeWrapper'
+export {
+	getShapeAnimation,
+	getShapeAnimationMetaPatch,
+	SHAPE_ANIMATION_META_KEY,
+	TL_SHAPE_ANIMATIONS,
+	type TLShapeAnimation,
+} from './lib/canvas/shape-animations'
 export { usePrefersReducedMotion } from './lib/shapes/shared/usePrefersReducedMotion'
 export { startEditingShapeWithRichText } from './lib/tools/SelectTool/selectHelpers'
 export { DefaultA11yAnnouncer, useSelectedShapesAnnouncer } from './lib/ui/components/A11y'
@@ -600,6 +608,7 @@ export {
 	StylePanelTextAlignPicker,
 	type StylePanelSectionProps,
 } from './lib/ui/components/StylePanel/DefaultStylePanelContent'
+export { StylePanelAnimationPicker } from './lib/ui/components/StylePanel/StylePanelAnimationPicker'
 export {
 	StylePanelButtonPicker,
 	StylePanelButtonPickerInline,
